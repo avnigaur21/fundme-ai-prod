@@ -1,168 +1,65 @@
-FundMe
+# FundMe AI Production
 
-FundMe is a platform that helps startup founders discover, apply to, and track funding opportunities, while enabling investors to explore ecosystem schemes, fund calls, and participation opportunities.
+FundMe is an AI-powered platform that helps startup founders discover, apply to, and track funding opportunities, while enabling investors to explore ecosystem schemes, fund calls, and participation opportunities.
 
-The platform centralizes fragmented information about grants, incubators, accelerators, and government programs into one structured interface.
+## Key Features
 
-Problem
+- **AI-Powered Matching**: Automatically matches your startup profile with relevant grants and funding opportunities.
+- **Chrome Extension**: Scrape opportunities directly from the web and track applications in real-time.
+- **Founder Dashboard**: Track the entire lifecycle of your applications from draft to submission.
+- **Investor Module**: Explore ecosystem schemes, fund calls, and licensing pathways.
+- **Automated Scrapers**: Built-in scrapers for major startup grant portals.
 
-Startup ecosystem information is highly fragmented.
+## Getting Started
 
-Founders often struggle to:
+### Prerequisites
 
-Discover relevant grants and incubator programs
+- Node.js (v16 or higher)
+- npm
 
-Track application deadlines and requirements
+### Installation
 
-Manage applications after submitting them
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/avnigaur21/fundme-ai-prod.git
+   cd fundme-ai-prod
+   ```
 
-Investors also face difficulty tracking:
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-Government ecosystem schemes
+3. Set up API keys:
+   - Copy `key.example.txt` to `key.txt`
+   - Add your [Groq](https://console.groq.com/) or [OpenRouter](https://openrouter.ai/) API keys.
+   ```bash
+   cp key.example.txt key.txt
+   ```
 
-Fund calls and co-investment programs
+### Running the Application
 
-Incubator or TBI licensing pathways
+1. Start the server:
+   ```bash
+   npm start
+   ```
+   The server will run on `http://localhost:3000`.
 
-This results in missed opportunities and inefficient navigation of the ecosystem.
+2. Open `index.html` in your browser or navigate to `http://localhost:3000`.
 
-Solution
+## Chrome Extension Setup
 
-FundMe provides a centralized platform where founders and investors can explore startup ecosystem opportunities in a structured way.
+1. Open Chrome and go to `chrome://extensions/`.
+2. Enable "Developer mode".
+3. Click "Load unpacked" and select the `chrome_extension` folder in this repository.
 
-The platform enables users to:
+## Technology Stack
 
-Discover startup opportunities
+- **Backend**: Node.js, Express
+- **Frontend**: HTML5, CSS3, Vanilla JavaScript
+- **AI**: Groq (Llama 3), OpenRouter
+- **Database**: Local JSON-based storage (data/db.json)
 
-Apply to programs
+## License
 
-Track application progress
-
-Understand ecosystem schemes and licensing pathways
-
-Key Features
-Founder Module
-
-The founder interface allows startups to:
-
-Complete onboarding with startup details
-
-Discover funding opportunities
-
-Search and filter programs
-
-View detailed opportunity information
-
-Save opportunities to a watchlist
-
-Apply to opportunities
-
-Track applications after submission
-
-This helps founders manage the entire opportunity lifecycle.
-
-Investor Module
-
-The investor interface supports:
-
-Angel investors
-
-Venture capital funds
-
-Incubators
-
-Campus innovation funds
-
-Investors can:
-
-Discover ecosystem schemes and incentives
-
-Track fund calls and participation opportunities
-
-Understand licensing pathways such as TBI recognition
-
-Check eligibility requirements
-
-Maintain a watchlist of schemes and programs
-
-Application Tracking
-
-FundMe extends beyond opportunity discovery by enabling post-application tracking.
-
-After applying to a program, founders can track the progress of their applications through stages such as:
-
-Applied → Under Review → Shortlisted → Interview / Pitch Round → Accepted / Rejected
-
-This ensures founders remain organized throughout the application process.
-
-Platform Modules
-
-FundMe consists of two main modules.
-
-Founder Interface
-
-Onboarding
-
-Dashboard
-
-Opportunity Explorer
-
-Opportunity Details
-
-Saved Opportunities
-
-Applications Tracker
-
-Founder Profile
-
-Settings
-
-Investor Interface
-
-Investor Dashboard
-
-Schemes & Incentives
-
-Fund Calls
-
-Licensing & TBI Information
-
-Eligibility Check
-
-Watchlist
-
-Investor Profile
-
-Settings
-
-Technology Stack
-
-Frontend:
-
-HTML
-
-CSS
-
-JavaScript
-
-The current version focuses on frontend architecture and user experience design, with backend integration planned for future development.
-
-Future Improvements
-
-Possible enhancements include:
-
-Backend API integration
-
-AI-based opportunity recommendations
-
-Automated eligibility matching
-
-Founder–Investor networking features
-
-Data insights from application outcomes
-
-Project Purpose
-
-FundMe was developed as part of an academic project exploring how digital platforms can simplify participation in the startup ecosystem.
-
-The goal is to create a system that transforms scattered opportunity information into a structured, navigable platform for founders and investors.
+This project is developed for educational and professional ecosystem support.
