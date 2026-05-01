@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: var(--color-bg-body) !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .main-content {
+            background: var(--color-bg-body) !important;
+            transition: background 0.3s ease;
+        }
+
+        .settings-view-container {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 3rem 5rem;
+        }
+
+        .settings-header {
+            margin-bottom: 2.5rem;
+            text-align: left;
+        }
+
+        .settings-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.01em;
+            transition: color 0.3s ease;
+        }
+
+        .settings-subtitle {
+            font-size: 0.9rem;
+            color: var(--color-text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .premium-card {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 4px; /* Standardized 4px corners */
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2rem;
+            padding: 2rem 2.5rem;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .premium-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
+
+        .premium-card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            transition: color 0.3s ease;
+        }
+
+        .premium-card-title svg {
+            color: var(--color-text-secondary);
+            transition: color 0.3s ease;
+        }
+
+        .profile-hero {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .profile-hero-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #3b82f6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .profile-hero-info h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text-main);
+            margin-bottom: 0.25rem;
+            transition: color 0.3s ease;
+        }
+
+        .profile-hero-info p {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            margin: 0;
+            transition: color 0.3s ease;
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            column-gap: 2rem;
+        }
+
+        .form-input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .premium-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text-main);
+            transition: color 0.3s ease;
+        }
+
+        .premium-input {
+            padding: 0.75rem 1rem;
+            background: var(--color-bg-surface);
+            border: 1.5px solid var(--color-border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--color-text-main);
+            transition: all 0.2s ease;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .premium-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.15);
+        }
+
+        .btn-navy {
+            background: var(--color-primary-dark);
+            color: var(--color-text-inverted);
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-navy:hover {
+            background: var(--color-primary);
+        }
+
+        .luxury-toggle-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-border);
+            transition: border-color 0.3s ease;
+        }
+
+        .luxury-toggle-item:last-child {
+            border-bottom: none;
+        }
+
+        .luxury-toggle-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .luxury-toggle-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text-main);
+            transition: color 0.3s ease;
+        }
+
+        .luxury-toggle-desc {
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            max-width: 400px;
+            transition: color 0.3s ease;
+        }
+
+        .danger-zone {
+            background: var(--color-danger-bg, #fffcfc);
+            transition: background 0.3s ease;
+        }
+
+        .danger-zone .premium-card-title,
+        .danger-zone .premium-card-title svg {
+            color: var(--color-alert) !important;
+        }
+
+        .danger-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .danger-item .luxury-toggle-name {
+            color: var(--color-alert) !important;
+        }
+
+        @media (max-width: 768px) {
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--color-border);
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--color-bg-surface);
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input:checked+.slider {
+            background-color: var(--color-accent);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">FundMe.</span>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    <span class="nav-item-label">Dashboard</span>
+                </a>
+                <a href="explorer.html" class="nav-item" data-tooltip="Explorer">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                    <span class="nav-item-label">Explorer</span>
+                </a>
+                <a href="saved.html" class="nav-item" data-tooltip="Saved">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    <span class="nav-item-label">Saved</span>
+                </a>
+                <a href="drafts.html" class="nav-item" data-tooltip="Drafts">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 0v6h6" />
+                    </svg>
+                    <span class="nav-item-label">Drafts</span>
+                </a>
+                <a href="applications.html" class="nav-item" data-tooltip="Applications">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                    </svg>
+                    <span class="nav-item-label">Applications</span>
+                </a>
+                <a href="business-opportunities.html" class="nav-item" data-tooltip="Business Opportunities">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" />
+                    </svg>
+                    <span class="nav-item-label">Business Opportunities</span>
+                </a>
+                <a href="profile.html" class="nav-item" data-tooltip="Startup Profile">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                    </svg>
+                    <span class="nav-item-label">Startup Profile</span>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="settings.html" class="nav-item active" data-tooltip="Settings">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.09 8.83a.488.488 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span class="nav-item-label">Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <button class="btn btn-outline" id="menu-toggle"
+                    style="margin-right: 1rem; padding: 4px 8px; display: none;">☰</button>
+                <div style="flex: 1;">
+                    <h1 class="topbar-title">Settings</h1>
+                </div>
+                <a href="profile.html"
+                    style="display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; cursor: pointer;">
+                    <!-- User Profile -->
+                    <div style="font-size: 0.875rem; text-align: right;">
+                        <div style="font-weight: 600;" id="header_user_name">...</div>
+                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);" id="header_user_meta">...
+                        </div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&size=32"
+                        alt="User Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" id="header_user_avatar">
+                </a>
+            </header>
+
+            <div class="settings-view-container">
+                <header class="settings-header">
+                    <h2 class="settings-title">Account Settings</h2>
+                    <p class="settings-subtitle">Manage your startup profile, security and preferences.</p>
+                </header>
+
+                <!-- 1. General Profile -->
+                <section class="premium-card">
+                    <h3 class="premium-card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        Profile Information
+                    </h3>
+                    <div class="profile-hero">
+                        <div class="profile-hero-avatar" id="settings_avatar_initials">U</div>
+                        <div class="profile-hero-info">
+                            <h4 id="settings_display_name">...</h4>
+                            <p id="settings_display_email">...</p>
+                        </div>
+                    </div>
+                    <div class="settings-grid">
+                        <div class="form-input-group">
+                            <label class="premium-label">Founder's Name</label>
+                            <input type="text" class="premium-input" id="settings_founder_name" value="">
+                        </div>
+                        <div class="form-input-group">
+                            <label class="premium-label">Founder's Email</label>
+                            <input type="email" class="premium-input" id="settings_contact_email" value="">
+                        </div>
+                    </div>
+                    <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                        <button class="btn-navy" id="btn-update-settings" onclick="updateSettings()">Update Profile</button>
+                    </div>
+                </section>
+
+                <!-- 2. Security -->
+                <section class="premium-card">
+                    <h3 class="premium-card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        Security & Password
+                    </h3>
+                    <div class="settings-grid">
+                        <div class="form-input-group" style="grid-column: 1 / 2;">
+                            <label class="premium-label">Current Password</label>
+                            <input type="password" class="premium-input" placeholder="••••••••">
+                        </div>
+                        <div style="grid-column: 2 / 3;"></div>
+
+                        <div class="form-input-group">
+                            <label class="premium-label">New Password</label>
+                            <input type="password" class="premium-input">
+                        </div>
+                        <div class="form-input-group">
+                            <label class="premium-label">Confirm Password</label>
+                            <input type="password" class="premium-input">
+                        </div>
+                    </div>
+                    <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                        <button class="btn-navy">Change Password</button>
+                    </div>
+                </section>
+
+                <!-- 3. Preferences -->
+                <section class="premium-card">
+                    <h3 class="premium-card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg>
+                        Preferences
+                    </h3>
+                    <div class="luxury-toggle-item" style="padding-top: 0;">
+                        <div class="luxury-toggle-info">
+                            <span class="luxury-toggle-name">Dark Mode</span>
+                            <span class="luxury-toggle-desc">Switch between light and dark visual themes.</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this)">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="luxury-toggle-item">
+                        <div class="luxury-toggle-info">
+                            <span class="luxury-toggle-name">Push Notifications</span>
+                            <span class="luxury-toggle-desc">Get real-time updates on funding opportunities and status
+                                changes.</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="luxury-toggle-item">
+                        <div class="luxury-toggle-info">
+                            <span class="luxury-toggle-name">Email Digests</span>
+                            <span class="luxury-toggle-desc">Weekly summary of activity and recommended
+                                opportunities.</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </section>
+
+                <!-- 4. Danger Zone -->
+                <section class="premium-card danger-zone">
+                    <h3 class="premium-card-title">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
+                            </path>
+                            <line x1="12" y1="9" x2="12" y2="13"></line>
+                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                        </svg>
+                        Danger Zone
+                    </h3>
+                    <div class="danger-item">
+                        <div class="luxury-toggle-info">
+                            <span class="luxury-toggle-name" style="color: #b91c1c;">Delete Account</span>
+                            <span class="luxury-toggle-desc">Permanently remove all your data and startup profile. This
+                                action cannot be undone.</span>
+                        </div>
+                        <button class="btn btn-outline"
+                            style="border-color: #fca5a5; color: #dc2626; background: #fef2f2; border-radius: 8px;">Delete
+                            Account</button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        async function loadSettings() {
+            const user = getCurrentUser();
+            if (!user) return;
+
+            document.getElementById('settings_display_name').innerText = user.name;
+            document.getElementById('settings_display_email').innerText = user.email;
+            document.getElementById('settings_avatar_initials').innerText = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+
+            try {
+                const profile = await api.getProfile();
+                document.getElementById('settings_founder_name').value = user.name || '';
+                document.getElementById('settings_contact_email').value = profile.application_email || user.email;
+            } catch (err) {
+                console.error('Error loading settings profile:', err);
+            }
+        }
+
+        async function updateSettings() {
+            const btn = document.getElementById('btn-update-settings');
+            const originalText = btn.innerText;
+            btn.innerText = "Updating...";
+            btn.disabled = true;
+
+            try {
+                const founderName = document.getElementById('settings_founder_name').value;
+                const contactEmail = document.getElementById('settings_contact_email').value;
+
+                // Update User Info (Name)
+                const userRes = await api.updateUser({ 
+                    name: founderName
+                });
+                
+                // Update Local Storage for immediate header reflection
+                const currentUser = getCurrentUser();
+                currentUser.name = founderName;
+                localStorage.setItem('fundme_user', JSON.stringify(currentUser));
+
+                // Update Profile Info (Contact Email)
+                await api.updateProfile({ 
+                    application_email: contactEmail
+                });
+
+                // Update User (if name changed - though here we use startup name for profile display)
+                // In a real app we might have a separate field for User name.
+                
+                await loadSettings();
+                if (typeof updateUserHeader === 'function') updateUserHeader();
+                
+                alert('Settings updated successfully!');
+            } catch (err) {
+                alert('Error updating settings: ' + err.message);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            
+            // Sidebar Toggle (Mobile - hamburger) - explicit fallback
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('open');
+                });
+            }
+
+            // Dark mode setting init
+            const darkModeToggle = document.getElementById('dark-mode-toggle');
+            if (darkModeToggle) {
+                darkModeToggle.checked = localStorage.getItem('fundme-dark-mode') === 'true';
+            }
+        });
+
+        // Global dark mode toggle function
+        function toggleDarkMode(checkbox) {
+            if (checkbox.checked) {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('fundme-dark-mode', 'true');
+            } else {
+                document.body.classList.remove('dark-mode');
+                localStorage.setItem('fundme-dark-mode', 'false');
+            }
+        }
+    </script>
+</body>
+
+</html>

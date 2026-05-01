@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Drafts - Modern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .main-content {
+            background: transparent !important;
+            position: relative;
+            z-index: 2;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Header Section */
+        .header-section {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .header-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: white;
+            margin: 0 0 1rem 0;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            letter-spacing: -0.02em;
+        }
+
+        .header-subtitle {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0 2rem 0;
+            font-weight: 400;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-xl);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-top: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Filters and Controls */
+        .controls-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .controls-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .controls-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 0;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            background: transparent;
+            border: 2px solid var(--gray-200);
+            color: var(--gray-600);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .filter-tab:hover {
+            background: var(--gray-50);
+            border-color: var(--gray-300);
+        }
+
+        .filter-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .search-bar {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            border: 2px solid var(--gray-200);
+            border-radius: 12px;
+            font-size: 0.875rem;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 1rem;
+        }
+
+        /* Drafts Grid */
+        .drafts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2rem;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .draft-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+            transition: all 0.4s ease;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .draft-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: var(--shadow-2xl);
+        }
+
+        .draft-card-header {
+            padding: 2rem 2rem 1.5rem 2rem;
+            position: relative;
+        }
+
+        .draft-status-badge {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            padding: 0.375rem 0.875rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-ai {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .badge-extension {
+            background: var(--success);
+            color: white;
+        }
+
+        .badge-ready {
+            background: var(--warning);
+            color: white;
+        }
+
+        .draft-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 0 0 0.75rem 0;
+            line-height: 1.3;
+            padding-right: 6rem;
+        }
+
+        .draft-provider {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .provider-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.625rem;
+            font-weight: 700;
+        }
+
+        .draft-progress-section {
+            padding: 0 2rem 1.5rem 2rem;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .progress-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 600;
+        }
+
+        .progress-percentage {
+            font-size: 1.125rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 999px;
+            transition: width 0.6s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 4px;
+            background: white;
+            border-radius: 0 4px 4px 0;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .draft-meta-section {
+            padding: 0 2rem 1.5rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+
+        .meta-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--gray-400);
+        }
+
+        .draft-missing-section {
+            padding: 0 2rem 1.5rem 2rem;
+        }
+
+        .missing-label {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .missing-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .missing-chip {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+            padding: 0.375rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .ready-chip {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            padding: 0.375rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .draft-actions-section {
+            padding: 1.5rem 2rem 2rem 2rem;
+            background: var(--gray-50);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        /* Empty State */
+        .empty-state {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 4rem 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: var(--shadow-xl);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            color: white;
+            font-size: 3rem;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
+
+        .empty-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin: 0 0 1rem 0;
+        }
+
+        .empty-description {
+            color: var(--gray-600);
+            margin: 0 0 2rem 0;
+            line-height: 1.6;
+            font-size: 1.125rem;
+        }
+
+        /* Floating Action Button */
+        .fab-container {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .fab {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .fab::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.5);
+        }
+
+        .fab:hover::before {
+            animation: shimmer 0.5s ease;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .header-title {
+                font-size: 2.5rem;
+            }
+
+            .drafts-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .controls-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-bar {
+                max-width: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header-title {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .drafts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .draft-actions-section {
+                grid-template-columns: 1fr;
+            }
+
+            .draft-meta-section {
+                grid-template-columns: 1fr;
+            }
+
+            .fab-container {
+                bottom: 1rem;
+                right: 1rem;
+            }
+
+            .fab {
+                width: 56px;
+                height: 56px;
+                font-size: 1.25rem;
+            }
+        }
+
+        /* Loading State */
+        .loading-skeleton {
+            background: linear-gradient(90deg, var(--gray-200) 25%, var(--gray-100) 50%, var(--gray-200) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* Tooltips */
+        .tooltip {
+            position: relative;
+        }
+
+        .tooltip::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gray-900);
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            margin-bottom: 0.5rem;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">FundMe.</span>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    <span class="nav-item-label">Dashboard</span>
+                </a>
+                <a href="explorer.html" class="nav-item" data-tooltip="Explorer">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                    <span class="nav-item-label">Explorer</span>
+                </a>
+                <a href="saved.html" class="nav-item" data-tooltip="Saved">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    <span class="nav-item-label">Saved</span>
+                </a>
+                <a href="drafts.html" class="nav-item active" data-tooltip="Drafts">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 0v6h6" />
+                    </svg>
+                    <span class="nav-item-label">Drafts</span>
+                </a>
+                <a href="applications.html" class="nav-item" data-tooltip="Applications">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                    </svg>
+                    <span class="nav-item-label">Applications</span>
+                </a>
+                <a href="business-opportunities.html" class="nav-item" data-tooltip="Business Opportunities">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" />
+                    </svg>
+                    <span class="nav-item-label">Business Opportunities</span>
+                </a>
+                <a href="profile.html" class="nav-item" data-tooltip="Startup Profile">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                    </svg>
+                    <span class="nav-item-label">Startup Profile</span>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="settings.html" class="nav-item" data-tooltip="Settings">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.09 8.83a.488.488 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span class="nav-item-label">Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button class="btn btn-outline" id="menu-toggle" style="margin-right: 1rem; padding: 4px 8px; display: none;">Menu</button>
+                <div style="flex: 1; display: flex; align-items: center; gap: 0.75rem;">
+                    <h1 class="topbar-title">Drafts</h1>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 0.875rem; text-align: right;">
+                        <div style="font-weight: 600;" id="header_user_name">...</div>
+                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);" id="header_user_meta">...</div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&size=32"
+                        alt="User Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;"
+                        id="header_user_avatar">
+                </div>
+            </header>
+
+            <div class="container">
+                <!-- Header Section -->
+                <div class="header-section">
+                    <h1 class="header-title">AI Draft Workspace</h1>
+                    <p class="header-subtitle">
+                        Transform your funding applications with AI-powered drafts. Smart completion tracking, intelligent suggestions, and seamless submission preparation.
+                    </p>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid" id="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📝</div>
+                        <div class="stat-value" id="total-drafts">0</div>
+                        <div class="stat-label">Total Drafts</div>
+                        <div class="stat-change">+12% this week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✨</div>
+                        <div class="stat-value" id="ready-drafts">0</div>
+                        <div class="stat-label">Ready to Submit</div>
+                        <div class="stat-change">+8% this week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value" id="avg-progress">0%</div>
+                        <div class="stat-label">Avg Progress</div>
+                        <div class="stat-change">+5% this week</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🤖</div>
+                        <div class="stat-value" id="ai-generated">0</div>
+                        <div class="stat-label">AI Generated</div>
+                        <div class="stat-change">+15% this week</div>
+                    </div>
+                </div>
+
+                <!-- Filters and Controls -->
+                <div class="controls-section">
+                    <div class="controls-header">
+                        <h2 class="controls-title">Your Drafts</h2>
+                        <div class="search-bar">
+                            <svg class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                            </svg>
+                            <input type="text" class="search-input" placeholder="Search drafts..." id="search-input">
+                        </div>
+                    </div>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active" data-filter="all">All Drafts</button>
+                        <button class="filter-tab" data-filter="ready">Ready to Submit</button>
+                        <button class="filter-tab" data-filter="in-progress">In Progress</button>
+                        <button class="filter-tab" data-filter="ai-generated">AI Generated</button>
+                    </div>
+                </div>
+
+                <!-- Drafts Grid -->
+                <div class="drafts-grid" id="drafts-grid"></div>
+
+                <!-- Empty State -->
+                <div class="empty-state" id="empty-state" style="display: none;">
+                    <div class="empty-icon">📝</div>
+                    <h2 class="empty-title">No Drafts Yet</h2>
+                    <p class="empty-description">
+                        Start exploring funding opportunities and let AI help you create professional application drafts. 
+                        Your drafts will appear here with smart progress tracking and completion suggestions.
+                    </p>
+                    <a class="btn btn-primary" href="explorer.html">Explore Opportunities</a>
+                </div>
+            </div>
+
+            <!-- Floating Action Button -->
+            <div class="fab-container">
+                <button class="fab tooltip" data-tooltip="Create New Draft" onclick="window.location.href='explorer.html'">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+                    </svg>
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let allDrafts = [];
+        let currentFilter = 'all';
+
+        function renderDraftCard(draft) {
+            const missing = draft.completion?.missing_fields || [];
+            const progress = draft.completion?.progress || 0;
+            const provider = draft.opportunity?.provider || 'Funding opportunity';
+            const title = draft.title || draft.opportunity?.title || 'Application Draft';
+            const isAI = draft.schema_source === 'ai_inferred';
+            const isExtension = draft.schema_source === 'extension_capture';
+            const isReady = progress >= 80 && missing.length === 0;
+            const lastSaved = draft.last_saved ? new Date(draft.last_saved).toLocaleDateString() : 'Not saved';
+
+            let statusBadge = '';
+            if (isAI) {
+                statusBadge = '<span class="draft-status-badge badge-ai">AI</span>';
+            } else if (isExtension) {
+                statusBadge = '<span class="draft-status-badge badge-extension">Live</span>';
+            }
+            if (isReady) {
+                statusBadge += '<span class="draft-status-badge badge-ready">Ready</span>';
+            }
+
+            return `
+                <article class="draft-card">
+                    <div class="draft-card-header">
+                        ${statusBadge}
+                        <h3 class="draft-title">${title}</h3>
+                        <div class="draft-provider">
+                            <span class="provider-icon">🏢</span>
+                            ${provider}
+                        </div>
+                    </div>
+
+                    <div class="draft-progress-section">
+                        <div class="progress-header">
+                            <span class="progress-label">Completion Progress</span>
+                            <span class="progress-percentage">${progress}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+
+                    <div class="draft-meta-section">
+                        <div class="meta-item">
+                            <svg class="meta-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41 1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            <span>${draft.source_url || draft.opportunity?.link || 'Not linked'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <svg class="meta-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5v2h14v2h1v-2zm0 4h-1v2h1v-2z"/>
+                            </svg>
+                            <span>Last saved: ${lastSaved}</span>
+                        </div>
+                    </div>
+
+                    ${missing.length > 0 ? `
+                        <div class="draft-missing-section">
+                            <div class="missing-label">Missing Required Fields:</div>
+                            <div class="missing-chips">
+                                ${missing.slice(0, 6).map(fieldId => 
+                                    `<span class="missing-chip">${fieldId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>`
+                                ).join('')}
+                                ${missing.length > 6 ? `<span class="missing-chip">+${missing.length - 6} more</span>` : ''}
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="draft-missing-section">
+                            <div class="missing-label">Status:</div>
+                            <div class="missing-chips">
+                                <span class="ready-chip">✨ Ready for Review</span>
+                            </div>
+                        </div>
+                    `}
+
+                    <div class="draft-actions-section">
+                        <a class="btn btn-primary" href="draft-generator.html?opportunity_id=${draft.opportunity_id}">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 17.25V21h3.75L17 81.75v-3.75H3zm16.5-6v-3.75H21V18L7.5 6v3.75H3V6L16.5 6z"/>
+                            </svg>
+                            Continue Editing
+                        </a>
+                        <a class="btn btn-outline" href="draft-preview.html?draft_id=${draft.draft_id}&opportunity_id=${draft.opportunity_id}">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 4.5C7 4.5 2.5 7.5 2.5S17.5 7.5 17.5 17.5c0 .61-.23 1.21-.64 1.75-.11.25-.5.4-.75-.65-.35-.2-.75-.35-1.15-.15-.55-.05-1.05.2-1.55.5-.5.95-.85-1.35-.15-.4-.3-.8-.45-1.25-.15-.45-.25-.9-.25-1.4 0-.6.05-1.15.25-1.65.4-.5.95-.75-1.45-.95-.5-.2-1-.3-1.5-.4-.6-.1-1.15.15-1.65.35-.5.9-.8-1.35-.15-.45-.3-.9-.45-1.35-.15-.5-.25-1-.4-1.5-.25-.6-.5-1.15-.65-1.65-.15-.5-.3-1-.45-1.5-.25-.6-.55-1.15-.7-1.65-.15-.5-.45-1-.7-1.5-.3-.6-.6-1.15-.8-1.65-.15-.5-.55-1-.95-1.15-1.35-.15-.5-.65-1-.95-1.15-1.35-.15-.5-.75-1-1.15-1.35-.15-.5-.85-1-1.15-1.35-.15-.5-.95-1-1.15-1.35-.15-.5-1.05-1-1.15-1.35-.15-.5-1.15-1-1.15-1.35-.15-.5-1.25-1-1.15-1.35-.15-.5-1.35-1-1.15-1.35-.15-.5-1.45-1-1.15-1.35-.15-.5-1.55-1-1.15-1.35-.15-.5-1.65-1-1.15-1.35-.15-.5-1.75-1-1.15-1.35-.15-.5-1.85-1-1.15-1.35-.15-.5-1.95-1-1.15-1.35-.15-.5-2.05-1-1.15-1.35-.15-.5-2.15-1-1.15-1.35-.15-.5-2.25-1-1.15-1.35-.15-.5-2.35-1-1.15-1.35-.15-.5-2.45-1-1.15-1.35-.15-.5-2.55-1-1.15-1.35-.15-.5-2.65-1-1.15-1.35-.15-.5-2.75-1-1.15-1.35-.15-.5-2.85-1-1.15-1.35-.15-.5-2.95-1-1.15-1.35-.15-.5-3.05-1-1.15-1.35-.15-.5-3.15-1-1.15-1.35-.15-.5-3.25-1-1.15-1.35-.15-.5-3.35-1-1.15-1.35-.15-.5-3.45-1-1.15-1.35-.15-.5-3.55-1-1.15-1.35-.15-.5-3.65-1-1.15-1.35-.15-.5-3.75-1-1.15-1.35-.15-.5-3.85-1-1.15-1.35-.15-.5-3.95-1-1.15-1.35-.15-.5-4.05-1-1.15-1.35-.15-.5-4.15-1-1.15-1.35-.15-.5-4.25-1-1.15-1.35-.15-.5-4.35-1-1.15-1.35-.15-.5-4.45-1-1.15-1.35-.15-.5-4.55-1-1.15-1.35-.15-.5-4.65-1-1.15-1.35-.15-.5-4.75-1-1.15-1.35-.15-.5-4.85-1-1.15-1.35-.15-.5-4.95-1-1.15-1.35-.15-.5-5.05-1-1.15-1.35-.15-.5-5.15-1-1.15-1.35-.15-.5-5.25-1-1.15-1.35-.15-.5-5.35-1-1.15-1.35-.15-.5-5.45-1-1.15-1.35-.15-.5-5.55-1-1.15-1.35-.15-.5-5.65-1-1.15-1.35-.15-.5-5.75-1-1.15-1.35-.15-.5-5.85-1-1.15-1.35-.15-.5-5.95-1-1.15-1.35-.15-.5-6.05-1-1.15-1.35-.15-.5-6.15-1-1.15-1.35-.15-.5-6.25-1-1.15-1.35-.15-.5-6.35-1-1.15-1.35-.15-.5-6.45-1-1.15-1.35-.15-.5-6.55-1-1.15-1.35-.15-.5-6.65-1-1.15-1.35-.15-.5-6.75-1-1.15-1.35-.15-.5-6.85-1-1.15-1.35-.15-.5-6.95-1-1.15-1.35-.15-.5-7.05-1-1.15-1.35-.15-.5-7.15-1-1.15-1.35-.15-.5-7.25-1-1.15-1.35-.15-.5-7.35-1-1.15-1.35-.15-.5-7.45-1-1.15-1.35-.15-.5-7.55-1-1.15-1.35-.15-.5-7.65-1-1.15-1.35-.15-.5-7.75-1-1.15-1.35-.15-.5-7.85-1-1.15-1.35-.15-.5-7.95-1-1.15-1.35-.15-.5-8.05-1-1.15-1.35-.15-.5-8.15-1-1.15-1.35-.15-.5-8.25-1-1.15-1.35-.15-.5-8.35-1-1.15-1.35-.15-.5-8.45-1-1.15-1.35-.15-.5-8.55-1-1.15-1.35-.15-.5-8.65-1-1.15-1.35-.15-.5-8.75-1-1.15-1.35-.15-.5-8.85-1-1.15-1.35-.15-.5-8.95-1-1.15-1.35-.15-.5-9.05-1-1.15-1.35-.15-.5-9.15-1-1.15-1.35-.15-.5-9.25-1-1.15-1.35-.15-.5-9.35-1-1.15-1.35-.15-.5-9.45-1-1.15-1.35-.15-.5-9.55-1-1.15-1.35-.15-.5-9.65-1-1.15-1.35-.15-.5-9.75-1-1.15-1.35-.15-.5-9.85-1-1.15-1.35-.15-.5-9.95-1-1.15-1.35-.15-.5-10.05-1-1.15-1.35-.15-.5-10.15-1-1.15-1.35-.15-.5-10.25-1-1.15-1.35-.15-.5-10.35-1-1.15-1.35-.15-.5-10.45-1-1.15-1.35-.15-.5-10.55-1-1.15-1.35-.15-.5-10.65-1-1.15-1.35-.15-.5-10.75-1-1.15-1.35-.15-.5-10.85-1-1.15-1.35-.15-.5-10.95-1-1.15-1.35-.15-.5-11.05-1-1.15-1.35-.15-.5-11.15-1-1.15-1.35-.15-.5-11.25-1-1.15-1.35-.15-.5-11.35-1-1.15-1.35-.15-.5-11.45-1-1.15-1.35-.15-.5-11.55-1-1.15-1.35-.15-.5-11.65-1-1.15-1.35-.15-.5-11.75-1-1.15-1.35-.15-.5-11.85-1-1.15-1.35-.15-.5-11.95-1-1.15-1.35-.15-.5-12.05-1-1.15-1.35-.15-.5-12.15-1-1.15-1.35-.15-.5-12.25-1-1.15-1.35-.15-.5-12.35-1-1.15-1.35-.15-.5-12.45-1-1.15-1.35-.15-.5-12.55-1-1.15-1.35-.15-.5-12.65-1-1.15-1.35-.15-.5-12.75-1-1.15-1.35-.15-.5-12.85-1-1.15-1.35-.15-.5-12.95-1-1.15-1.35-.15-.5-13.05-1-1.15-1.35-.15-.5-13.15-1-1.15-1.35-.15-.5-13.25-1-1.15-1.35-.15-.5-13.35-1-1.15-1.35-.15-.5-13.45-1-1.15-1.35-.15-.5-13.55-1-1.15-1.35-.15-.5-13.65-1-1.15-1.35-.15-.5-13.75-1-1.15-1.35-.15-.5-13.85-1-1.15-1.35-.15-.5-13.95-1-1.15-1.35-.15-.5-14.05-1-1.15-1.35-.15-.5-14.15-1-1.15-1.35-.15-.5-14.25-1-1.15-1.35-.15-.5-14.35-1-1.15-1.35-.15-.5-14.45-1-1.15-1.35-.15-.5-14.55-1-1.15-1.35-.15-.5-14.65-1-1.15-1.35-.15-.5-14.75-1-1.15-1.35-.15-.5-14.85-1-1.15-1.35-.15-.5-14.95-1-1.15-1.35-.15-.5-15.05-1-1.15-1.35-.15-.5-15.15-1-1.15-1.35-.15-.5-15.25-1-1.15-1.35-.15-.5-15.35-1-1.15-1.35-.15-.5-15.45-1-1.15-1.35-.15-.5-15.55-1-1.15-1.35-.15-.5-15.65-1-1.15-1.35-.15-.5-15.75-1-1.15-1.35-.15-.5-15.85-1-1.15-1.35-.15-.5-15.95-1-1.15-1.35-.15-.5-16.05-1-1.15-1.35-.15-.5-16.15-1-1.15-1.35-.15-.5-16.25-1-1.15-1.35-.15-.5-16.35-1-1.15-1.35-.15-.5-16.45-1-1.15-1.35-.15-.5-16.55-1-1.15-1.35-.15-.5-16.65-1-1.15-1.35-.15-.5-16.75-1-1.15-1.35-.15-.5-16.85-1-1.15-1.35-.15-.5-16.95-1-1.15-1.35-.15-.5-17.05-1-1.15-1.35-.15-.5-17.15-1-1.15-1.35-.15-.5-17.25-1-1.15-1.35-.15-.5-17.35-1-1.15-1.35-.15-.5-17.45-1-1.15-1.35-.15-.5-17.55-1-1.15-1.35-.15-.5-17.65-1-1.15-1.35-.15-.5-17.75-1-1.15-1.35-.15-.5-17.85-1-1.15-1.35-.15-.5-17.95-1-1.15-1.35-.15-.5-18.05-1-1.15-1.35-.15-.5-18.15-1-1.15-1.35-.15-.5-18.25-1-1.15-1.35-.15-.5-18.35-1-1.15-1.35-.15-.5-18.45-1-1.15-1.35-.15-.5-18.55-1-1.15-1.35-.15-.5-18.65-1-1.15-1.35-.15-.5-18.75-1-1.15-1.35-.15-.5-18.85-1-1.15-1.35-.15-.5-18.95-1-1.15-1.35-.15-.5-19.05-1-1.15-1.35-.15-.5-19.15-1-1.15-1.35-.15-.5-19.25-1-1.15-1.35-.15-.5-19.35-1-1.15-1.35-.15-.5-19.45-1-1.15-1.35-.15-.5-19.55-1-1.15-1.35-.15-.5-19.65-1-1.15-1.35-.15-.5-19.75-1-1.15-1.35-.15-.5-19.85-1-1.15-1.35-.15-.5-19.95-1-1.15-1.35-.15-.5-20.05-1-1.15-1.35-.15-.5-20.15-1-1.15-1.35-.15-.5-20.25-1-1.15-1.35-.15-.5-20.35-1-1.15-1.35-.15-.5-20.45-1-1.15-1.35-.15-.5-20.55-1-1.15-1.35-.15-.5-20.65-1-1.15-1.35-.15-.5-20.75-1-1.15-1.35-.15-.5-20.85-1-1.15-1.35-.15-.5-20.95-1-1.15-1.35-.15-.5-21.05-1-1.15-1.35-.15-.5-21.15-1-1.15-1.35-.15-.5-21.25-1-1.15-1.35-.15-.5-21.35-1-1.15-1.35-.15-.5-21.45-1-1.15-1.35-.15-.5-21.55-1-1.15-1.35-.15-.5-21.65-1-1.15-1.35-.15-.5-21.75-1-1.15-1.35-.15-.5-21.85-1-1.15-1.35-.15-.5-21.95-1-1.15-1.35-.15-.5-22.05-1-1.15-1.35-.15-.5-22.15-1-1.15-1.35-.15-.5-22.25-1-1.15-1.35-.15-.5-22.35-1-1.15-1.35-.15-.5-22.45-1-1.15-1.35-.15-.5-22.55-1-1.15-1.35-.15-.5-22.65-1-1.15-1.35-.15-.5-22.75-1-1.15-1.35-.15-.5-22.85-1-1.15-1.35-.15-.5-22.95-1-1.15-1.35-.15-.5-23.05-1-1.15-1.35-.15-.5-23.15-1-1.15-1.35-.15-.5-23.25-1-1.15-1.35-.15-.5-23.35-1-1.15-1.35-.15-.5-23.45-1-1.15-1.35-.15-.5-23.55-1-1.15-1.35-.15-.5-23.65-1-1.15-1.35-.15-.5-23.75-1-1.15-1.35-.15-.5-23.85-1-1.15-1.35-.15-.5-23.95-1-1.15-1.35-.15-.5-24.05-1-1.15-1.35-.15-.5-24.15-1-1.15-1.35-.15-.5-24.25-1-1.15-1.35-.15-.5-24.35-1-1.15-1.35-.15-.5-24.45-1-1.15-1.35-.15-.5-24.55-1-1.15-1.35-.15-.5-24.65-1-1.15-1.35-.15-.5-24.75-1-1.15-1.35-.15-.5-24.85-1-1.15-1.35-.15-.5-24.95-1-1.15-1.35z"/>
+                            </svg>
+                            Preview Draft
+                        </a>
+                    </div>
+                </article>
+            `;
+        }
+
+        function filterDrafts(filter) {
+            currentFilter = filter;
+            let filteredDrafts = [...allDrafts];
+
+            switch (filter) {
+                case 'ready':
+                    filteredDrafts = filteredDrafts.filter(d => 
+                        (d.completion?.progress || 0) >= 80 && 
+                        (d.completion?.missing_fields || []).length === 0
+                    );
+                    break;
+                case 'in-progress':
+                    filteredDrafts = filteredDrafts.filter(d => 
+                        (d.completion?.progress || 0) < 80 || 
+                        (d.completion?.missing_fields || []).length > 0
+                    );
+                    break;
+                case 'ai-generated':
+                    filteredDrafts = filteredDrafts.filter(d => 
+                        d.schema_source === 'ai_inferred' || d.schema_source === 'extension_capture'
+                    );
+                    break;
+            }
+
+            renderDrafts(filteredDrafts);
+        }
+
+        function searchDrafts(query) {
+            const filteredDrafts = allDrafts.filter(draft => {
+                const title = (draft.title || draft.opportunity?.title || '').toLowerCase();
+                const provider = (draft.opportunity?.provider || '').toLowerCase();
+                return title.includes(query.toLowerCase()) || provider.includes(query.toLowerCase());
+            });
+            renderDrafts(filteredDrafts);
+        }
+
+        function renderDrafts(drafts) {
+            const container = document.getElementById('drafts-grid');
+            const emptyState = document.getElementById('empty-state');
+
+            if (!drafts.length) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            container.innerHTML = drafts.map(renderDraftCard).join('');
+            container.style.display = 'grid';
+            emptyState.style.display = 'none';
+        }
+
+        function updateStats(drafts) {
+            const totalDrafts = drafts.length;
+            const readyDrafts = drafts.filter(d => 
+                (d.completion?.progress || 0) >= 80 && 
+                (d.completion?.missing_fields || []).length === 0
+            ).length;
+            const avgProgress = totalDrafts > 0 ? Math.round(
+                drafts.reduce((sum, d) => sum + (d.completion?.progress || 0), 0) / totalDrafts
+            ) : 0;
+            const aiGenerated = drafts.filter(d => 
+                d.schema_source === 'ai_inferred' || d.schema_source === 'extension_capture'
+            ).length;
+
+            document.getElementById('total-drafts').textContent = totalDrafts;
+            document.getElementById('ready-drafts').textContent = readyDrafts;
+            document.getElementById('avg-progress').textContent = avgProgress + '%';
+            document.getElementById('ai-generated').textContent = aiGenerated;
+        }
+
+        async function initDraftsPage() {
+            try {
+                const drafts = await api.getDrafts();
+                allDrafts = drafts;
+
+                updateStats(drafts);
+                filterDrafts(currentFilter);
+
+                // Setup filter tabs
+                document.querySelectorAll('.filter-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        filterDrafts(tab.dataset.filter);
+                    });
+                });
+
+                // Setup search
+                document.getElementById('search-input').addEventListener('input', (e) => {
+                    searchDrafts(e.target.value);
+                });
+
+            } catch (error) {
+                console.error('Failed to load drafts:', error);
+                document.getElementById('drafts-grid').style.display = 'none';
+                document.getElementById('empty-state').style.display = 'block';
+                document.getElementById('stats-grid').style.display = 'none';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initDraftsPage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe Smart Apply</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+
+<body>
+    <main class="popup-shell">
+        <div class="hero">
+            <div class="eyebrow">FundMe Smart Apply</div>
+            <h1>Live portal assistant</h1>
+            <p>Capture the real form after login, generate grounded answers, and fill the portal in place.</p>
+        </div>
+
+        <section class="card">
+            <label class="field">
+                <span>FundMe API</span>
+                <input id="baseUrl" type="url" value="http://localhost:3000">
+            </label>
+            <label class="field">
+                <span>User ID</span>
+                <input id="userId" type="text" placeholder="u1">
+            </label>
+            <label class="field">
+                <span>Opportunity ID</span>
+                <input id="opportunityId" type="text" placeholder="opp_xxxxxx">
+            </label>
+            <div class="context-meta" id="tabMeta">Reading current tab...</div>
+        </section>
+
+        <section class="card actions">
+            <button id="diagnoseBtn">Diagnose Page</button>
+            <button id="captureBtn" class="primary">Capture Form</button>
+            <button id="generateBtn">Generate Answers</button>
+            <button id="fillBtn">Fill Portal</button>
+            <button id="aiFillBtn" class="primary" style="background: linear-gradient(135deg, #8b5cf6, #d946ef); border: none; color: white;">AI Smart Fill</button>
+        </section>
+
+        <section class="card status-card">
+            <div class="status-title">Status</div>
+            <pre id="statusLog">Waiting for portal context...</pre>
+        </section>
+    </main>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

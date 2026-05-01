@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Intelligence for Modern Founders</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Landing Specific Styles */
+        .hero {
+            background-color: var(--color-bg-surface);
+            padding: 8rem 0 6rem;
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-headline {
+            font-size: 3.3rem;
+            line-height: 1.15;
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-primary-dark);
+            font-weight: 700;
+        }
+        
+        .hero-sub {
+             font-size: 1.25rem;
+             color: var(--color-text-secondary);
+             margin-bottom: var(--spacing-xl);
+             line-height: 1.6;
+        }
+
+        .hero-form {
+            display: flex;
+            gap: var(--spacing-md);
+            background: #F3F4F6;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border);
+            flex-wrap: wrap; /* Mobile friendly */
+            width: 100%;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-trust-strip {
+            display: flex;
+            gap: 1.25rem;
+            flex-wrap: wrap;
+            align-items: center;
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+        
+        .hero-trust-strip span {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+        
+        .hero-trust-strip span::before {
+            content: '✓';
+            color: var(--color-primary);
+            font-weight: bold;
+        }
+
+        .hero-mockup-wrapper {
+            position: relative;
+            transform: perspective(1000px) rotateY(-12deg) rotateX(4deg);
+            transition: transform 0.5s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+        }
+        
+        .hero-mockup-wrapper:hover {
+            transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+        }
+
+        @media (max-width: 992px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .hero-mockup-wrapper {
+                transform: none;
+                margin-top: 1rem;
+            }
+            .hero-mockup-wrapper:hover {
+                transform: none;
+            }
+        }
+        
+        .trust-bar {
+            padding: 6rem 0 var(--spacing-xl);
+            background-color: var(--color-bg-body);
+            border-bottom: 1px solid var(--color-border);
+            text-align: center;
+        }
+        
+        .trust-logos {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-2xl);
+            opacity: 0.6;
+            filter: grayscale(100%);
+            flex-wrap: wrap;
+        }
+
+        .trust-logo {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--color-text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .features {
+            padding: 6rem 0;
+        }
+
+        .navbar {
+            height: var(--header-height);
+            border-bottom: 1px solid var(--color-border);
+            background: var(--color-bg-surface);
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0 var(--spacing-md);
+        }
+
+        .landing-nav {
+            padding-left: var(--spacing-lg);
+            padding-right: var(--spacing-lg);
+        }
+
+        .logo-fundme {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.35rem;
+            color: var(--color-primary-dark);
+            letter-spacing: -0.03em;
+            text-decoration: none;
+        }
+        .logo-fundme:hover {
+            color: var(--color-primary-dark);
+        }
+        .logo-text {
+            color: var(--color-primary-dark);
+            font-size: 1.5rem;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--color-primary-dark);
+            letter-spacing: -0.03em;
+        }
+
+        /* Landing colors & dark blue aesthetic */
+        .hero {
+            background: linear-gradient(180deg, var(--color-bg-surface) 0%, #F0F4F8 100%);
+            border-bottom: 1px solid var(--color-border);
+        }
+        .hero-headline {
+            color: var(--color-primary-dark);
+        }
+        .hero-form .btn-primary {
+            background: var(--color-primary);
+        }
+        .hero-form .btn-primary:hover {
+            background: var(--color-accent);
+        }
+        .trust-bar {
+            background: linear-gradient(180deg, #F0F4F8 0%, var(--color-bg-body) 100%);
+        }
+        .trust-logo {
+            color: var(--color-primary);
+        }
+        .feature-card {
+            border-left: 4px solid var(--color-accent);
+            background: var(--color-bg-surface);
+        }
+        .feature-card:nth-child(2) {
+            border-left-color: var(--color-primary);
+        }
+        .feature-card:nth-child(3) {
+            border-left-color: #0d9488;
+        }
+        .screen-preview-section {
+            background: linear-gradient(180deg, var(--color-primary-dark) 0%, #0f1729 100%);
+            color: var(--color-text-inverted);
+            padding: 6rem 0;
+            position: relative;
+        }
+        .screen-preview-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(15, 118, 110, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .screen-preview-section .section-sub {
+            color: rgba(255,255,255,0.7);
+            text-align: center;
+            font-size: 1rem;
+            margin-top: -0.5rem;
+            margin-bottom: var(--spacing-xl);
+        }
+        .screen-preview-section h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 0.25rem;
+            font-size: 1.75rem;
+        }
+        .screen-previews {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-xl);
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        .screen-mockup {
+            background: var(--color-bg-surface);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 24px 48px rgba(0,0,0,0.35), 0 0 0 1px rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .screen-mockup-header {
+            background: linear-gradient(90deg, var(--color-primary) 0%, #374151 100%);
+            color: white;
+            padding: 0.875rem 1.25rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .screen-mockup-header::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+        }
+        .screen-mockup-body {
+            padding: 1.25rem;
+            min-height: 260px;
+            background: #FAFBFC;
+        }
+        .screen-mockup.dashboard-preview .screen-mockup-body {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+        .mock-metric {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: var(--color-text-main);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        .mock-metric strong {
+            display: block;
+            font-size: 1.25rem;
+            color: var(--color-primary-dark);
+            margin-bottom: 0.2rem;
+        }
+        .mock-metric.mock-accent strong { color: var(--color-accent); }
+        .screen-mockup.explorer-preview .screen-mockup-body {
+            display: flex;
+            gap: 1rem;
+        }
+        .mock-filters {
+            width: 130px;
+            flex-shrink: 0;
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 0.75rem;
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        .mock-filters-title {
+            font-weight: 600;
+            color: var(--color-primary-dark);
+            margin-bottom: 0.5rem;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .mock-filter-item {
+            padding: 0.35rem 0;
+            font-size: 0.8rem;
+            color: var(--color-text-main);
+            border-bottom: 1px solid #F0F0F0;
+        }
+        .mock-filter-item:last-child { border-bottom: none; }
+        .mock-results {
+            flex: 1;
+            display: grid;
+            gap: 0.75rem;
+        }
+        .mock-card {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            color: var(--color-text-main);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+        }
+        .mock-card-title { font-weight: 600; color: var(--color-primary-dark); }
+        .mock-card-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: #ECFDF5;
+            color: #047857;
+        }
+        @media (max-width: 768px) {
+            .screen-previews { grid-template-columns: 1fr; }
+            .hero {
+                padding: 4rem 0 3rem;
+                min-height: 70vh;
+            }
+            .hero-headline {
+                font-size: 2.5rem;
+            }
+            .hero-sub {
+                font-size: 1.1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar landing-nav">
+        <div class="container nav-container">
+            <a href="index.html" class="logo logo-fundme">
+                <span class="logo-text">FundMe.</span>
+            </a>
+            <div class="nav-actions">
+                <a href="login.html" class="btn btn-outline" style="margin-right: 0.5rem;">Log In</a>
+                <a href="onboarding.html" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content-left">
+                <h1 class="hero-headline">Funding opportunities <br>for early-stage startups</h1>
+                <p class="hero-sub">Explore grants, incubators, accelerators, angel networks, and seed opportunities matched to your startup stage and sector.</p>
+                
+                <div class="hero-form">
+                    <div style="flex: 1; min-width: 150px;">
+                         <select class="form-select">
+                            <option selected disabled>I am a startup at stage...</option>
+                            <option>Idea / Setup</option>
+                            <option>Prototype / MVP</option>
+                            <option>Early Revenue</option>
+                            <option>Growth / Scale</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1; min-width: 150px;">
+                        <select class="form-select">
+                            <option selected disabled>In the sector...</option>
+                            <option>AI / Deep Tech</option>
+                            <option>Fintech</option>
+                            <option>HealthTech</option>
+                            <option>Climate / Sustainability</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" onclick="window.location.href='onboarding.html'">Find Funding</button>
+                </div>
+
+                <div class="hero-trust-strip">
+                    <span>Stage-matched opportunities</span>
+                    <span>Clear eligibility</span>
+                    <span>Deadline tracking</span>
+                    <span>Faster applications with AI</span>
+                </div>
+            </div>
+            
+            <div class="hero-content-right">
+                <div class="hero-mockup-wrapper">
+                    <div class="screen-mockup explorer-preview" style="box-shadow: none; border: 1px solid var(--color-border);">
+                        <div class="screen-mockup-header" style="background: linear-gradient(90deg, var(--color-primary-dark) 0%, #1e293b 100%);">Opportunity Matches</div>
+                        <div class="screen-mockup-body" style="background: var(--color-bg-surface); border-radius: 0 0 10px 10px; display: flex; flex-direction: column;">
+                            <div class="mock-results" style="width: 100%;">
+                                <div class="mock-card" style="box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-color: #f1f5f9; padding: 1rem;">
+                                    <span class="mock-card-title">NSF Seed Fund</span>
+                                    <span class="mock-card-badge">92% Match</span>
+                                </div>
+                                <div class="mock-card" style="box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-color: #f1f5f9; padding: 1rem;">
+                                    <span class="mock-card-title">SBIR Phase I</span>
+                                    <span class="mock-card-badge">88% Match</span>
+                                </div>
+                                <div class="mock-card" style="box-shadow: 0 4px 6px rgba(0,0,0,0.02); border-color: #f1f5f9; padding: 1rem;">
+                                    <span class="mock-card-title">VC Growth Fund</span>
+                                    <span class="mock-card-badge">85% Match</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Founder Journey Section -->
+    <section class="founder-journey-section" style="padding: 8rem 0; background-color: var(--color-bg-body);">
+        <div class="container">
+            <style>
+                @media (max-width: 992px) {
+                    .journey-step {
+                        grid-template-columns: 1fr !important;
+                        gap: 2rem !important;
+                        margin-bottom: 4rem !important;
+                    }
+                    .journey-content {
+                        order: 1 !important;
+                        text-align: center;
+                    }
+                    .journey-mockup {
+                        order: 2 !important;
+                    }
+                    .journey-step .step-badge {
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+                }
+                .saas-mockup {
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                }
+                .saas-mockup:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15) !important;
+                }
+            </style>
+
+            <div style="text-align: center; max-width: 800px; margin: 0 auto; margin-bottom: 5rem;">
+                <p style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; margin-bottom: 1rem;">Founder Journey</p>
+                <h2 style="font-size: 2.5rem; color: var(--color-primary-dark); font-weight: 700; margin-bottom: 1rem; line-height: 1.2;">Built to help founders discover, compare, and act</h2>
+                <p style="font-size: 1.15rem; color: var(--color-text-secondary); line-height: 1.6;">See your best-fit funding opportunities in one place. From search to shortlist to deadline tracking.</p>
+            </div>
+
+            <!-- Step 1 -->
+            <div class="journey-step" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center; margin-bottom: 7rem;">
+                <div class="journey-content" style="order: 1;">
+                    <div class="step-badge" style="width: 40px; height: 40px; background: #e0f2fe; color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin-bottom: 1.5rem;">1</div>
+                    <h3 style="font-size: 1.75rem; color: var(--color-primary-dark); font-weight: 700; margin-bottom: 1rem;">Tell us your stage and sector</h3>
+                    <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 1.6;">Get opportunities filtered for idea, MVP, early revenue, or growth stage based on your startup profile.</p>
+                </div>
+                <div class="journey-mockup" style="order: 2;">
+                    <!-- Setup Mockup -->
+                    <div class="saas-mockup" style="background: var(--color-bg-surface); border-radius: 12px; border: 1px solid var(--color-border); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); overflow: hidden;">
+                        <div style="background: #f8fafc; padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); display: flex; gap: 6px;">
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 8px;">
+                                <span style="font-size: 0.85rem; color: var(--color-text-secondary);">Profile setup</span>
+                                <span style="font-size: 0.85rem; color: var(--color-text-secondary); font-weight: 600;">75% Complete</span>
+                            </div>
+                            <div style="height: 6px; background: #f1f5f9; border-radius: 10px; width: 100%; margin-bottom: 1.5rem;">
+                                <div style="height: 100%; background: var(--color-primary); border-radius: 10px; width: 75%;"></div>
+                            </div>
+                            
+                            <div style="background: #f8fafc; border-radius: 8px; padding: 1.5rem; margin-top: 1.5rem;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
+                                    <div>
+                                        <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-bottom: 4px;">Sector</div>
+                                        <div style="font-size: 0.9rem; font-weight: 600; color: var(--color-text-main);">Fintech</div>
+                                    </div>
+                                    <div>
+                                        <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-bottom: 4px;">Current Stage</div>
+                                        <div style="font-size: 0.9rem; font-weight: 600; color: var(--color-text-main);">Early Revenue</div>
+                                    </div>
+                                    <div style="grid-column: span 2;">
+                                        <div style="font-size: 0.75rem; color: var(--color-text-secondary); margin-bottom: 4px;">Preferred Funding</div>
+                                        <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px;">
+                                            <span style="background: var(--color-bg-surface); border: 1px solid var(--color-border); border-radius: 4px; padding: 4px 10px; font-size: 0.75rem; font-weight: 500; color: var(--color-text-main);">Grant (Non-dilutive)</span>
+                                            <span style="background: var(--color-bg-surface); border: 1px solid var(--color-border); border-radius: 4px; padding: 4px 10px; font-size: 0.75rem; font-weight: 500; color: var(--color-text-main);">Seed Equity</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="journey-step" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center; margin-bottom: 7rem;">
+                <div class="journey-mockup" style="order: 1;">
+                    <!-- Explorer Mockup -->
+                    <div class="saas-mockup" style="background: var(--color-bg-surface); border-radius: 12px; border: 1px solid var(--color-border); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); overflow: hidden;">
+                        <div style="background: #f8fafc; padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); display: flex; gap: 6px;">
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                        </div>
+                        <div style="padding: 1.5rem; background: #f8fafc; display: flex; gap: 1.5rem;">
+                            <!-- Filters Sidebar -->
+                            <div style="width: 100px; flex-shrink: 0; display: flex; flex-direction: column; gap: 1.25rem;">
+                                <div>
+                                    <div style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 0.5rem; letter-spacing: 0.05em;">Filters</div>
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.7rem; color: var(--color-text-main);">
+                                            <input type="checkbox" checked style="margin:0; width: 10px; height: 10px; accent-color: var(--color-primary);"> 
+                                            <span>MVP Stage</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.7rem; color: var(--color-text-main);">
+                                            <input type="checkbox" style="margin:0; width: 10px; height: 10px; accent-color: var(--color-primary);"> 
+                                            <span>Early Rev</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.65rem; font-weight: 600; text-transform: uppercase; color: var(--color-text-secondary); margin-bottom: 0.5rem; letter-spacing: 0.05em;">Sector</div>
+                                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                                        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.7rem; color: var(--color-text-main);">
+                                            <input type="checkbox" checked style="margin:0; width: 10px; height: 10px; accent-color: var(--color-primary);"> 
+                                            <span>DeepTech</span>
+                                        </div>
+                                        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.7rem; color: var(--color-text-main);">
+                                            <input type="checkbox" style="margin:0; width: 10px; height: 10px; accent-color: var(--color-primary);"> 
+                                            <span>FinTech</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style="margin-top: auto;">
+                                    <button style="width: 100%; background: var(--color-bg-surface); border: 1px solid var(--color-border); border-radius: 4px; padding: 4px 6px; font-size: 0.65rem; font-weight: 500; cursor: pointer;">Clear All</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Cards List -->
+                            <div style="flex: 1; display: flex; flex-direction: column; gap: 1rem;">
+                                <!-- Card 1 -->
+                                <div style="background: var(--color-bg-surface); border-radius: 8px; border: 1px solid #e2e8f0; padding: 1.25rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                        <div>
+                                            <h3 style="font-size: 1rem; font-weight: 600; color: var(--color-primary-dark); margin: 0 0 2px 0;">NSF Seed Fund (Phase I)</h3>
+                                            <div style="font-size: 0.75rem; color: var(--color-text-secondary);">National Science Foundation</div>
+                                        </div>
+                                        <span style="background: #ECFDF5; color: #047857; font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 99px;">98% Match</span>
+                                    </div>
+                                    <div style="display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap;">
+                                        <span style="background: #EFF6FF; color: #1D4ED8; font-size: 0.7rem; font-weight: 500; padding: 3px 8px; border-radius: 4px;">DeepTech</span>
+                                        <span style="background: #F0FDF4; color: #15803D; font-size: 0.7rem; font-weight: 500; padding: 3px 8px; border-radius: 4px;">MVP Stage</span>
+                                        <span style="background: #FEFCE8; color: #A16207; font-size: 0.7rem; font-weight: 500; padding: 3px 8px; border-radius: 4px;">$275k</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 0.75rem;">
+                                        <div style="font-size: 0.8rem; color: var(--color-text-secondary);">Deadline: <span style="color: #0ea5e9; font-weight: 600;">15 Oct</span></div>
+                                        <button style="background: #f1f5f9; border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 6px; padding: 4px 12px; font-size: 0.75rem; font-weight: 500; cursor: pointer;">View Details</button>
+                                    </div>
+                                </div>
+                                <!-- Card 2 -->
+                                <div style="background: var(--color-bg-surface); border-radius: 8px; border: 1px solid #e2e8f0; padding: 1.25rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem;">
+                                        <div>
+                                            <h3 style="font-size: 1rem; font-weight: 600; color: var(--color-primary-dark); margin: 0 0 2px 0;">Y Combinator W27</h3>
+                                            <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Accelerator</div>
+                                        </div>
+                                        <span style="background: #ECFDF5; color: #047857; font-size: 0.75rem; font-weight: 700; padding: 4px 8px; border-radius: 99px;">94% Match</span>
+                                    </div>
+                                    <div style="display: flex; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap;">
+                                        <span style="background: #EFF6FF; color: #1D4ED8; font-size: 0.7rem; font-weight: 500; padding: 3px 8px; border-radius: 4px;">Any Sector</span>
+                                        <span style="background: #F0FDF4; color: #15803D; font-size: 0.7rem; font-weight: 500; padding: 3px 8px; border-radius: 4px;">Early Stage</span>
+                                        <span style="background: #FEFCE8; color: #A16207; font-size: 0.7rem; font-weight: 500; padding: 3px 8px; border-radius: 4px;">$500k</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 0.75rem;">
+                                        <div style="font-size: 0.8rem; color: var(--color-text-secondary);">Deadline: <span style="color: #0ea5e9; font-weight: 600;">01 Nov</span></div>
+                                        <button style="background: #f1f5f9; border: 1px solid var(--color-border); color: var(--color-text-main); border-radius: 6px; padding: 4px 12px; font-size: 0.75rem; font-weight: 500; cursor: pointer;">View Details</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="journey-content" style="order: 2;">
+                    <div class="step-badge" style="width: 40px; height: 40px; background: #e0f2fe; color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin-bottom: 1.5rem;">2</div>
+                    <h3 style="font-size: 1.75rem; color: var(--color-primary-dark); font-weight: 700; margin-bottom: 1rem;">See your best-fit matches</h3>
+                    <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 1.6;">Compare grants, accelerators, incubators, and funding programs by relevance, eligibility, deadlines, and funding type.</p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="journey-step" style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 4rem; align-items: center; margin-bottom: 7rem;">
+                <div class="journey-content" style="order: 1;">
+                    <div class="step-badge" style="width: 40px; height: 40px; background: #e0f2fe; color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin-bottom: 1.5rem;">3</div>
+                    <h3 style="font-size: 1.75rem; color: var(--color-primary-dark); font-weight: 700; margin-bottom: 1rem;">Track what to apply to next</h3>
+                    <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 1.6;">Save opportunities, monitor deadlines, and stay organized throughout your funding search.</p>
+                </div>
+                <div class="journey-mockup" style="order: 2;">
+                    <!-- Shortlist Mockup -->
+                    <div class="saas-mockup" style="background: var(--color-bg-surface); border-radius: 12px; border: 1px solid var(--color-border); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); overflow: hidden;">
+                        <div style="background: #f8fafc; padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); display: flex; gap: 6px;">
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                        </div>
+                        <div style="padding: 2rem;">
+                            <div style="display: flex; gap: 1.5rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                                <span style="color: var(--color-primary); font-weight: 600; font-size: 0.9rem; border-bottom: 2px solid var(--color-primary); padding-bottom: 1rem; margin-bottom: -1rem;">Saved (12)</span>
+                                <span style="color: var(--color-text-secondary); font-weight: 500; font-size: 0.9rem;">Archived (3)</span>
+                            </div>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <!-- Item 1 -->
+                                <div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0; padding: 1rem 1.25rem; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--color-primary-dark); margin-bottom: 4px; font-size: 0.95rem;">Y Combinator W27</div>
+                                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Accelerator</div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 0.85rem; font-weight: 600; color: #ea580c; margin-bottom: 4px;">Deadline: 01 Nov</div>
+                                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);">High Priority</div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Item 2 -->
+                                <div style="display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0; padding: 1rem 1.25rem; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--color-primary-dark); margin-bottom: 4px; font-size: 0.95rem;">Techstars London</div>
+                                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Accelerator</div>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <div style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-main); margin-bottom: 4px;">Deadline: 05 Dec</div>
+                                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Saved on Sep 12</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4 -->
+            <div class="journey-step" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center;">
+                <div class="journey-mockup" style="order: 1;">
+                    <div class="saas-mockup" style="background: var(--color-bg-surface); border-radius: 12px; border: 1px solid var(--color-border); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); overflow: hidden;">
+                        <div style="background: #f8fafc; padding: 0.75rem 1rem; border-bottom: 1px solid var(--color-border); display: flex; gap: 6px;">
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                            <span style="width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0;"></span>
+                        </div>
+                        <div style="padding: 2rem; background: #f8fafc;">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; color: var(--color-primary-dark); font-weight: 600; font-size: 0.95rem; margin-bottom: 1rem;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #ea580c;"><path d="m21 16-4 4-4-4"/><path d="M17 2v18"/><path d="m3 8 4-4 4 4"/><path d="M7 22V4"/></svg>
+                                AI Application Drafter
+                            </div>
+                            <div style="background: var(--color-bg-surface); border-radius: 8px; border: 1px solid #e2e8f0; padding: 1.25rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);">
+                                <div style="font-size: 0.8rem; font-weight: 600; color: var(--color-primary-dark); margin-bottom: 0.75rem;">Company Overview</div>
+                                <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; margin-bottom: 0.5rem;"></div>
+                                <div style="width: 85%; height: 6px; background: #e2e8f0; border-radius: 4px; margin-bottom: 0.5rem;"></div>
+                                <div style="width: 90%; height: 6px; background: #e2e8f0; border-radius: 4px; margin-bottom: 1.25rem;"></div>
+                                <div style="font-size: 0.8rem; font-weight: 600; color: var(--color-primary-dark); margin-bottom: 0.75rem;">Market Opportunity</div>
+                                <div style="width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; margin-bottom: 0.5rem;"></div>
+                                <div style="width: 75%; height: 6px; background: #e2e8f0; border-radius: 4px; margin-bottom: 1.25rem;"></div>
+                                <button style="width: 100%; background: #0f172a; border: none; color: white; border-radius: 6px; padding: 8px 16px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 16-4 4-4-4"/><path d="M17 2v18"/></svg> Generate Draft
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="journey-content" style="order: 2;">
+                    <div class="step-badge" style="width: 40px; height: 40px; background: #e0f2fe; color: var(--color-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; margin-bottom: 1.5rem;">4</div>
+                    <h3 style="font-size: 1.75rem; color: var(--color-primary-dark); font-weight: 700; margin-bottom: 1rem;">Prepare stronger applications faster</h3>
+                    <p style="font-size: 1.1rem; color: var(--color-text-secondary); line-height: 1.6;">Turn your startup profile into draft-ready application responses and reduce repetitive work with AI-assisted drafting.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- Features -->
+    <section class="features" style="padding: 7rem 0; background-color: var(--color-bg-body);">
+        <div class="container">
+            <style>
+                .bento-grid {
+                    display: grid; 
+                    grid-template-columns: repeat(3, 1fr); 
+                    gap: 1.5rem;
+                }
+                @media (max-width: 900px) {
+                    .bento-grid { grid-template-columns: 1fr; }
+                    .card-wide { grid-column: span 1 !important; }
+                }
+                .founder-feature-card {
+                    background: linear-gradient(145deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+                    border: 1px solid rgba(255,255,255,0.05) !important; 
+                    border-radius: 12px; 
+                    padding: 1.5rem;
+                    box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.1); 
+                    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+                    display: flex; flex-direction: column; gap: 1rem; font-family: 'Inter', sans-serif;
+                    color: white;
+                }
+                .founder-feature-card:hover {
+                    transform: translateY(-3px); 
+                    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+                    border-color: rgba(255,255,255,0.2) !important;
+                }
+                .founder-feature-card h3 {
+                    color: white !important;
+                    font-size: 1.1rem !important;
+                    margin-bottom: 0.25rem !important;
+                }
+                .founder-feature-card p {
+                    color: rgba(255, 255, 255, 0.8) !important;
+                    font-size: 0.9rem !important;
+                    line-height: 1.4 !important;
+                }
+                .feature-icon-box {
+                    width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+                    background: rgba(255, 255, 255, 0.1) !important;
+                    color: white !important;
+                }
+            </style>
+            
+            <div style="text-align: center; max-width: 800px; margin: 0 auto; margin-bottom: 5rem;">
+                <p style="color: var(--color-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; font-size: 0.85rem; margin-bottom: 1rem;">Intelligent Discovery</p>
+                <h2 style="font-size: 2.5rem; color: var(--color-primary-dark); font-weight: 700; margin-bottom: 1rem; line-height: 1.2;">Everything you need to fund your startup faster</h2>
+                <p style="font-size: 1.15rem; color: var(--color-text-secondary); line-height: 1.6;">Built to solve the specific pain points of early-stage discovery and application.</p>
+            </div>
+
+            <div class="bento-grid">
+                
+                <!-- Card 1 -->
+                <div class="founder-feature-card" style="border-top: 4px solid var(--color-primary);">
+                    <div class="feature-icon-box" style="background: #e0f2fe; color: var(--color-primary);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="m17 5-5-3-5 3"/><path d="m17 19-5 3-5-3"/><path d="M2 12h20"/><path d="m5 7-3 5 3 5"/><path d="m19 7 3 5-3 5"/></svg>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em;">Stage-fit matching</h3>
+                        <p style="color: var(--color-text-secondary); font-size: 1rem; line-height: 1.5;">Find opportunities aligned with your startup stage, not random listings.</p>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="founder-feature-card" style="border-top: 4px solid var(--color-primary);">
+                    <div class="feature-icon-box" style="background: #e0f2fe; color: var(--color-primary);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em;">Eligibility clarity</h3>
+                        <p style="color: var(--color-text-secondary); font-size: 1rem; line-height: 1.5;">Quickly see who can apply, what’s required, and whether it matches your startup.</p>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="founder-feature-card" style="border-top: 4px solid var(--color-primary);">
+                    <div class="feature-icon-box" style="background: #e0f2fe; color: var(--color-primary);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em;">Deadline tracking</h3>
+                        <p style="color: var(--color-text-secondary); font-size: 1rem; line-height: 1.5;">Never miss grants, accelerators, or open calls worth applying to.</p>
+                    </div>
+                </div>
+
+                <!-- Card 4 (AI) -->
+                <div class="founder-feature-card" style="border-top: 4px solid var(--color-primary);">
+                    <div class="feature-icon-box" style="background: #e0f2fe; color: var(--color-primary);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em;">AI recommendations</h3>
+                        <p style="color: var(--color-text-secondary); font-size: 1rem; line-height: 1.5;">Get smarter opportunity suggestions based on your startup profile, sector, and stage.</p>
+                    </div>
+                </div>
+
+                <!-- Card 5 (Drafts) -->
+                <div class="founder-feature-card" style="border-top: 4px solid var(--color-primary);">
+                    <div class="feature-icon-box" style="background: #e0f2fe; color: var(--color-primary);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 5-3-3H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2z"/><path d="M8 18h1"/><path d="M18.4 9.6a2 2 0 1 1 3 3L17 17l-4 1 1-4Z"/></svg>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em;">Application draft support</h3>
+                        <p style="color: var(--color-text-secondary); font-size: 1rem; line-height: 1.5;">Turn your startup profile into draft-ready responses and drastically reduce repetitive work.</p>
+                    </div>
+                </div>
+
+                <!-- Card 6 (Unified Profile) -->
+                <div class="founder-feature-card" style="border-top: 4px solid var(--color-primary);">
+                    <div class="feature-icon-box" style="background: #e0f2fe; color: var(--color-primary);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><polyline points="16 11 18 13 22 9"/></svg>
+                    </div>
+                    <div>
+                        <h3 style="font-size: 1.25rem; font-weight: 700; color: var(--color-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.01em;">Unified startup profile</h3>
+                        <p style="color: var(--color-text-secondary); font-size: 1rem; line-height: 1.5;">Create one comprehensive profile to generate drafts and check matching eligibility instantly.</p>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Trust Bar -->
+    <section class="trust-bar">
+        <div class="container">
+            <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-text-secondary); margin-bottom: var(--spacing-lg);">Trusted by partners at</p>
+            <div class="trust-logos">
+                <div class="trust-logo"><span>▲</span> VESTED</div>
+                <div class="trust-logo"><span>●</span> ORBIT</div>
+                <div class="trust-logo"><span>■</span> FOUNDRY</div>
+                <div class="trust-logo"><span>◆</span> CATALYST</div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

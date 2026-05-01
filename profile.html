@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Startup Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* FundMe Premium Profile - AI-Integrated Design System */
+        :root {
+            --color-text-main: #0f172a;
+            --color-text-secondary: #64748b;
+            --color-border: #cbd5e1; /* Higher contrast */
+            --color-accent: #0ea5e9;
+            --color-success: #0d9488;
+            --color-warning: #d97706;
+            --color-primary-dark: #111827;
+        }
+
+        body {
+            background-color: var(--color-bg-body); /* Softer slate */
+            font-family: 'Inter', sans-serif;
+            color: var(--color-text-main);
+        }
+
+        .main-content {
+            background-color: var(--color-bg-body);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: var(--color-bg-surface) !important;
+            border-bottom: 2px solid #e2e8f0;
+            padding: 0 2rem !important;
+            height: 72px !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            width: 98%;
+            max-width: none;
+            padding: 2.5rem 2rem;
+            margin: 0 auto;
+        }
+
+        /* Profile Layout Grid */
+        .profile-container {
+            display: grid;
+            grid-template-columns: 460px 1fr;
+            grid-template-areas:
+                "strength overview"
+                "strength traction"
+                "strength preferences"
+                "strength materials";
+            gap: 2rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1100px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+        /* Card System - Premium Accents */
+        .card {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 4px; /* Standardized 4px corners */
+            padding: 1.75rem;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        /* Color-Coded Sections */
+        .card.section-overview { background: var(--color-bg-surface); border-left: 4px solid var(--color-accent); }
+        .card.section-traction { background: var(--color-bg-surface); border-left: 4px solid var(--color-success); border-top: 1px solid var(--color-border); }
+        .card.section-preferences { background: var(--color-bg-surface); border-left: 4px solid #6366f1; border-top: 1px solid var(--color-border); }
+        .card.section-materials { background: var(--color-bg-surface); border-top: 2px solid var(--color-border); }
+
+        /* Headers within cards */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.75rem;
+            border-bottom: 1px solid #cbd5e1;
+            padding-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--color-primary-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* AI Chip Styles */
+        .ai-badge {
+            font-size: 10px;
+            font-weight: 800;
+            color: #0ea5e9;
+            background: #e0f2fe;
+            border: 1px solid #bae6fd;
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .ai-badge::before { content: '✨'; }
+
+        /* Edit Toggle Buttons */
+        .btn-edit-toggle {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-text-secondary);
+            border: 1px solid var(--color-border);
+            background: var(--color-bg-surface);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .btn-edit-toggle:hover {
+            color: var(--color-primary-dark);
+            background: var(--color-bg-body);
+            border-color: var(--color-text-secondary);
+        }
+
+        .btn-edit-toggle.active {
+            background: var(--color-primary-dark);
+            color: white;
+            border-color: var(--color-primary-dark);
+        }
+
+        /* Info Display vs Edit Form */
+        .edit-mode-content { display: none; }
+        .view-mode-content.hidden { display: none; }
+        .edit-mode-content.active { display: block; }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .info-block {
+            margin-bottom: 1rem;
+        }
+
+        .info-label {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--color-text-main);
+            line-height: 1.6;
+        }
+
+        /* Form Inputs (Edit Mode) */
+        .profile-input {
+            width: 100%;
+            padding: 0.875rem 1.25rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .profile-input:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        /* Identity Sidebar */
+        .profile-sidebar {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .avatar-large {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem auto;
+            border: 4px solid white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .profile-name-large {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--color-primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .strength-container {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .strength-bar-bg {
+            height: 8px;
+            background: var(--color-bg-body);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 0.75rem 0;
+        }
+
+        .strength-bar-fill {
+            height: 100%;
+            background: var(--color-accent);
+            border-radius: 10px;
+        }
+
+        /* Material List */
+        .material-item {
+            padding: 1.25rem;
+            background: var(--color-bg-body);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .material-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .tag {
+            padding: 4px 10px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .btn-save-section {
+            background: var(--color-primary-dark);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 1.5rem;
+        }
+
+        /* Dark Mode Button Overrides */
+        body.dark-mode .btn-edit-toggle.active {
+            background: var(--color-accent) !important;
+            color: var(--color-text-inverted) !important;
+            border-color: var(--color-accent) !important;
+        }
+
+        body.dark-mode .btn-save-section {
+            background: var(--color-accent) !important;
+            color: var(--color-text-inverted) !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">FundMe.</span>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    <span class="nav-item-label">Dashboard</span>
+                </a>
+                <a href="explorer.html" class="nav-item" data-tooltip="Explorer">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                    <span class="nav-item-label">Explorer</span>
+                </a>
+                <a href="saved.html" class="nav-item" data-tooltip="Saved">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    <span class="nav-item-label">Saved</span>
+                </a>
+                <a href="drafts.html" class="nav-item" data-tooltip="Drafts">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 0v6h6" />
+                    </svg>
+                    <span class="nav-item-label">Drafts</span>
+                </a>
+                <a href="applications.html" class="nav-item" data-tooltip="Applications">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                    </svg>
+                    <span class="nav-item-label">Applications</span>
+                </a>
+                <a href="business-opportunities.html" class="nav-item" data-tooltip="Business Opportunities">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" />
+                    </svg>
+                    <span class="nav-item-label">Business Opportunities</span>
+                </a>
+                <a href="profile.html" class="nav-item active" data-tooltip="Startup Profile">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                    </svg>
+                    <span class="nav-item-label">Startup Profile</span>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="settings.html" class="nav-item" data-tooltip="Settings">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.09 8.83a.488.488 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span class="nav-item-label">Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <button class="btn btn-outline" id="menu-toggle"
+                    style="margin-right: 1rem; padding: 4px 8px; display: none;">☰</button>
+                <h1 class="topbar-title">Startup Profile</h1>
+                <a href="profile.html"
+                    style="display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; cursor: pointer;">
+                    <!-- User Profile -->
+                    <div style="font-size: 0.875rem; text-align: right;">
+                        <div style="font-weight: 600;" id="header_user_name">...</div>
+                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);" id="header_user_meta">...</div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&size=32"
+                        alt="User Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" id="header_user_avatar">
+                </a>
+            </header>
+
+            <div class="container" style="padding-top: var(--spacing-xl);">
+                <div class="profile-container">
+
+                    <!-- 1. Profile Sidebar: Identity & Health -->
+                    <aside class="profile-sidebar">
+                        <img src="https://ui-avatars.com/api/?name=Startup&background=111827&color=fff&size=120" alt="Startup" class="avatar-large">
+                        <h2 class="profile-name-large">...</h2>
+                        <p style="color: var(--color-text-secondary); font-size: 0.95rem; font-weight: 500; margin-bottom: 2rem;"><span id="display_founder_name">...</span> • Founder</p>
+
+                        <div style="text-align: left; background: #f8fafc; padding: 1.25rem; border-radius: 4px; border: 1px solid var(--color-border);">
+                            <div class="info-block">
+                                <span class="info-label">Account Email</span>
+                                <span class="info-value" id="display_user_email">...</span>
+                            </div>
+                            <div class="info-block" style="margin-top: 1rem;">
+                                <span class="info-label">Application Email</span>
+                                <span class="info-value" id="display_app_email">...</span>
+                                <span class="ai-badge" style="margin-top: 4px; width: fit-content;">AI Sync Active</span>
+                            </div>
+                        </div>
+
+                        <div class="strength-container">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="info-label" style="margin-bottom: 0;">Profile Strength</span>
+                                <span style="font-size: 11px; font-weight: 800; color: var(--color-accent);">85%</span>
+                            </div>
+                            <div class="strength-bar-bg">
+                                <div class="strength-bar-fill" style="width: 85%;"></div>
+                            </div>
+                            <p style="font-size: 0.75rem; color: var(--color-text-secondary); line-height: 1.4; margin-top: 0.5rem;">
+                                Complete your traction data to reach 100% and improve AI matching.
+                            </p>
+                            <button class="btn-save-section" style="width: 100%; margin-top: 1.5rem; background: var(--color-accent);">Boost Profile</button>
+                        </div>
+                    </aside>
+
+                    <!-- 2. Main Content Cards -->
+                    <div style="display: flex; flex-direction: column; gap: 2rem;">
+                        
+                        <!-- Section: Company Overview -->
+                        <div class="card section-overview" id="section-overview">
+                            <div class="section-header">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <h3 class="section-title">Company Overview</h3>
+                                    <span class="ai-badge">AI Extracted</span>
+                                </div>
+                                <button class="btn-edit-toggle" onclick="toggleEdit('overview')">EDIT DETAILS</button>
+                            </div>
+
+                            <!-- View Mode -->
+                            <div class="view-mode-content" id="overview-view">
+                                <div class="info-grid">
+                                    <div class="info-block">
+                                        <span class="info-label">Startup Name</span>
+                                        <span class="info-value" id="view_startup_name">...</span>
+                                    </div>
+                                    <div class="info-block">
+                                        <span class="info-label">Primary Sector</span>
+                                        <span class="info-value" id="view_sector">Fintech / AI Treasury</span>
+                                    </div>
+                                    <div class="info-block" style="grid-column: span 2;">
+                                        <span class="info-label">Company Description</span>
+                                        <p class="info-value" id="view_startup_overview" style="font-weight: 400;">Building the institutional-grade financial intelligence layer for next-gen global startups.</p>
+                                    </div>
+                                    <div class="info-block" style="grid-column: span 2;">
+                                        <span class="info-label">Problem Statement</span>
+                                        <p class="info-value" id="view_problem_statement" style="font-weight: 400;">Multi-currency treasury visibility is fragmented across banking and crypto rails, causing capital reconciliation delays.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Edit Mode -->
+                            <div class="edit-mode-content" id="overview-edit">
+                                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                                    <div class="grid grid-cols-2" style="gap: 1.5rem;">
+                                        <div class="form-group"><label class="info-label">Name</label><input type="text" class="profile-input" id="edit_startup_name" value=""></div>
+                                        <div class="form-group"><label class="info-label">Sector</label><input type="text" class="profile-input" id="edit_sector" value="Fintech / AI Treasury"></div>
+                                    </div>
+                                    <div class="form-group"><label class="info-label">Application Email</label><input type="email" class="profile-input" id="edit_app_email" value="founders@acmecorp.finance"></div>
+                                    <div class="form-group"><label class="info-label">Description</label><textarea class="profile-input" id="edit_startup_overview" rows="2">Building the institutional-grade financial intelligence layer for next-gen global startups.</textarea></div>
+                                    <div class="form-group"><label class="info-label">Problem</label><textarea class="profile-input" id="edit_problem_statement" rows="2">Multi-currency treasury visibility is fragmented across banking and crypto rails, causing capital reconciliation delays.</textarea></div>
+                                    <button class="btn-save-section" onclick="saveSection('overview')">Save Changes</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section: Traction & Progress -->
+                        <div class="card section-traction" id="section-traction">
+                            <div class="section-header">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <h3 class="section-title">Traction & Progress</h3>
+                                    <span class="ai-badge" style="background: #ccfbf1; border-color: #99f6e4; color: #0d9488;">AI Ready</span>
+                                </div>
+                                <button class="btn-edit-toggle" onclick="toggleEdit('traction')">EDIT TRACTION</button>
+                            </div>
+
+                            <!-- View Mode -->
+                            <div class="view-mode-content" id="traction-view">
+                                <div class="info-grid">
+                                    <div class="info-block">
+                                        <span class="info-label">Current Stage</span>
+                                        <span class="info-value">Early Revenue / MVP</span>
+                                    </div>
+                                    <div class="info-block">
+                                        <span class="info-label">Target Users</span>
+                                        <span class="info-value">High-growth Startups (B2B)</span>
+                                    </div>
+                                    <div class="info-block" style="grid-column: span 2;">
+                                        <span class="info-label">Current Traction Summary</span>
+                                        <p class="info-value" style="font-weight: 400; color: var(--color-warning);">Missing details. Add MRR and pilot count to boost AI matching confidence.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Edit Mode -->
+                            <div class="edit-mode-content" id="traction-edit">
+                                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                                    <div class="grid grid-cols-2" style="gap: 1.5rem;">
+                                        <div class="form-group"><label class="info-label">Stage</label><input type="text" class="profile-input" value="Early Revenue / MVP"></div>
+                                        <div class="form-group"><label class="info-label">Users</label><input type="text" class="profile-input" value="High-growth Startups (B2B)"></div>
+                                    </div>
+                                    <div class="form-group"><label class="info-label">Traction Detail</label><textarea class="profile-input" rows="3" placeholder="Add MRR, user growth, or major pilots..."></textarea></div>
+                                    <button class="btn-save-section" style="background: var(--color-success);" onclick="toggleEdit('traction')">Update Traction</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section: Preferences -->
+                        <div class="card section-preferences" id="section-preferences">
+                            <div class="section-header">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <h3 class="section-title">Funding Preferences</h3>
+                                </div>
+                                <button class="btn-edit-toggle" onclick="toggleEdit('preferences')">EDIT PREFERENCES</button>
+                            </div>
+
+                            <!-- View Mode -->
+                            <div class="view-mode-content" id="preferences-view">
+                                <div class="info-grid">
+                                    <div class="info-block">
+                                        <span class="info-label">Target Funding</span>
+                                        <span class="info-value">₹1.5Cr</span>
+                                    </div>
+                                    <div class="info-block">
+                                        <span class="info-label">Geography Focus</span>
+                                        <span class="info-value">India</span>
+                                    </div>
+                                </div>
+                                <div style="margin-top: 1.5rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                    <span class="tag">Seed Equity</span>
+                                    <span class="tag">Grant (Non-dilutive)</span>
+                                    <span class="tag">Accelerators</span>
+                                </div>
+                            </div>
+
+                            <!-- Edit Mode -->
+                            <div class="edit-mode-content" id="preferences-edit">
+                                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                                    <div class="grid grid-cols-2" style="gap: 1.5rem;">
+                                        <div class="form-group"><label class="info-label">Funding Size</label><input type="text" class="profile-input" value="₹1.5Cr"></div>
+                                        <div class="form-group"><label class="info-label">Geography</label><input type="text" class="profile-input" value="India"></div>
+                                    </div>
+                                    <button class="btn-save-section" style="background: #6366f1;" onclick="toggleEdit('preferences')">Save Preferences</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Section: Materials -->
+                        <div class="card section-materials" id="section-materials">
+                            <div class="section-header">
+                                <div style="display: flex; align-items: center; gap: 1rem;">
+                                    <h3 class="section-title">Uploaded Materials</h3>
+                                </div>
+                            </div>
+
+                            <div class="material-item">
+                                <div class="material-meta">
+                                    <span style="font-weight: 700; color: var(--color-primary-dark); font-size: 0.95rem;">Pitch Deck (March 2026)</span>
+                                    <span style="font-size: 0.75rem; color: var(--color-text-secondary);">4.2 MB • PDF file</span>
+                                </div>
+                                <div style="display: flex; gap: 0.75rem;">
+                                    <button class="btn-edit-toggle">VIEW</button>
+                                    <button class="btn-edit-toggle">REPLACE</button>
+                                </div>
+                            </div>
+
+                            <div class="material-item">
+                                <div class="material-meta">
+                                    <span style="font-weight: 700; color: var(--color-primary-dark); font-size: 0.95rem;">Website Extraction Data</span>
+                                    <span style="font-size: 0.75rem; color: var(--color-text-secondary);">Last sync: Feb 20, 2026</span>
+                                </div>
+                                <button class="btn-edit-toggle">SYNC NOW</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        async function loadProfile() {
+            const user = getCurrentUser();
+            if(!user) return;
+            
+            document.getElementById('display_user_email').innerText = user.email;
+            document.getElementById('display_founder_name').innerText = user.name || 'Founder';
+            
+            try {
+                const profile = await api.getProfile();
+                
+                // Display Sidebar / Large info
+                const lgName = document.querySelector('.profile-name-large');
+                if (lgName) lgName.innerText = profile.startup_name;
+                document.getElementById('display_app_email').innerText = profile.application_email || user.email;
+
+                // Overview View Mode
+                document.getElementById('view_startup_name').innerText = profile.startup_name;
+                document.getElementById('view_sector').innerText = profile.sector;
+                document.getElementById('view_startup_overview').innerText = profile.startup_overview;
+                document.getElementById('view_problem_statement').innerText = profile.problem_statement || 'N/A';
+
+                // Overview Edit Mode
+                document.getElementById('edit_startup_name').value = profile.startup_name;
+                document.getElementById('edit_sector').value = profile.sector;
+                document.getElementById('edit_app_email').value = profile.application_email || '';
+                document.getElementById('edit_startup_overview').value = profile.startup_overview;
+                document.getElementById('edit_problem_statement').value = profile.problem_statement || '';
+
+                // Traction (Similarly update others if needed)
+                // ...
+                
+            } catch (err) {
+                console.error('Error loading profile:', err);
+            }
+        }
+
+        async function saveSection(sectionId) {
+            const btn = document.querySelector(`#${sectionId}-edit .btn-save-section`);
+            const originalText = btn.innerText;
+            btn.innerText = "Saving...";
+            btn.disabled = true;
+
+            try {
+                if (sectionId === 'overview') {
+                    const data = {
+                        startup_name: document.getElementById('edit_startup_name').value,
+                        sector: document.getElementById('edit_sector').value,
+                        application_email: document.getElementById('edit_app_email').value,
+                        startup_overview: document.getElementById('edit_startup_overview').value,
+                        problem_statement: document.getElementById('edit_problem_statement').value
+                    };
+                    await api.updateProfile(data);
+                }
+                
+                // Refresh data and toggle back
+                await loadProfile();
+                updateUserHeader(); // Refresh global header
+                toggleEdit(sectionId);
+            } catch (err) {
+                alert('Error saving section: ' + err.message);
+            } finally {
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+        });
+
+        function toggleEdit(sectionId) {
+            const viewMode = document.getElementById(sectionId + '-view');
+            const editMode = document.getElementById(sectionId + '-edit');
+            const btn = document.querySelector(`#section-${sectionId} .btn-edit-toggle`);
+
+            if (editMode.style.display === 'block') {
+                editMode.style.display = 'none';
+                viewMode.style.display = 'block';
+                btn.innerText = 'EDIT ' + sectionId.toUpperCase();
+                btn.classList.remove('active');
+            } else {
+                editMode.style.display = 'block';
+                viewMode.style.display = 'none';
+                btn.innerText = 'FINISH EDITING';
+                btn.classList.add('active');
+            }
+        }
+
+        // Sidebar Sync for Consistency
+        // (Removed redundant listener, now handled by js/app.js)
+    </script>
+</body>
+</html>
+```

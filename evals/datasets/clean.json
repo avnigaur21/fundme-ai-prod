@@ -1,0 +1,176 @@
+[
+  {
+    "input": {
+      "title": "Bharat Startup Grand Challenge 2026",
+      "description": "Bharat Startup Grand Challenge (BSGC) 2026 by Startup India / MASA ForumgrantNational initiative identifying and scaling high-impact innovations in Digital & FinTech Inclusion. Dec 31, 2026Up to: ₹5 Lakh"
+    },
+    "expected_output": {
+      "title": "Bharat Startup Grand Challenge",
+      "sector": "FinTech",
+      "deadline": "Dec 31, 2026",
+      "amount": "₹5 Lakh"
+    }
+  },
+  {
+    "input": {
+      "title": "HDFC Bank Parivartan SmartUp Grants (FY26)",
+      "description": "HDFC Bank Parivartan SmartUp Grants (FY26) by HDFC BankgrantNon-dilutive grants for social impact startups focused on financial inclusion and MSME innovations. Jan 31, 2026Up to: ₹50 Lakh"
+    },
+    "expected_output": {
+      "title": "HDFC Bank Parivartan SmartUp Grants",
+      "sector": "FinTech",
+      "deadline": "Jan 31, 2026",
+      "amount": "₹50 Lakh"
+    }
+  },
+  {
+    "input": {
+      "title": "FutureX AI – Campus Fund (2nd Edition) by Campus Fund, Google CloudCampus Fund, Google CloudAmountUpto ₹8.5 CrDeadlineApr 10, 2026Typeaccelerator",
+      "description": "Investment platform and accelerator contest for student-led AI startups. Selected teams receive investment up to $1,000,000 from Campus Fund and Google Cloud credits. Applications open to current students or graduates/dropouts from 2023 onwards."
+    },
+    "expected_output": {
+      "title": "FutureX AI Campus Fund",
+      "sector": "AI",
+      "deadline": "Apr 10, 2026",
+      "location": "India",
+      "type": "Accelerator",
+      "summary": "Investment platform and accelerator contest for student-led AI startups with up to $1M investment.",
+      "eligibility": ["Student-led AI startups", "Current students or graduates/dropouts from 2023 onwards"]
+    }
+  },
+  {
+    "input": {
+      "title": "BioVerse Challenge 2025 by Thermo Fisher ScientificThermo Fisher ScientificAmountNot specifiedDeadlineApr 10, 2026Typeaccelerator",
+      "description": "Nationwide challenge by Thermo Fisher for early-stage and growth-stage biotech startups registered with DPIIT. Covers Biologics, Industrial Biotechnology, Bioenergy, Green Biotech, Marine Biotechnology, Agri & Food Biotech, and Medtech & Diagnostics."
+    },
+    "expected_output": {
+      "title": "BioVerse Challenge",
+      "sector": "Biotech",
+      "deadline": "Apr 10, 2026",
+      "location": "India",
+      "type": "Accelerator",
+      "summary": "Nationwide challenge by Thermo Fisher for early and growth-stage biotech startups.",
+      "eligibility": ["Registered with DPIIT", "Early-stage and growth-stage biotech startups"]
+    }
+  },
+  {
+    "input": {
+      "title": "R|Elan Circular Design Challenge 2026R|ElanAmountVariableDeadlineApr 14, 2026Typechallenge",
+      "description": "Global competition for sustainable fashion innovations by designers and startups. Seed funding and mentorship offered."
+    },
+    "expected_output": {
+      "title": "R|Elan Circular Design Challenge",
+      "sector": "Sustainable Fashion",
+      "deadline": "Apr 14, 2026",
+      "location": "Global",
+      "type": "Challenge",
+      "summary": "Global competition for sustainable fashion innovations by designers and startups.",
+      "eligibility": ["Designers and startups"]
+    }
+  },
+  {
+    "input": {
+      "title": "Amazon Saheli Accelerate Season 2Amazon IndiaAmountNot specifiedDeadlineDec 20, 2025Typeaccelerator",
+      "description": "Business scale-up and mentorship program designed to nurture and empower women-led businesses across India. Provides seller training, brand visibility on Amazon marketplace, and direct access to venture capitalists during Demo Day."
+    },
+    "expected_output": {
+      "title": "Amazon Saheli Accelerate",
+      "sector": "E-commerce",
+      "deadline": "Dec 20, 2025",
+      "location": "India",
+      "type": "Accelerator",
+      "summary": "Mentorship program designed to empower women-led e-commerce businesses across India.",
+      "eligibility": ["Women-led businesses in India"]
+    }
+  },
+  {
+    "input": {
+      "title": "Innovate for Impact Challenge - Food Security World Food PrizeAmount₹45 LakhsDeadlineApr 15, 2026Typegrant",
+      "description": "A startup competition focused on food security and sustainability, with a grant of up to ₹45 Lakhs."
+    },
+    "expected_output": {
+      "title": "Innovate for Impact Challenge",
+      "sector": "Sustainability",
+      "deadline": "Apr 15, 2026",
+      "location": "Global",
+      "type": "Grant",
+      "summary": "Startup competition focused on food security and sustainability with up to ₹45 Lakhs grant.",
+      "eligibility": ["Startups working on food security and sustainability"]
+    }
+  },
+  {
+    "input": {
+      "title": "BioNEST Incubation Program at FITT IIT DelhiIIT DelhiAmountNot specifiedDeadlineApr 15, 2026Typeincubation",
+      "description": "Biotech incubation at IIT Delhi for innovators at ideation to early prototype stages."
+    },
+    "expected_output": {
+      "title": "BioNEST Incubation Program",
+      "sector": "Biotech",
+      "deadline": "Apr 15, 2026",
+      "location": "IIT Delhi, India",
+      "type": "Incubation",
+      "summary": "Biotech incubation at IIT Delhi for innovators at ideation to early prototype stages.",
+      "eligibility": ["Innovators at ideation to early prototype stages"]
+    }
+  },
+  {
+    "input": {
+      "title": "VJTI TBI DeepTech IncubatorVJTI TBI MumbaiAmountUp to ₹1 CrDeadlineApr 17, 2026Typeincubation",
+      "description": "Government-affiliated incubator focused on deep technology sectors. Provides access to laboratory and testing infrastructure, entrepreneurship training, mentorship, investor connections, and go-to-market support for startups in energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity."
+    },
+    "expected_output": {
+      "title": "VJTI TBI DeepTech Incubator",
+      "sector": "DeepTech",
+      "deadline": "Apr 17, 2026",
+      "location": "Mumbai, India",
+      "type": "Incubation",
+      "summary": "Government-affiliated incubator focused on deep technology sectors like IoT, AI/ML, and energy.",
+      "eligibility": ["DeepTech startups in energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity"]
+    }
+  },
+  {
+    "input": {
+      "title": "Google for Startups Accelerator: IndiaGoogle for StartupsAmountEquity-freeDeadlineApr 19, 2026Typeaccelerator",
+      "description": "Three-month, equity-free accelerator for AI-first startups at Seed to Series A. Offers mentoring from Google teams, Cloud credits, free Cloud TPU access, technical bootcamps, and strategic support on product and company strategy."
+    },
+    "expected_output": {
+      "title": "Google for Startups Accelerator: India",
+      "sector": "AI",
+      "deadline": "Apr 19, 2026",
+      "location": "India",
+      "type": "Accelerator",
+      "summary": "Three-month, equity-free accelerator for AI-first startups at Seed to Series A stage.",
+      "eligibility": ["AI-first startups in India", "Seed to Series A stage"]
+    }
+  },
+  {
+    "input": {
+      "title": "Tamil Nadu Technology Hub - iAccelerate Batch 2T-Hub TN / iAccelerateAmount₹40 LakhsDeadlineApr 20, 2026Typeaccelerator",
+      "description": "Deep tech accelerator for startups in Tier 2/3 cities of Tamil Nadu with TRL 3+. Provides expert-led strategy sessions, access to corporate and government partners, connections with 30+ investor partners, and seed funding up to Rs. 40 lakh for graduating startups."
+    },
+    "expected_output": {
+      "title": "Tamil Nadu Technology Hub - iAccelerate",
+      "sector": "DeepTech",
+      "deadline": "Apr 20, 2026",
+      "location": "Tamil Nadu, India",
+      "type": "Accelerator",
+      "summary": "Deep tech accelerator for startups in Tier 2/3 cities of Tamil Nadu.",
+      "eligibility": ["Startups in Tier 2/3 cities of Tamil Nadu", "TRL 3+ readiness"]
+    }
+  },
+  {
+    "input": {
+      "title": "BIRAC LEAP Fund at IIT DelhiBIRAC / IIT DelhiAmountUp to ₹70 LakhsDeadlineApr 20, 2026Typegrant",
+      "description": "Equity-linked funding for biotech and medtech startups provided by BIRAC's LEAP Fund at IIT Delhi. Up to ₹70 Lakhs for startups in validation and scaling stages."
+    },
+    "expected_output": {
+      "title": "BIRAC LEAP Fund",
+      "sector": "Biotech",
+      "deadline": "Apr 20, 2026",
+      "location": "IIT Delhi, India",
+      "type": "Equity",
+      "summary": "Equity-linked funding for biotech and medtech startups in validation and scaling stages.",
+      "eligibility": ["Biotech and medtech startups in validation and scaling stages"]
+    }
+  }
+]

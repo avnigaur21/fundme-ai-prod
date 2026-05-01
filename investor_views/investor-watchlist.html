@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Saved / Watchlist</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Base Styling for Consistency */
+        body { background-color: var(--color-bg-body) !important; transition: background-color 0.3s ease, color 0.3s ease; }
+        .main-content { background: var(--color-bg-body) !important; transition: background 0.3s ease; }
+    </style>
+    <style>
+        .watchlist-tabs {
+            display: flex;
+            gap: 2rem;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            padding: 1rem 0;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.9375rem;
+        }
+
+        .tab-btn:hover {
+            color: var(--color-primary);
+        }
+
+        .tab-btn.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-primary);
+        }
+
+        .watchlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .watchlist-card {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .watchlist-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-type {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #F0FDF4;
+            color: #166534;
+        }
+
+        .status-soon {
+            background: #FFFBEB;
+            color: #92400E;
+        }
+
+        .status-closed {
+            background: var(--color-bg-body);
+            color: #4B5563;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .action-link {
+            font-size: 0.875rem;
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .remove-btn {
+            font-size: 0.8125rem;
+            color: #EF4444;
+            background: none;
+            border: none;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .remove-btn:hover {
+            opacity: 1;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">FundMe.</span>
+                <button class="sidebar-toggle" id="sidebar-toggle" title="Expand sidebar" aria-label="Expand sidebar">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="investor-dashboard.html" class="nav-item" data-tooltip="Dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    <span class="nav-item-label">Dashboard</span>
+                </a>
+                <a href="investor-schemes.html" class="nav-item" data-tooltip="Schemes & Incentives">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.36 8-6.17 8-10.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2V15h2v1.5zm0-2.5h-2c0-2.5 2.5-2.5 2.5-4 0-1.5-1.5-1.5-1.5-1.5s-1.5 0-1.5 1.5h-2c0-3 3-3 3-3s3.5 0 3.5 3.5c0 2-2.5 2-2.5 4z" />
+                    </svg>
+                    <span class="nav-item-label">Schemes & Incentives</span>
+                </a>
+                <a href="investor-fund-calls.html" class="nav-item" data-tooltip="Fund Calls">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                    </svg>
+                    <span class="nav-item-label">Fund Calls</span>
+                </a>
+                <a href="investor-licenses.html" class="nav-item" data-tooltip="Licenses & TBI">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z" />
+                    </svg>
+                    <span class="nav-item-label">Licenses & TBI</span>
+                </a>
+                <a href="investor-eligibility.html" class="nav-item" data-tooltip="Eligibility Check">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    <span class="nav-item-label">Eligibility Check</span>
+                </a>
+                <a href="investor-watchlist.html" class="nav-item active" data-tooltip="Saved / Watchlist">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    <span class="nav-item-label">Saved / Watchlist</span>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="investor-profile.html" class="nav-item" data-tooltip="Investor Profile">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                    </svg>
+                    <span class="nav-item-label">Investor Profile</span>
+                </a>
+                <a href="investor-settings.html" class="nav-item" data-tooltip="Settings">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.09 8.83a.488.488 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span class="nav-item-label">Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <button class="btn btn-outline" id="menu-toggle"
+                    style="margin-right: 1rem; padding: 4px 8px; display: none;"
+                    onclick="event.stopPropagation(); document.getElementById('sidebar').classList.toggle('open');">☰</button>
+                <h1 class="topbar-title">Saved / Watchlist</h1>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 0.875rem; text-align: right;">
+                        <div style="font-weight: 600;">Sequoia India</div>
+                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Venture Capital • Tier 1
+                        </div>
+                    </div>
+                    <div style="width: 32px; height: 32px; background: #E5E7EB; border-radius: 50%;"></div>
+                </div>
+            </header>
+
+            <div class="container" style="padding-top: var(--spacing-lg); padding-bottom: 5rem;">
+                <div style="margin-bottom: var(--spacing-xl);">
+                    <p style="color: var(--color-text-secondary); max-width: 600px;">
+                        Items you’ve bookmarked for future reference across schemes, fund calls, and licenses.
+                    </p>
+                </div>
+
+                <!-- Category Tabs -->
+                <div class="watchlist-tabs">
+                    <button class="tab-btn active" onclick="switchTab('schemes', this)">Saved Schemes</button>
+                    <button class="tab-btn" onclick="switchTab('fund-calls', this)">Saved Fund Calls</button>
+                    <button class="tab-btn" onclick="switchTab('licenses', this)">Saved Licenses</button>
+                </div>
+
+                <!-- Tab Content: Schemes -->
+                <div id="schemes" class="tab-content active">
+                    <div class="watchlist-grid">
+                        <div class="watchlist-card">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <span class="card-type">Scheme</span>
+                                <span class="status-badge status-active">Active</span>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Seed Fund
+                                    Scheme (SFS)</h3>
+                                <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">
+                                    Financial assistance to startups for proof of concept, prototype development, and
+                                    product trials.
+                                </p>
+                            </div>
+                            <div class="card-actions">
+                                <a href="investor-schemes.html" class="action-link">View details</a>
+                                <button class="remove-btn">Remove</button>
+                            </div>
+                        </div>
+
+                        <div class="watchlist-card">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <span class="card-type">Scheme</span>
+                                <span class="status-badge status-soon">Closing Soon</span>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Credit
+                                    Guarantee Scheme</h3>
+                                <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">
+                                    Enabling credit to startups by providing guarantees for loans from Scheduled
+                                    Commercial Banks.
+                                </p>
+                            </div>
+                            <div class="card-actions">
+                                <a href="investor-schemes.html" class="action-link">View details</a>
+                                <button class="remove-btn">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Fund Calls -->
+                <div id="fund-calls" class="tab-content">
+                    <div class="watchlist-grid">
+                        <div class="watchlist-card">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <span class="card-type">Fund Call</span>
+                                <span class="status-badge status-active">Active</span>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">Fund of Funds
+                                    for Startups (FFS)</h3>
+                                <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">
+                                    SIDBI invitation for AIFs to apply for capital contribution under the FFS corpus.
+                                </p>
+                            </div>
+                            <div class="card-actions">
+                                <a href="investor-fund-calls.html" class="action-link">View details</a>
+                                <button class="remove-btn">Remove</button>
+                            </div>
+                        </div>
+
+                        <div class="watchlist-card">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <span class="card-type">Fund Call</span>
+                                <span class="status-badge status-closed">Closed</span>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">National
+                                    Startup Awards 2024</h3>
+                                <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">
+                                    Application window for the annual recognition program for high-impact startups.
+                                </p>
+                            </div>
+                            <div class="card-actions">
+                                <a href="investor-fund-calls.html" class="action-link">View details</a>
+                                <button class="remove-btn">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab Content: Licenses -->
+                <div id="licenses" class="tab-content">
+                    <div class="watchlist-grid">
+                        <div class="watchlist-card">
+                            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                <span class="card-type">License</span>
+                                <span class="status-badge status-active">Active</span>
+                            </div>
+                            <div>
+                                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">NIDHI-TBI
+                                    Recognition</h3>
+                                <p style="font-size: 0.875rem; color: var(--color-text-secondary); line-height: 1.5;">
+                                    Institutional accreditation for TBIs to receive DST grants and operational support.
+                                </p>
+                            </div>
+                            <div class="card-actions">
+                                <a href="investor-licenses.html" class="action-link">View details</a>
+                                <button class="remove-btn">Remove</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function switchTab(tabId, el) {
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            el.classList.add('active');
+
+            // Update content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // removed sidebar toggle
+    </script>
+    <!-- Existing inline scripts or closing body -->
+    <script src="js/app.js"></script>
+    <script>
+        // Sidebar Toggle (Mobile - hamburger) - explicit fallback
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('open');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

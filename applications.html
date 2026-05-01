@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | My Applications</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: var(--color-bg-body) !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .main-content {
+            background: var(--color-bg-body) !important;
+            transition: background 0.3s ease;
+        }
+
+        /* Summary Widget */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 1rem;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .summary-card {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem 1rem;
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            margin-bottom: 0.25rem;
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Applications List Grid */
+        .applications-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .app-card {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .app-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .app-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-primary-dark);
+            margin-bottom: 4px;
+        }
+
+        .app-org {
+            font-size: 0.8125rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-applied {
+            background: #E5E7EB;
+            color: #374151;
+        }
+
+        .status-review {
+            background: #E0E7FF;
+            color: #4338CA;
+            border: 1px solid #C7D2FE;
+        }
+
+        .status-shortlisted {
+            background: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #FDE68A;
+        }
+
+        .status-interview {
+            background: #FCE7F3;
+            color: #9D174D;
+            border: 1px solid #FBCFE8;
+        }
+
+        .status-accepted {
+            background: #DCFCE7;
+            color: #166534;
+            border: 1px solid #BBF7D0;
+        }
+
+        .status-rejected {
+            background: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #FECACA;
+        }
+
+        /* Timeline Info */
+        .app-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            background: var(--color-bg-body);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid #E5E7EB;
+        }
+
+        .timeline-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8125rem;
+        }
+
+        .timeline-label {
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        .timeline-value {
+            color: var(--color-text-main);
+            font-weight: 600;
+        }
+
+        /* Next Step Block */
+        .next-step-block {
+            border-left: 3px solid var(--color-primary);
+            padding-left: 1rem;
+        }
+
+        .next-step-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 4px;
+        }
+
+        .next-step-text {
+            font-size: 0.875rem;
+            color: var(--color-text-main);
+            line-height: 1.4;
+        }
+
+        /* Actions */
+        .app-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .app-actions .btn {
+            flex: 1;
+            justify-content: center;
+            padding: 8px 16px;
+            font-size: 0.875rem;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: var(--color-bg-surface);
+            border: 1px dashed var(--color-border);
+            border-radius: var(--radius-lg);
+            max-width: 600px;
+            margin: 2rem auto;
+            display: none;
+            /* toggled via JS if empty */
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-container {
+            background: var(--color-bg-surface);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(20px);
+            transition: transform 0.2s ease;
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--color-text-secondary);
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            padding: 1.25rem 1.5rem;
+            border-top: 1px solid var(--color-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            background: var(--color-bg-body);
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-select,
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 0.9375rem;
+            background: var(--color-bg-surface);
+            color: var(--color-text-main);
+            box-sizing: border-box;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .conditional-section {
+            display: none;
+            padding: 1rem;
+            background: var(--color-bg-body);
+            border: 1px dashed #CBD5E1;
+            border-radius: var(--radius-md);
+            margin-top: 1rem;
+        }
+
+        .conditional-section.active {
+            display: block;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--color-text-main);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">FundMe.</span>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+            </div>
+                        <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    <span class="nav-item-label">Dashboard</span>
+                </a>
+                <a href="explorer.html" class="nav-item" data-tooltip="Explorer">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                    <span class="nav-item-label">Explorer</span>
+                </a>
+                <a href="saved.html" class="nav-item" data-tooltip="Saved">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    <span class="nav-item-label">Saved</span>
+                </a>
+                <a href="drafts.html" class="nav-item" data-tooltip="Drafts">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 0v6h6" />
+                    </svg>
+                    <span class="nav-item-label">Drafts</span>
+                </a>
+                <a href="applications.html" class="nav-item active" data-tooltip="Applications">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                    </svg>
+                    <span class="nav-item-label">Applications</span>
+                </a>
+                <a href="business-opportunities.html" class="nav-item" data-tooltip="Business Opportunities">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" />
+                    </svg>
+                    <span class="nav-item-label">Business Opportunities</span>
+                </a>
+                <a href="profile.html" class="nav-item" data-tooltip="Startup Profile">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                    </svg>
+                    <span class="nav-item-label">Startup Profile</span>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="settings.html" class="nav-item" data-tooltip="Settings">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.09 8.83a.488.488 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span class="nav-item-label">Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <button class="btn btn-outline" id="menu-toggle"
+                    style="margin-right: 1rem; padding: 4px 8px; display: none;">☰</button>
+                <div style="flex: 1;">
+                    <h1 class="topbar-title">My Applications</h1>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1.5rem;">
+
+
+                  <a href="profile.html"
+                    style="display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; cursor: pointer;">
+                    <!-- User Profile -->
+                    <div style="font-size: 0.875rem; text-align: right;">
+                        <div style="font-weight: 600;" id="header_user_name">...</div>
+                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);" id="header_user_meta">...
+                        </div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&size=32"
+                        alt="User Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" id="header_user_avatar">
+                </a>
+                </div>
+            </header>
+
+            <div class="container" style="padding-top: var(--spacing-lg); padding-bottom: 5rem;">
+
+                <!-- Page Description -->
+                <div style="margin-bottom: var(--spacing-xl);">
+                    <p style="color: var(--color-text-secondary); max-width: 700px; line-height: 1.6;">
+                        Track the status and progress of the grants, accelerators, and funds you have applied to. Keep
+                        your documents organized and monitor upcoming evaluation stages.
+                    </p>
+                </div>
+
+                <!-- Applications Summary Widget -->
+                <div class="summary-grid">
+                    <div class="summary-card">
+                        <div class="summary-value">4</div>
+                        <div class="summary-label">Total Applied</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-value" style="color: #4338CA;">2</div>
+                        <div class="summary-label">Under Review</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-value" style="color: #92400E;">1</div>
+                        <div class="summary-label">Shortlisted</div>
+                    </div>
+                    <div class="summary-card" style="opacity: 0.5;">
+                        <div class="summary-value" style="color: #166534;">0</div>
+                        <div class="summary-label">Accepted</div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-value" style="color: #991B1B;">1</div>
+                        <div class="summary-label">Rejected</div>
+                    </div>
+                </div>
+
+                <!-- Empty State (Hidden by default, shown if no applications) -->
+                <div class="empty-state" id="emptyState">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🗂️</div>
+                    <h3 style="font-size: 1.25rem; color: var(--color-primary-dark); margin-bottom: 0.5rem;">No
+                        applications yet</h3>
+                    <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem; line-height: 1.5;">
+                        You haven't submitted any applications through the platform yet. Explore the matching ecosystem
+                        to find grants and accelerators perfect for your startup stage.
+                    </p>
+                    <a href="explorer.html" class="btn btn-primary"
+                        style="display: inline-flex; text-decoration: none;">Explore Ecosystem</a>
+                </div>
+
+                <!-- Active Applications List -->
+                <div class="applications-grid" id="applicationsGrid">
+
+                    <!-- Applications will be dynamically rendered here -->
+
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Update Status Modal -->
+    <div class="modal-overlay" id="statusModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title">Update Status</h2>
+                    <div style="font-size: 0.875rem; color: var(--color-text-secondary);">
+                        Opportunity: <strong id="modalOppName" style="color: var(--color-text-main);">NSF Seed
+                            Fund</strong><br>
+                        Current Status: <span id="modalCurrentStatus" style="color: var(--color-text-main);">Under
+                            Review</span>
+                    </div>
+                </div>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">New Status</label>
+                    <select class="form-select" id="newStatusSelect">
+                        <option value="Applied">Applied</option>
+                        <option value="Under Review">Under Review</option>
+                        <option value="Shortlisted">Shortlisted</option>
+                        <option value="Interview / Pitch Round">Interview / Pitch Round</option>
+                        <option value="Accepted">Accepted</option>
+                        <option value="Rejected">Rejected</option>
+                        <option value="Waitlisted">Waitlisted</option>
+                        <option value="Withdrawn">Withdrawn</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Next Step or Update</label>
+                    <textarea class="form-textarea" id="nextStepInput"
+                        placeholder="e.g. Waiting for panel review results."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Last Updated</label>
+                    <div id="lastUpdateDate"
+                        style="font-size: 0.9375rem; font-weight: 500; color: var(--color-text-main);">Oct 25, 2026
+                    </div>
+                </div>
+
+                <!-- Conditional: Rejected -->
+                <div class="conditional-section" id="rejectedSection">
+                    <label class="form-label">Did the program provide feedback?</label>
+                    <div class="radio-group">
+                        <label class="radio-label"><input type="radio" name="feedbackType" value="yes" checked>
+                            Yes</label>
+                        <label class="radio-label"><input type="radio" name="feedbackType" value="no"> No</label>
+                        <label class="radio-label"><input type="radio" name="feedbackType" value="assumed"> Assumed
+                            reason</label>
+                    </div>
+                    <div id="feedbackTextContainer">
+                        <label class="form-label" id="feedbackLabel">Feedback Details</label>
+                        <textarea class="form-textarea" id="feedbackInput"
+                            placeholder="Paste feedback here..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Conditional: Accepted -->
+                <div class="conditional-section" id="acceptedSection">
+                    <div class="form-group">
+                        <label class="form-label">Program Start Date</label>
+                        <input type="date" class="form-input" id="acceptedStartDate" style="margin-bottom: 1rem;">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Next Milestone / Notes</label>
+                        <textarea class="form-textarea" id="acceptedNotes"
+                            placeholder="e.g. Preparing onboarding documents."></textarea>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelModalBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveUpdateBtn">Save Update</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Sidebar Toggle (Mobile - hamburger) - explicit fallback
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const sidebar = document.getElementById('sidebar');
+            if (menuToggle && sidebar) {
+                menuToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('open');
+                });
+            }
+        });
+
+        // Dynamic Logic for Applications
+        document.addEventListener('DOMContentLoaded', async () => {
+            const modal = document.getElementById('statusModal');
+            const newStatusSelect = document.getElementById('newStatusSelect');
+            const rejectedSection = document.getElementById('rejectedSection');
+            const acceptedSection = document.getElementById('acceptedSection');
+            const feedbackRadios = document.querySelectorAll('input[name="feedbackType"]');
+            const feedbackTextContainer = document.getElementById('feedbackTextContainer');
+            const feedbackInput = document.getElementById('feedbackInput');
+            const feedbackLabel = document.getElementById('feedbackLabel');
+            
+            let currentActiveApp = null;
+            let applicationsList = [];
+
+            const getFormattedDate = () => {
+                const options = { month: 'short', day: 'numeric', year: 'numeric' };
+                return new Intl.DateTimeFormat('en-US', options).format(new Date());
+            };
+
+            const getStatusClassAndColor = (status) => {
+                const map = {
+                    'Applied': 'status-applied',
+                    'Under Review': 'status-review',
+                    'Shortlisted': 'status-shortlisted',
+                    'Interview / Pitch Round': 'status-interview',
+                    'Accepted': 'status-accepted',
+                    'Rejected': 'status-rejected',
+                    'Waitlisted': 'status-shortlisted',
+                    'Withdrawn': 'status-applied'
+                };
+                return map[status] || 'status-applied';
+            };
+
+            function renderApplicationCard(app) {
+                const title = app.opportunity?.title || 'Application';
+                const org = app.opportunity?.provider || 'Organization';
+                const status = app.status || 'Applied';
+                const appliedDate = app.created_at ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(app.created_at)) : '-';
+                const deadline = app.deadline ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(app.deadline)) : 'Rolling';
+                const lastUpdate = app.updated_at ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(app.updated_at)) : appliedDate;
+                
+                const nextStep = app.timeline && app.timeline.length > 0 ? app.timeline[app.timeline.length - 1].note : 'Awaiting updates.';
+
+                let nextStepColor = 'var(--color-primary)';
+                let labelColor = 'var(--color-primary)';
+                let labelText = 'Next Step';
+                
+                if (status === 'Rejected') {
+                    nextStepColor = '#EF4444';
+                    labelColor = '#DC2626';
+                    labelText = 'Feedback / Outcome';
+                } else if (status === 'Accepted') {
+                    nextStepColor = '#22C55E';
+                    labelColor = '#166534';
+                    labelText = 'Next Milestone';
+                } else if (status === 'Shortlisted' || status === 'Interview / Pitch Round') {
+                    nextStepColor = '#F59E0B';
+                    labelColor = '#D97706';
+                    labelText = 'Action Required';
+                }
+
+                return `
+                    <div class="app-card" data-id="${app.application_id}">
+                        <div class="app-header">
+                            <div>
+                                <h3 class="app-title">${title}</h3>
+                                <div class="app-org">${org}</div>
+                            </div>
+                            <span class="status-badge ${getStatusClassAndColor(status)}">${status}</span>
+                        </div>
+
+                        <div class="app-timeline">
+                            <div class="timeline-row">
+                                <span class="timeline-label">Applied On</span>
+                                <span class="timeline-value">${appliedDate}</span>
+                            </div>
+                            <div class="timeline-row" style="margin-top: 4px; padding-top: 4px; border-top: 1px solid #E5E7EB;">
+                                <span class="timeline-label">Deadline</span>
+                                <span class="timeline-value">${deadline}</span>
+                            </div>
+                            <div class="timeline-row" style="margin-top: 4px; padding-top: 4px; border-top: 1px solid #E5E7EB;">
+                                <span class="timeline-label">Last Update</span>
+                                <span class="timeline-value" style="color: ${labelColor};">${lastUpdate}</span>
+                            </div>
+                        </div>
+
+                        <div class="next-step-block" style="border-left-color: ${nextStepColor};">
+                            <div class="next-step-label" style="color: ${labelColor};">${labelText}</div>
+                            <div class="next-step-text">${nextStep}</div>
+                        </div>
+
+                        <div class="app-actions">
+                            <button class="btn btn-outline" onclick="window.location.href='draft-preview.html?opportunity_id=${app.opportunity_id}'">View Draft</button>
+                            <button class="btn btn-outline update-status-btn" style="background: #F9FAFB;">Update Status</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            async function initApplicationsPage() {
+                try {
+                    applicationsList = await api.getApplications();
+                    
+                    if (applicationsList.length === 0) {
+                        document.getElementById('emptyState').style.display = 'block';
+                        document.getElementById('applicationsGrid').innerHTML = '';
+                        document.querySelector('.summary-grid').style.display = 'none';
+                        return;
+                    }
+
+                    // Update summary counts
+                    const counts = { 'Total': applicationsList.length, 'Under Review': 0, 'Shortlisted': 0, 'Accepted': 0, 'Rejected': 0 };
+                    applicationsList.forEach(app => {
+                        if (app.status === 'Under Review') counts['Under Review']++;
+                        if (app.status === 'Shortlisted' || app.status === 'Interview / Pitch Round') counts['Shortlisted']++;
+                        if (app.status === 'Accepted') counts['Accepted']++;
+                        if (app.status === 'Rejected') counts['Rejected']++;
+                    });
+
+                    const summaryCards = document.querySelectorAll('.summary-card .summary-value');
+                    if (summaryCards.length >= 5) {
+                        summaryCards[0].innerText = counts['Total'];
+                        summaryCards[1].innerText = counts['Under Review'];
+                        summaryCards[2].innerText = counts['Shortlisted'];
+                        summaryCards[3].innerText = counts['Accepted'];
+                        summaryCards[4].innerText = counts['Rejected'];
+                    }
+
+                    const grid = document.getElementById('applicationsGrid');
+                    grid.innerHTML = applicationsList.map(renderApplicationCard).join('');
+
+                    // Attach modal events to the new buttons
+                    document.querySelectorAll('.update-status-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const card = e.target.closest('.app-card');
+                            const appId = card.getAttribute('data-id');
+                            currentActiveApp = applicationsList.find(a => a.application_id === appId);
+
+                            document.getElementById('modalOppName').innerText = currentActiveApp.opportunity?.title || 'Application';
+                            document.getElementById('modalCurrentStatus').innerText = currentActiveApp.status || 'Applied';
+                            
+                            const lastNote = currentActiveApp.timeline && currentActiveApp.timeline.length > 0 
+                                ? currentActiveApp.timeline[currentActiveApp.timeline.length - 1].note 
+                                : '';
+                            document.getElementById('nextStepInput').value = lastNote.replace(/^"[^]*"\n?/g, '').trim();
+                            document.getElementById('lastUpdateDate').innerText = getFormattedDate();
+
+                            newStatusSelect.value = currentActiveApp.status || 'Under Review';
+                            newStatusSelect.dispatchEvent(new Event('change'));
+
+                            document.getElementById('acceptedStartDate').value = '';
+                            document.getElementById('acceptedNotes').value = '';
+                            feedbackRadios[0].checked = true;
+                            feedbackRadios[0].dispatchEvent(new Event('change'));
+                            feedbackInput.value = '';
+
+                            modal.classList.add('active');
+                        });
+                    });
+
+                } catch (err) {
+                    console.error('Failed to load applications:', err);
+                }
+            }
+
+            const closeModal = () => {
+                modal.classList.remove('active');
+                currentActiveApp = null;
+            };
+
+            document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+            document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal();
+            });
+
+            newStatusSelect.addEventListener('change', (e) => {
+                const val = e.target.value;
+                rejectedSection.classList.remove('active');
+                acceptedSection.classList.remove('active');
+                if (val === 'Rejected') rejectedSection.classList.add('active');
+                else if (val === 'Accepted') acceptedSection.classList.add('active');
+            });
+
+            feedbackRadios.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    const val = e.target.value;
+                    if (val === 'no') {
+                        feedbackTextContainer.style.display = 'none';
+                        feedbackInput.value = '';
+                    } else {
+                        feedbackTextContainer.style.display = 'block';
+                        if (val === 'yes') {
+                            feedbackLabel.innerText = "Paste feedback here:";
+                            feedbackInput.placeholder = "e.g. Traction is slightly too early for this cohort.";
+                        } else if (val === 'assumed') {
+                            feedbackLabel.innerText = "Assumed reason:";
+                            feedbackInput.placeholder = "e.g. Program typically accepts revenue-stage startups.";
+                        }
+                    }
+                });
+            });
+
+            document.getElementById('saveUpdateBtn').addEventListener('click', async () => {
+                if (!currentActiveApp) return;
+
+                const newStatus = newStatusSelect.value;
+                const nextStep = document.getElementById('nextStepInput').value;
+                
+                let finalText = nextStep || '';
+                
+                if (newStatus === 'Rejected') {
+                    const feedbackType = document.querySelector('input[name="feedbackType"]:checked').value;
+                    if (feedbackType !== 'no') {
+                        const fb = feedbackInput.value.trim();
+                        finalText = fb ? `"${fb}"\n\n${nextStep}` : nextStep;
+                    }
+                } else if (newStatus === 'Accepted') {
+                    const startDate = document.getElementById('acceptedStartDate').value;
+                    const notes = document.getElementById('acceptedNotes').value.trim();
+                    let acceptedText = [];
+                    if (startDate) acceptedText.push(`Program Starts: ${startDate}`);
+                    if (notes) acceptedText.push(notes);
+                    if (acceptedText.length > 0) {
+                        finalText = acceptedText.join(' | ') + (nextStep ? `\n\n${nextStep}` : '');
+                    }
+                }
+
+                if (!finalText || finalText.trim() === '') finalText = "No further action pending.";
+
+                try {
+                    const saveBtn = document.getElementById('saveUpdateBtn');
+                    const originalBtnText = saveBtn.innerText;
+                    
+                    // Update application backend
+                    currentActiveApp.status = newStatus;
+                    currentActiveApp.timeline = currentActiveApp.timeline || [];
+                    currentActiveApp.timeline.push({
+                        status: newStatus,
+                        note: finalText.trim(),
+                        date: new Date().toISOString()
+                    });
+                    
+                    await api.updateApplication(currentActiveApp.application_id, {
+                        status: newStatus,
+                        timeline: currentActiveApp.timeline
+                    });
+
+                    // Optional: Trigger AI Feedback Insights if rejected
+                    if (newStatus === 'Rejected' && feedbackInput.value.trim() !== '') {
+                        saveBtn.innerText = 'Generating Insights...';
+                        saveBtn.disabled = true;
+                        try {
+                            const aiRes = await fetch('/api/ai/feedback-insights', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ application: currentActiveApp })
+                            }).then(r => r.json());
+                            
+                            if (aiRes && aiRes.result) {
+                                currentActiveApp.timeline.push({
+                                    status: 'AI Insights',
+                                    note: aiRes.result,
+                                    date: new Date().toISOString()
+                                });
+                                await api.updateApplication(currentActiveApp.application_id, { timeline: currentActiveApp.timeline });
+                            }
+                        } catch (aiErr) { 
+                            console.error('AI Insights failed', aiErr); 
+                        } finally {
+                            saveBtn.innerText = originalBtnText;
+                            saveBtn.disabled = false;
+                        }
+                    }
+
+                    closeModal();
+                    await initApplicationsPage(); // Refresh UI
+                } catch (err) {
+                    alert('Failed to update status.');
+                    console.error(err);
+                }
+            });
+
+            // Initialize Page
+            initApplicationsPage();
+        });
+    </script>
+</body>
+
+</html>

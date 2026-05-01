@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Role Selection</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .fade-transition {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 1;
+        }
+
+        .fade-out {
+            opacity: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="onboarding-container" style="height: 100vh; overflow: hidden;">
+        <!-- Left Panel: Value Prop -->
+        <div class="onboarding-left" id="leftPanel" style="justify-content: space-between; padding: 5rem 4rem; height: 100vh; position: sticky; top: 0;">
+            
+            <!-- Top: Brand Logo -->
+            <div style="z-index: 1;">
+                <a href="index.html"
+                    style="color: white; font-weight: 800; font-size: 1.75rem; text-decoration: none; display: block; letter-spacing: -0.02em;">FundMe.</a>
+            </div>
+
+            <!-- Middle: Dynamic Headlines -->
+            <div style="z-index: 1; max-width: 480px;">
+                <h1 id="onboardingHeadline" class="fade-transition"
+                    style="color: white; font-size: 3rem; margin-bottom: 1.5rem; line-height: 1.1; font-weight: 700;">Personalized funding support starts with your profile.</h1>
+                <p id="onboardingSubtext" class="fade-transition"
+                    style="color: rgba(255,255,255,0.6); font-size: 1.125rem; line-height: 1.6;">Choose your role and create your account to begin discovering better-fit opportunities.</p>
+            </div>
+
+            <!-- Bottom: Trust Indicators -->
+            <div style="z-index: 1; display: flex; gap: 2rem; color: rgba(255,255,255,0.4); font-size: 0.875rem; font-weight: 500;">
+                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--color-accent);">✓</span> AI-Powered</div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--color-accent);">✓</span> Founder-First</div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;"><span style="color: var(--color-accent);">✓</span> Verified Data</div>
+            </div>
+
+        </div>
+
+        <!-- Right Panel: Form Area -->
+        <div class="onboarding-right" style="position: relative; overflow-y: auto; height: 100vh; width: 100%;">
+            
+            <!-- STEP 1: Welcome & Account Setup (Combined) -->
+            <div class="auth-box step-container active" id="step1">
+                <h2 style="margin-bottom: 0.5rem; font-size: 1.5rem;">Create your account</h2>
+                <p style="color: var(--color-text-secondary); margin-bottom: 2rem;">Select your primary role and secure your login details.</p>
+                
+                <!-- Role Selection -->
+                <div class="role-grid" style="grid-template-columns: repeat(2, 1fr); margin-bottom: 2rem;">
+                    <div class="role-tile">
+                        <input type="radio" name="role_choice" id="choice_founder" value="founder" checked>
+                        <label class="role-label" for="choice_founder">Founder</label>
+                    </div>
+                    <div class="role-tile">
+                        <input type="radio" name="role_choice" id="choice_investor" value="investor">
+                        <label class="role-label" for="choice_investor">Investor</label>
+                    </div>
+                </div>
+
+                <!-- Account Fields -->
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" id="founder_name" class="form-input" placeholder="Jane Doe" required onkeydown="handleStep1Enter(event, 'founder_name', 'primary_email')">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Primary Account Email</label>
+                    <input type="email" id="primary_email" class="form-input" placeholder="jane@startup.com" required onkeydown="handleStep1Enter(event, 'primary_email', 'password')">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="••••••••" required onkeydown="if(event.key==='Enter') startFlow()">
+                </div>
+
+                <div id="step1_error" style="color: #ef4444; font-size: 0.85rem; margin-top: 1rem; margin-bottom: 0.5rem; display: none; background: #fef2f2; padding: 0.75rem; border-radius: 4px; border: 1px solid #fee2e2;">
+                    Please fill in your name, email, and password to continue.
+                </div>
+
+                <button type="button" class="btn btn-primary" id="continue_btn_step1" style="width: 100%; margin-top: 0.5rem; border-radius: 4px;" onclick="startFlow()">Continue</button>
+            </div>
+
+
+            <!-- STEP 2: Application Identity Setup -->
+            <div class="auth-box step-container" id="step2" style="display: none;">
+                <h2 style="margin-bottom: 0.5rem; font-size: 1.5rem;">Application Identity</h2>
+                <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    This email will be used for opportunity submissions, funding applications, and future AI-assisted workflows.
+                </p>
+                
+                <div class="form-group">
+                    <label class="form-label">Which email should we use for applications?</label>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem; margin-top: 0.5rem;" onkeydown="if(event.key==='Enter') handleStep2SelectionEnter(event)">
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 1rem; border: 1px solid var(--color-border); border-radius: 4px;">
+                            <input type="radio" name="app_email_choice" value="primary" checked onchange="toggleAppEmailField()">
+                            <span style="font-weight: 500;">Use primary account email</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; padding: 1rem; border: 1px solid var(--color-border); border-radius: 4px;">
+                            <input type="radio" name="app_email_choice" value="separate" onchange="toggleAppEmailField()">
+                            <span style="font-weight: 500;">Use a separate application email</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group" id="separate_email_group" style="display: none; margin-top: 1rem;">
+                    <label class="form-label">Application Email</label>
+                    <input type="email" id="app_email" class="form-input" placeholder="founders@startup.com" onkeydown="if(event.key==='Enter') validateAndGoToStep3()">
+                </div>
+
+                <div id="step2_error" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.5rem; display: none;">Please provide your application email.</div>
+
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button type="button" class="btn" style="flex: 1; padding: 1.25rem; height: auto; border-radius: 4px; font-weight: 600; font-size: 1.1rem; border: 1px solid #cbd5e1; background: var(--color-bg-surface); color: #64748b;" onclick="goToStep(1)">Back</button>
+                    <button type="button" class="btn btn-primary" style="flex: 1; padding: 1.25rem; height: auto; border-radius: 4px; font-weight: 700; font-size: 1.1rem; background: #111827;" onclick="validateAndGoToStep3()">Next</button>
+                </div>
+            </div>
+
+            <!-- STEP 3: Startup Profile Setup (AI Import) -->
+            <div class="auth-box step-container" id="step3" style="display: none; max-width: 650px; width: 100%;">
+                <!-- Header -->
+                <div style="margin-bottom: 2rem;">
+                    <h2 style="font-size: 2.22rem; font-weight: 800; color: var(--color-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.03em;">Let AI build your startup profile</h2>
+                    <p style="color: var(--color-text-secondary); font-size: 1.1rem; line-height: 1.6;">Import from your website, summary, or pitch deck. We'll extract key details like sector, stage, problem, and solution for your review.</p>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                    <!-- Startup Source Section -->
+                    <div style="background: hsla(210, 40%, 98%, 0.6); padding: 1.5rem; border-radius: 4px; border-left: 3px solid #0ea5e9;">
+                        <h3 style="font-size: 0.85rem; font-weight: 700; color: #0ea5e9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.25rem;">Startup Details</h3>
+                        
+                        <div class="form-group" style="margin-bottom: 1.5rem;">
+                            <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0.5rem;">Paste Startup Website URL</label>
+                            <input type="url" id="startup_url" class="form-input" placeholder="https://yourstartup.com" style="height: 52px; border-radius: 4px; border-color: #cbd5e1; font-size: 1.1rem; padding: 0 1.25rem; background: var(--color-bg-surface);">
+                            <p style="font-size: 0.82rem; color: #64748b; margin-top: 0.5rem;">Best if your product or company site clearly explains what you do.</p>
+                        </div>
+
+                        <div style="position: relative; margin: 2rem 0;">
+                            <div style="border-top: 1px solid #94a3b8; opacity: 0.3;"></div>
+                            <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #f0f7ff; padding: 0 1rem; color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;">OR</span>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0.5rem;">Paste Startup Summary or Overview</label>
+                            <textarea id="startup_summary" class="form-input" rows="3" placeholder="Tell us about what you're building..." style="border-radius: 4px; border-color: #cbd5e1; font-size: 1.1rem; padding: 1rem 1.25rem; background: var(--color-bg-surface);"></textarea>
+                            <p style="font-size: 0.82rem; color: #64748b; margin-top: 0.5rem;">Paste a short overview, elevator pitch, or startup description.</p>
+                        </div>
+                    </div>
+
+                    <!-- OR Divider -->
+                    <div style="position: relative; margin: 0.5rem 0;">
+                        <div style="border-top: 1px solid #94a3b8; opacity: 0.3;"></div>
+                        <span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #f8fafc; padding: 0 1rem; color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em;">OR</span>
+                    </div>
+
+                    <!-- Upload Section -->
+                    <input type="file" id="pitch_deck_file" accept=".pdf" style="display: none;" onchange="handleFileSelect(this)">
+                    <div style="background: hsla(180, 40%, 98%, 0.6); padding: 1.5rem; border-radius: 4px; border-left: 3px solid #0d9488; border-top: 1px solid #94a3b8;">
+                        <h3 style="font-size: 0.85rem; font-weight: 700; color: #0d9488; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.25rem;">Pitch Deck or Docs (Optional)</h3>
+                        <div id="drop_zone" class="drop-zone" onclick="document.getElementById('pitch_deck_file').click()">
+                            <div id="upload_status_title" style="color: #0d9488; font-weight: 700; font-size: 1.1rem;">Click or drag to upload PDF</div>
+                            <div id="upload_status_sub" style="font-size: 0.82rem; color: #64748b; margin-top: 0.5rem;">Add a pitch deck or supporting document for richer extraction.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Output Explanation Box -->
+                <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 1.5rem; margin-bottom: 2.5rem; margin-top: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
+                        <div style="width: 24px; height: 24px; background: #0ea5e9; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px;">✨</div>
+                        <span style="font-weight: 700; font-size: 0.95rem; color: var(--color-primary-dark);">What AI will generate for you:</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; color: #64748b; font-size: 0.95rem;">
+                        <div style="display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;">• Startup Name & Sector</div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;">• Target Users & Problem</div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;">• Stage & Overview</div>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; white-space: nowrap;">• Business Model & Traction</div>
+                    </div>
+                </div>
+
+                <!-- CTA Row & Trust Note -->
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    <button type="button" class="btn" style="width: 100%; border: none; background: transparent; color: #64748b; font-size: 0.9rem; font-weight: 600; text-decoration: underline; margin-bottom: 0.5rem;" onclick="goToStep(2)">Back to Identity</button>
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="button" class="btn" style="flex: 1; padding: 1.25rem; height: auto; border-radius: 4px; font-weight: 600; font-size: 1.1rem; border: 1px solid #cbd5e1; background: var(--color-bg-surface); color: #64748b;" onclick="goToStep(5)">Manual Entry</button>
+                        <button type="button" class="btn btn-primary" style="flex: 2; padding: 1.25rem; height: auto; border-radius: 4px; font-weight: 700; font-size: 1.15rem; background: #111827; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" onclick="startAIProcessing()">Create AI Profile Draft</button>
+                    </div>
+                    <p style="text-align: center; font-size: 0.8rem; color: var(--color-text-secondary); line-height: 1.4;">
+                        Your materials are used only to generate a draft profile for your review. <br>Nothing is finalized until you confirm it.
+                    </p>
+                </div>
+            </div>
+
+            <!-- STEP 4: AI Processing State -->
+            <div class="auth-box step-container" id="step4" style="display: none; text-align: center;">
+                <div style="margin: 3rem 0;">
+                    <!-- Simple CSS Spinner -->
+                    <div class="spinner" style="width: 48px; height: 48px; border: 4px solid var(--color-border); border-top-color: var(--color-accent); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem auto;"></div>
+                    <h2 style="font-size: 1.5rem; margin-bottom: 0.5rem; color: var(--color-primary-dark);">Analyzing Materials...</h2>
+                    <p id="processing_text" style="color: var(--color-text-secondary);">Extracting company overview and traction data.</p>
+                </div>
+            </div>
+
+            <!-- STEP 5: Review & Confirm -->
+            <div class="step-container" id="step5" style="display: none; max-width: 900px; width: 100%; padding: 0 3rem;">
+                <!-- Header Section -->
+                <div style="margin-bottom: 2rem; text-align: left;">
+                    <h2 style="font-size: 2.2rem; font-weight: 800; color: var(--color-primary-dark); margin-bottom: 0.5rem; letter-spacing: -0.03em;">Review Your Profile</h2>
+                    <p style="color: var(--color-text-secondary); font-size: 1.1rem; line-height: 1.6; max-width: 650px;">We've prepared a draft... Please verify and refine the details.</p>
+                </div>
+
+                <!-- Main Form Layout - Tightened -->
+                <div style="display: flex; flex-direction: column; gap: 2rem;">
+                    
+                    <!-- Basic Info Group -->
+                    <div style="background: hsla(210, 40%, 98%, 0.6); padding: 1.5rem; border-radius: 4px; border-left: 3px solid #0ea5e9;">
+                        <h3 style="font-size: 0.85rem; font-weight: 700; color: #0ea5e9; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.25rem;">Basic Information</h3>
+                        <div class="grid grid-cols-2" style="gap: 2rem;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0.5rem;">Startup Name</label>
+                                <input type="text" id="review_name" class="form-input" value="" placeholder="Name" style="height: 52px; border-radius: 4px; border-color: #cbd5e1; font-size: 1.05rem; padding: 0 1.25rem; background: var(--color-bg-surface);">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0.5rem;">Company Website</label>
+                                <input type="text" id="review_website" class="form-input" value="" placeholder="Website URL" style="height: 52px; border-radius: 4px; border-color: #cbd5e1; font-size: 1.05rem; padding: 0 1.25rem; background: var(--color-bg-surface);">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Market Context Group -->
+                    <div style="border-top: 1px solid #94a3b8; padding: 2rem 1.5rem 1.5rem 1.5rem; background: hsla(180, 40%, 98%, 0.6); border-radius: 4px; border-left: 3px solid #0d9488;">
+                        <h3 style="font-size: 0.85rem; font-weight: 700; color: #0d9488; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.25rem;">Market & Product Context</h3>
+                        <div class="grid grid-cols-2" style="gap: 2rem; margin-bottom: 2rem;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0.5rem;">Primary Sector</label>
+                                <select id="review_sector" class="form-select" style="height: 52px; border-radius: 4px; border-color: #cbd5e1; font-size: 1.05rem; padding: 0 1.25rem; background: var(--color-bg-surface);">
+                                    <option value="">Select Sector...</option>
+                                    <option>AI / Deep Tech</option>
+                                    <option>Fintech</option>
+                                    <option>HealthTech</option>
+                                    <option>AgriTech</option>
+                                    <option>EdTech</option>
+                                    <option>E-commerce</option>
+                                    <option>SaaS</option>
+                                    <option>Climate / Sustainability</option>
+                                    <option>Logistics / Mobility</option>
+                                    <option>Consumer Tech</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0.5rem;">Current Stage</label>
+                                <select id="review_stage" class="form-select" style="height: 52px; border-radius: 4px; border-color: #cbd5e1; font-size: 1.05rem; padding: 0 1.25rem; background: var(--color-bg-surface);">
+                                    <option value="">Select Stage...</option>
+                                    <option>Idea</option>
+                                    <option>Prototype</option>
+                                    <option>MVP</option>
+                                    <option>Early Revenue</option>
+                                    <option>Growth</option>
+                                    <option>Series A+</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 2rem;">
+                            <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0.5rem;">Company Description</label>
+                            <textarea id="review_desc" class="form-input" rows="2" placeholder="Start typing description or use AI extraction..." style="border-radius: 4px; border-color: #cbd5e1; line-height: 1.6; padding: 1rem 1.25rem; font-size: 1.05rem; background: var(--color-bg-surface);"></textarea>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 2rem;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0;">Problem Statement</label>
+                                <span style="font-size: 9px; font-weight: 800; color: #0ea5e9; background: #e0f2fe; border: 1px solid #bae6fd; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;">AI Generated</span>
+                            </div>
+                            <textarea id="review_problem" class="form-input" rows="3" placeholder="Describe the problem being solved..." style="border-radius: 4px; border-color: #cbd5e1; line-height: 1.6; padding: 1rem 1.25rem; font-size: 1.05rem; background: var(--color-bg-surface);"></textarea>
+                        </div>
+
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;">
+                                <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0;">Solution / Product Summary</label>
+                                <span style="font-size: 9px; font-weight: 800; color: #0ea5e9; background: #e0f2fe; border: 1px solid #bae6fd; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;">AI Generated</span>
+                            </div>
+                            <textarea id="review_solution" class="form-input" rows="3" placeholder="Describe your solution..." style="border-radius: 4px; border-color: #cbd5e1; line-height: 1.6; padding: 1rem 1.25rem; font-size: 1.05rem; background: var(--color-bg-surface);"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Business Stats Group -->
+                    <div style="border-top: 1px solid #94a3b8; padding: 2rem 1.5rem 1.5rem 1.5rem; background: hsla(240, 40%, 98%, 0.6); border-radius: 4px; border-left: 3px solid #6366f1;">
+                        <h3 style="font-size: 0.85rem; font-weight: 700; color: #6366f1; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1.25rem;">Business & Traction</h3>
+                        <div class="grid grid-cols-2" style="gap: 2rem; margin-bottom: 2rem;">
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0.5rem;">Target Customers</label>
+                                <input type="text" id="review_customers" class="form-input" value="" placeholder="e.g. B2B SaaS Startups" style="height: 52px; border-radius: 4px; border-color: #cbd5e1; font-size: 1.05rem; padding: 0 1.25rem; background: var(--color-bg-surface);">
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label" style="font-weight: 600; font-size: 1rem; color: #1e293b; margin-bottom: 0.5rem;">Business Model</label>
+                                <input type="text" id="review_model" class="form-input" value="" placeholder="e.g. Subscription" style="height: 52px; border-radius: 4px; border-color: #cbd5e1; font-size: 1.05rem; padding: 0 1.25rem; background: var(--color-bg-surface);">
+                            </div>
+                        </div>
+
+                        <div class="form-group missing-field" id="traction_container" style="padding: 1.5rem; border-radius: 4px; background: #fffbeb; border: 1px solid #fde68a; margin-bottom: 0;">
+                            <label class="form-label" style="color: #92400e; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; margin-bottom: 0.75rem; display: block; letter-spacing: 0.05em;">Traction & Progress (Needs Attention)</label>
+                            <textarea id="review_traction" class="form-input" rows="2" style="border-radius: 4px; border-color: #fcd34d; font-size: 1.05rem; padding: 1rem 1.25rem; background: var(--color-bg-surface);" placeholder="Describe your current traction, MRR, user growth, or major pilots..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Footer Actions -->
+                    <div style="display: flex; gap: 1.5rem; padding: 2.5rem 0 1rem 0; border-top: 2px solid #94a3b8;">
+                        <button type="button" class="btn" style="flex: 1; padding: 1.25rem; height: auto; border-radius: 4px; font-weight: 600; font-size: 1.1rem; border: 1px solid #cbd5e1; background: var(--color-bg-surface); color: #64748b;" onclick="goToStep(3)">Back to Import</button>
+                        <button type="button" class="btn btn-primary" style="flex: 2; padding: 1.25rem; height: auto; border-radius: 4px; font-weight: 700; font-size: 1.15rem; background: #111827; box-shadow: 0 4px 12px rgba(0,0,0,0.15);" onclick="handleFinalSubmit()">Confirm & Save Profile</button>
+                    </div>
+
+                </div>
+            </div>
+                <!-- Mini Footnote -->
+                <p style="margin-top: 2rem; text-align: center; color: var(--color-text-secondary); font-size: 0.875rem;">
+                    Your data is securely stored. You can refine this draft anytime in your Profile.
+                </p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Additional Styles & Scripts -->
+    <style>
+        .fade-transition {
+            transition: opacity 0.3s ease-in-out;
+            opacity: 1;
+        }
+        .fade-out {
+            opacity: 0;
+        }
+        .step-container {
+            animation: fadeIn 0.4s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .ai-draft-input {
+            border-left: 3px solid var(--color-accent);
+            background-color: #f8fafc;
+        }
+        .ai-draft-input:focus {
+            background-color: #ffffff;
+        }
+        /* Refined right panel for premium feel */
+        .onboarding-right {
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f8fafc;
+        }
+        .auth-box {
+            width: 100%;
+            max-width: 480px;
+            /* Vertical centering trick that keeps top visible on overflow */
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+        /* Drag and Drop styles */
+        .drop-zone {
+            border: 2px dashed #cbd5e1;
+            border-radius: 4px;
+            padding: 2.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--color-bg-surface);
+        }
+        .drop-zone:hover, .drop-zone.drag-over {
+            border-color: #0ea5e9;
+            background-color: #f0f9ff;
+        }
+        .drop-zone.has-file {
+            border-color: #0d9488;
+            background-color: #f0fdfa;
+        }
+    </style>
+
+    <script src="js/api.js"></script>
+    <script>
+        let currentStep = 1;
+
+        function toggleAppEmailField() {
+            const separateSelected = document.querySelector('input[name="app_email_choice"][value="separate"]').checked;
+            const group = document.getElementById('separate_email_group');
+            if (separateSelected) {
+                group.style.display = 'block';
+            } else {
+                group.style.display = 'none';
+            }
+        }
+
+        async function startFlow() {
+            const name = document.getElementById('founder_name').value.trim();
+            const email = document.getElementById('primary_email').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const role = document.querySelector('input[name="role_choice"]:checked').value;
+            const errorEl = document.getElementById('step1_error');
+            const submitBtn = document.getElementById('continue_btn_step1');
+
+            if (!name || !email || !pass) {
+                errorEl.innerText = 'Please fill in your name, email, and password to continue.';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.innerText = 'Checking...';
+                
+                console.log('🔍 Checking email:', email);
+                const response = await fetch(`/api/users/check-email?email=${encodeURIComponent(email)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Server returned ${response.status}`);
+                }
+
+                const data = await response.json();
+                console.log('📡 Check Result:', data);
+                
+                if (data.exists) {
+                    errorEl.innerText = 'Email already registered. Please login instead.';
+                    errorEl.style.display = 'block';
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = 'Continue';
+                    return;
+                }
+
+                errorEl.style.display = 'none';
+                if (role === 'investor') {
+                    window.location.href = 'investor-onboarding-next-steps.html';
+                } else {
+                    goToStep(2);
+                }
+            } catch (err) {
+                console.error('❌ Email check failed:', err);
+                // If it's a 404, it means the server hasn't been restarted
+                if (err.message.includes('404')) {
+                    errorEl.innerText = 'Server update required. Please restart your backend server.';
+                    errorEl.style.display = 'block';
+                } else {
+                    // Fail safe for other errors
+                    goToStep(2);
+                }
+            } finally {
+                if (submitBtn) {
+                  submitBtn.disabled = false;
+                  submitBtn.innerText = 'Continue';
+                }
+            }
+        }
+
+        function handleStep1Enter(event, currentId, nextId) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const currentVal = document.getElementById(currentId).value.trim();
+                const errorEl = document.getElementById('step1_error');
+                
+                if (currentVal) {
+                    errorEl.style.display = 'none';
+                    document.getElementById(nextId).focus();
+                } else {
+                    errorEl.style.display = 'block';
+                }
+            }
+        }
+
+        function validateAndGoToStep3() {
+            const choice = document.querySelector('input[name="app_email_choice"]:checked').value;
+            const appEmail = document.getElementById('app_email').value.trim();
+            const errorEl = document.getElementById('step2_error');
+
+            if (choice === 'separate' && !appEmail) {
+                errorEl.style.display = 'block';
+                return;
+            }
+            
+            errorEl.style.display = 'none';
+            goToStep(3);
+        }
+
+        function handleStep2SelectionEnter(event) {
+            const choice = document.querySelector('input[name="app_email_choice"]:checked').value;
+            if (choice === 'primary') {
+                validateAndGoToStep3();
+            } else {
+                // Focus the separate email field if it's visible
+                const appEmailInput = document.getElementById('app_email');
+                if (appEmailInput && document.getElementById('separate_email_group').style.display !== 'none') {
+                    appEmailInput.focus();
+                }
+            }
+        }
+
+        function goToStep(step) {
+            if (step === 5) {
+                syncOnboardingData();
+            }
+            document.querySelectorAll('.step-container').forEach(el => el.style.display = 'none');
+            document.getElementById('step' + step).style.display = 'block';
+
+            // Update left panel text based on step
+            const headline = document.getElementById('onboardingHeadline');
+            const subtext = document.getElementById('onboardingSubtext');
+            
+            if (step === 2) {
+                headline.innerHTML = 'Stay organized before opportunities pile up.';
+                subtext.innerHTML = 'Choose the email identity you want to use across applications.';
+            } else if (step === 3 || step === 4) {
+                headline.innerHTML = 'Let AI turn your materials into momentum.';
+                subtext.innerHTML = 'Import your startup details and generate a profile draft faster.';
+            } else if (step === 5) {
+                headline.innerHTML = 'Review once. Reuse everywhere.';
+                subtext.innerHTML = 'Refine your draft so FundMe can match better opportunities and generate stronger applications.';
+            } else {
+                headline.innerHTML = 'Personalized funding support starts with your profile.';
+                subtext.innerHTML = 'Choose your role and create your account to begin discovering better-fit opportunities.';
+            }
+        }
+
+        function syncOnboardingData() {
+            const url = document.getElementById('startup_url').value;
+            const summary = document.getElementById('startup_summary').value;
+
+            if (url) {
+                document.getElementById('review_website').value = url;
+                // Simple AI simulation: extract name from URL if name is still default
+                const currentName = document.getElementById('review_name').value;
+                if (!currentName) {
+                    try {
+                        let name = new URL(url).hostname.split('.')[0];
+                        if (name === 'www') name = new URL(url).hostname.split('.')[1];
+                        document.getElementById('review_name').value = name.charAt(0).toUpperCase() + name.slice(1);
+                    } catch (e) {
+                        // ignore invalid URL for name extraction
+                    }
+                }
+            }
+            if (summary) {
+                document.getElementById('review_desc').value = summary;
+            }
+        }
+
+        let selectedFile = null;
+
+        function handleFileSelect(input) {
+            const files = input.files;
+            if (files && files[0]) {
+                const file = files[0];
+                if (file.type !== 'application/pdf') {
+                    alert('Please upload a PDF file.');
+                    return;
+                }
+                selectedFile = file;
+                document.getElementById('upload_status_title').innerText = "Selected: " + selectedFile.name;
+                document.getElementById('upload_status_sub').innerText = (selectedFile.size / 1024 / 1024).toFixed(2) + " MB • Ready for AI extraction";
+                document.getElementById('drop_zone').classList.add('has-file');
+            }
+        }
+
+        // Drag and Drop Event Listeners
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropZone = document.getElementById('drop_zone');
+            if (!dropZone) return;
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }, false);
+            });
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.add('drag-over');
+                }, false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropZone.addEventListener(eventName, () => {
+                    dropZone.classList.remove('drag-over');
+                }, false);
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                handleFileSelect({ files: files });
+            }, false);
+        });
+
+        async function startAIProcessing() {
+            const url = document.getElementById('startup_url').value;
+            const summary = document.getElementById('startup_summary').value;
+            
+            // Move to processing state
+            goToStep(4);
+            const textEl = document.getElementById('processing_text');
+            
+            try {
+                // Initialize progress messages
+                textEl.innerText = "Connecting to AI analysis engine...";
+                
+                const formData = new FormData();
+                formData.append('startup_overview', summary);
+                formData.append('website', url);
+                if (selectedFile) {
+                    formData.append('file', selectedFile);
+                    setTimeout(() => { textEl.innerText = "Parsing PDF pitch deck content..."; }, 1000);
+                }
+                
+                if (url) {
+                    setTimeout(() => { textEl.innerText = "Scraping startup website for deeper context..."; }, 3000);
+                }
+
+                setTimeout(() => { textEl.innerText = "Synthesizing data and drafting investor-ready profile..."; }, 5500);
+
+                const response = await fetch('/api/ai/generate-profile', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+
+                // Populate Step 5 with AI results
+                const profile = data.result;
+                if (profile.startup_name) document.getElementById('review_name').value = profile.startup_name;
+                if (url) document.getElementById('review_website').value = url;
+                else if (profile.website) document.getElementById('review_website').value = profile.website;
+                
+                if (profile.sector) document.getElementById('review_sector').value = profile.sector;
+                if (profile.stage) document.getElementById('review_stage').value = profile.stage;
+                if (profile.startup_overview) document.getElementById('review_desc').value = profile.startup_overview;
+                if (profile.problem_statement) document.getElementById('review_problem').value = profile.problem_statement;
+                if (profile.solution_summary) document.getElementById('review_solution').value = profile.solution_summary;
+                if (profile.target_customers) document.getElementById('review_customers').value = profile.target_customers;
+                if (profile.business_model) document.getElementById('review_model').value = profile.business_model;
+            if (profile.traction_summary) {
+                document.getElementById('review_traction').value = profile.traction_summary;
+                // If we have traction, we can remove the 'needs attention' styling
+                document.getElementById('traction_container').classList.remove('missing-field');
+                document.getElementById('traction_container').style.background = 'var(--color-bg-surface)';
+                document.getElementById('traction_container').style.border = '1px solid #cbd5e1';
+                document.getElementById('traction_container').querySelector('label').style.color = '#1e293b';
+                document.getElementById('traction_container').querySelector('label').innerText = 'Traction & Progress';
+            }
+
+                // Final transition
+                textEl.innerText = "Profile draft ready!";
+                setTimeout(() => {
+                    goToStep(5);
+                }, 800)
+
+            } catch (err) {
+                console.error("AI Generation Failed:", err);
+                alert("AI Analysis failed: " + err.message + ". Switch to manual entry.");
+                goToStep(5);
+            }
+        }
+
+        async function handleFinalSubmit() {
+            const btn = document.querySelector('#step5 .btn-primary');
+            const originalText = btn.innerText;
+            btn.innerText = "Saving Profile...";
+            btn.disabled = true;
+
+            try {
+                // 1. Gather Personal Data
+                const name = document.getElementById('founder_name').value;
+                const email = document.getElementById('primary_email').value;
+                const password = document.getElementById('password').value || 'temporary_password_123';
+
+                // 2. Signup User
+                const signupRes = await api.signup({ name, email, password, role: 'founder' });
+                setSession(signupRes.user);
+
+                // 3. Gather Startup Data
+                const profileData = {
+                    startup_name: document.getElementById('review_name').value,
+                    website: document.getElementById('review_website').value,
+                    sector: document.getElementById('review_sector').value,
+                    stage: document.getElementById('review_stage').value,
+                    startup_overview: document.getElementById('review_desc').value,
+                    problem_statement: document.getElementById('review_problem').value,
+                    solution_summary: document.getElementById('review_solution').value,
+                    target_customers: document.getElementById('review_customers').value,
+                    business_model: document.getElementById('review_model').value,
+                    application_email: email
+                };
+
+                // 4. Create Profile
+                await api.createProfile(profileData);
+
+                // 5. Success
+                btn.innerText = "Redirecting...";
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+
+            } catch (err) {
+                console.error('Onboarding Save Error:', err);
+                alert('Error saving profile: ' + err.message);
+                btn.innerText = originalText;
+                btn.disabled = false;
+            }
+        }
+    </script>
+
+</body>
+
+</html>

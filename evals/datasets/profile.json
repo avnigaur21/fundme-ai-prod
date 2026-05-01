@@ -1,0 +1,41 @@
+[
+  {
+    "input": "AgriSense AI is an agri-tech startup using AI and IoT. It is in early growth stage after MVP validation.",
+    "expected_output": {
+      "startup_name": "AgriSense AI",
+      "sector": "Agricultural Technology",
+      "stage": "Early Growth",
+      "startup_overview": "AgriSense AI is an agri-tech startup that leverages Artificial Intelligence (AI) and the Internet of Things (IoT) to provide data-driven insights and automation for modern farming. By integrating sensor data with predictive analytics, the company helps farmers increase crop yields and reduce resource waste.",
+      "problem_statement": "The agricultural sector faces significant inefficiencies due to unpredictable weather, sub-optimal resource allocation, and a lack of real-time data on soil and crop health, leading to lower yields and higher costs.",
+      "solution_summary": "AgriSense AI provides an end-to-end platform combining IoT hardware and AI software to monitor field conditions and automate irrigation and fertilization, optimizing productivity through precise diagnostics.",
+      "target_customers": "Commercial farmers, agricultural cooperatives, and large-scale plantation owners seeking operational efficiency.",
+      "business_model": "Software-as-a-Service (SaaS) model with subscription tiers for the monitoring platform, plus revenue from IoT hardware sales."
+    }
+  },
+  {
+    "input": "MediLink is a healthcare startup providing telemedicine solutions and is scaling beyond prototype stage. They use AI-driven diagnostics.",
+    "expected_output": {
+      "startup_name": "MediLink",
+      "sector": "HealthTech",
+      "stage": "Growth",
+      "startup_overview": "MediLink is a healthcare technology startup providing an advanced telemedicine platform that integrates AI-driven diagnostics. The platform connects patients with specialists remotely and assists doctors with automated symptom analysis and diagnostic data visualization.",
+      "problem_statement": "Limited access to specialized medical care in rural and underserved urban areas, combined with diagnostic delays, results in poor health outcomes and increased mortality.",
+      "solution_summary": "A secure telemedicine platform that uses AI algorithms to analyze diagnostic data and provide preliminary assessments, facilitating faster and more accurate remote medical interventions.",
+      "target_customers": "Patients in remote areas, private clinics, and hospital networks looking to scale their digital health offerings.",
+      "business_model": "Transactional model based on consultation fees and B2B licensing for clinics and hospitals."
+    }
+  },
+  {
+    "input": "Bharat Fintech Solutions is a fintech startup enabling UPI-based micro-lending for rural India. Early revenue stage with 5,000+ users.",
+    "expected_output": {
+      "startup_name": "Bharat Fintech Solutions",
+      "sector": "Fintech",
+      "stage": "Early Revenue",
+      "startup_overview": "Bharat Fintech Solutions is a financial services startup focused on rural financial inclusion through UPI-based micro-lending. The platform uses alternative credit scoring and UPI integration to provide small, low-interest loans to underserved populations.",
+      "problem_statement": "The lack of formal credit history and physical banking infrastructure prevents millions in rural India from accessing emergency funds or capital for micro-enterprises.",
+      "solution_summary": "A mobile-first lending platform that leverages UPI rails and alternative data points (like utility payments) to assess creditworthiness and disburse micro-loans instantly.",
+      "target_customers": "Rural micro-entrepreneurs, small-scale farmers, and daily wage earners in Tier 2 and Tier 3 cities.",
+      "business_model": "Interest-based revenue model on disbursed loans, with processing fees and data-driven credit assessment services for larger financial partners."
+    }
+  }
+]

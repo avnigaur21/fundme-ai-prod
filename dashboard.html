@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .bookmark-icon {
+            cursor: pointer;
+            opacity: 0.3;
+            filter: grayscale(100%);
+            transition: all 0.2s ease;
+            font-size: 1.25rem;
+            display: inline-block;
+        }
+
+        .bookmark-icon.saved {
+            opacity: 1;
+            filter: none;
+        }
+
+        /* Cohesive Dashboard Styling */
+        body {
+            background-color: var(--color-bg-body) !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .main-content {
+            background: var(--color-bg-body) !important;
+            transition: background 0.3s ease;
+            min-width: 0;
+        }
+
+        .topbar {
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+        }
+
+        .topbar-title {
+            font-size: 1.75rem !important;
+            color: var(--color-primary-dark) !important;
+        }
+
+        .container {
+            max-width: 1280px !important;
+            width: 100% !important;
+            margin: 0 auto !important;
+            padding-left: 1.5rem !important;
+            padding-right: 1.5rem !important;
+        }
+
+        /* Metrics */
+        .metrics-grid {
+            gap: 1rem !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        }
+
+        .metric-card {
+            background: var(--color-bg-surface) !important;
+            border: 1px solid var(--color-border) !important;
+            border-radius: var(--radius-sm) !important;
+            padding: 1.25rem 1rem !important;
+            box-shadow: 0 4px 15px -3px rgba(15, 118, 110, 0.05), 
+                        0 2px 6px -2px rgba(15, 118, 110, 0.03) !important;
+            transition: transform 0.2s, box-shadow 0.2s !important;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-4px) !important;
+            box-shadow: 0 12px 25px -5px rgba(15, 118, 110, 0.1) !important;
+        }
+
+        .metric-value {
+            font-size: 1.75rem !important;
+            font-weight: 700 !important;
+            color: var(--color-primary-dark) !important;
+            margin-bottom: 0.5rem !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .metric-label {
+            font-size: 0.75rem !important;
+            font-weight: 500 !important;
+            color: var(--color-text-secondary) !important;
+            letter-spacing: 0.02em !important;
+        }
+
+        /* Highlight the first key metric */
+        .metric-card:nth-child(1) {
+            background: var(--color-primary-dark) !important;
+        }
+        .metric-card:nth-child(1) .metric-value,
+        .metric-card:nth-child(1) .metric-label {
+            color: #ffffff !important;
+        }
+
+        /* Deadlines */
+        h3 {
+            font-size: 1.25rem !important;
+            color: var(--color-primary-dark) !important;
+            margin-bottom: 1.25rem !important;
+        }
+
+        .deadlines-list {
+            display: grid !important;
+            grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            gap: 1.5rem !important;
+        }
+
+        @media (max-width: 1024px) {
+            .deadlines-list {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+        }
+        @media (max-width: 768px) {
+            .deadlines-list {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        .deadline-item {
+            background: var(--color-bg-surface) !important;
+            border: 1px solid var(--color-border) !important;
+            border-radius: var(--radius-sm) !important;
+            padding: 1.5rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.5rem !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02) !important;
+            transition: border-color 0.2s, box-shadow 0.2s !important;
+            min-width: 0;
+            overflow: hidden;
+            text-decoration: none;
+        }
+
+        .deadline-item:hover {
+            border-color: var(--color-accent) !important;
+            box-shadow: 0 8px 20px rgba(15, 118, 110, 0.08) !important;
+        }
+
+        .deadline-date {
+            font-size: 0.8rem !important;
+            color: var(--color-accent) !important;
+            background: rgba(15, 118, 110, 0.1) !important;
+            padding: 0.25rem 0.75rem !important;
+            border-radius: 4px !important;
+            font-weight: 600 !important;
+            white-space: nowrap;
+        }
+
+        .deadline-name {
+            font-size: 1.15rem !important;
+            font-weight: 600 !important;
+            color: var(--color-primary-dark) !important;
+            margin-top: 0.25rem !important;
+            width: 100%;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.4;
+            max-height: 2.8em;
+        }
+
+        .deadline-days {
+            font-size: 0.85rem !important;
+            color: var(--color-text-secondary) !important;
+            font-weight: 500 !important;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Specific override for urgent deadline (Alert Color) */
+        .deadline-item.urgent {
+            border-color: rgba(194, 65, 12, 0.2) !important;
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.25) !important;
+            border: 1px solid #ef4444 !important;
+            background: rgba(239, 68, 68, 0.05) !important;
+        }
+        .deadline-item.urgent:hover {
+            border-color: var(--color-alert) !important;
+            box-shadow: 0 8px 20px rgba(246, 4, 4, 0.15) !important;
+        }
+        .deadline-item.urgent .deadline-date {
+            color: #ef4444 !important;
+            background: rgba(239, 68, 68, 0.1) !important;
+        }
+        .deadline-item.urgent .deadline-days {
+            color: #ef4444 !important;
+            font-weight: bold;
+        }
+
+        /* Matches Table */
+        .data-table-container {
+            background: var(--color-bg-surface) !important;
+            border: 1px solid var(--color-border) !important;
+            border-radius: var(--radius-sm) !important;
+            box-shadow: 0 4px 20px -5px rgba(15, 118, 110, 0.05) !important;
+            padding: 1rem !important;
+            overflow-x: auto !important;
+            width: 100%;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background: transparent !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            color: var(--color-text-secondary) !important;
+            padding: 1rem 1.25rem !important;
+            white-space: nowrap;
+            text-align: left;
+        }
+
+        .data-table td {
+            padding: 1.25rem !important;
+            border-bottom: 1px solid #f1f5f9 !important;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            min-width: 140px;
+        }
+
+        .data-table td:first-child {
+            min-width: 280px;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none !important;
+        }
+
+        .data-table tr:hover {
+            background-color: #f8fafc !important;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            border-radius: var(--radius-sm) !important;
+            box-shadow: 0 2px 6px rgba(15, 118, 110, 0.2) !important;
+        }
+
+        .match-score {
+            border-radius: 4px !important;
+            padding: 0.35rem 0.75rem !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar (collapsed by default, expand on hover or click) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">FundMe.</span>
+                <button class="sidebar-toggle" id="sidebar-toggle" title="Expand sidebar" aria-label="Expand sidebar">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item active" data-tooltip="Dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    <span class="nav-item-label">Dashboard</span>
+                </a>
+                <a href="explorer.html" class="nav-item" data-tooltip="Explorer">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                    <span class="nav-item-label">Explorer</span>
+                </a>
+                <a href="saved.html" class="nav-item" data-tooltip="Saved">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    <span class="nav-item-label">Saved</span>
+                </a>
+                <a href="drafts.html" class="nav-item" data-tooltip="Drafts">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 0v6h6" />
+                    </svg>
+                    <span class="nav-item-label">Drafts</span>
+                </a>
+                <a href="applications.html" class="nav-item" data-tooltip="Applications">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                    </svg>
+                    <span class="nav-item-label">Applications</span>
+                </a>
+                <a href="business-opportunities.html" class="nav-item" data-tooltip="Business Opportunities">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" />
+                    </svg>
+                    <span class="nav-item-label">Business Opportunities</span>
+                </a>
+                <a href="profile.html" class="nav-item" data-tooltip="Startup Profile">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                    </svg>
+                    <span class="nav-item-label">Startup Profile</span>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="settings.html" class="nav-item" data-tooltip="Settings">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.09 8.83a.488.488 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span class="nav-item-label">Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <!-- Mobile Toggle -->
+                <button class="btn btn-outline" id="menu-toggle"
+                    style="margin-right: 1rem; padding: 4px 8px; display: none;">☰</button>
+
+                <h1 class="topbar-title">Overview</h1>
+
+                <a href="profile.html" style="display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; cursor: pointer;">
+                    <!-- User Profile -->
+                    <div style="font-size: 0.875rem; text-align: right;">
+                        <div style="font-weight: 600;" id="header_user_name">...</div>
+                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);" id="header_user_meta">...</div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&size=32" alt="User Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" id="header_user_avatar">
+                </a>
+            </header>
+
+            <div class="container" style="padding-top: var(--spacing-lg); padding-bottom: 6rem;">
+                <!-- Metrics -->
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">Relevant Opportunities</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">0</div>
+                        <div class="metric-label">Upcoming Deadlines</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">₹35Cr</div>
+                        <div class="metric-label">Highest Available Grant</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">85%</div>
+                        <div class="metric-label">Profile Completion</div>
+                    </div>
+                </div>
+
+                <!-- Upcoming deadlines -->
+                <div class="deadlines-section" style="margin-bottom: var(--spacing-xl);">
+                    <h3 style="margin-bottom: var(--spacing-md); display: flex; align-items: center; gap: 0.5rem;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Upcoming deadlines
+                    </h3>
+                    <div class="deadlines-list" id="deadlines-list">
+                        <em style="color:var(--color-text-secondary); grid-column: span 3;">Loading deadlines...</em>
+                    </div>
+                </div>
+
+                <!-- Drafts In Progress -->
+                <div class="drafts-section" style="margin-bottom: var(--spacing-xl);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-md);">
+                        <h3 style="margin-bottom: 0; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m16 13-3.6 3.6c-.3.3-.8.3-1.1 0l-1.9-1.9"/></svg> 
+                            Drafts in Progress
+                        </h3>
+                        <a href="drafts.html" style="font-size: 0.8125rem; color: var(--color-accent); font-weight: 600; text-decoration: none;">View All Drafts &rarr;</a>
+                    </div>
+                    
+                    <div id="drafts-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                        <em style="color:var(--color-text-secondary); grid-column: span 2;">Loading drafts...</em>
+                    </div>
+                </div>
+
+                <!-- Matches Table -->
+                <h3 style="margin-bottom: var(--spacing-sm);">High Relevance Matches</h3>
+                <div class="data-table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Opportunity</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Deadline</th>
+                                <th>Match</th>
+                                <th>Action</th>
+                                <th style="text-align: center;">Save</th>
+                            </tr>
+                        </thead>
+                        <tbody id="matches-tbody">
+                            <tr><td colspan="7" style="text-align:center;">Loading matches...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userId = (JSON.parse(localStorage.getItem('user')) || {}).user_id || 'u1';
+            
+            try {
+                // 1. Load Real Opportunities (Awaited for filtering)
+                const opps = await api.getOpportunities();
+                if(opps && opps.length > 0) {
+                    
+                    // Update Deadlines (Show ONLY very close deadlines in high contrast)
+                    const today = new Date();
+                    const closeOpps = opps.filter(o => o.deadline && o.deadline.toLowerCase() !== 'rolling' && o.deadline.toLowerCase() !== 'not specified')
+                        .map(o => {
+                            const dDate = new Date(o.deadline);
+                            const diffDays = Math.ceil((dDate - today) / (1000 * 60 * 60 * 24));
+                            return { ...o, diffDays };
+                        })
+                        .filter(o => o.diffDays >= 0 && o.diffDays <= 30) // Threshold can be adjusted
+                        .sort((a, b) => a.diffDays - b.diffDays)
+                        .slice(0, 3);
+
+                    const deadlinesList = document.getElementById('deadlines-list');
+                    if(deadlinesList) {
+                        if (closeOpps.length > 0) {
+                            deadlinesList.innerHTML = closeOpps.map(o => {
+                                const isUrgent = o.diffDays <= 14;
+                                return `
+                                <a href="opportunity.html?opportunity_id=${o.opportunity_id}" class="deadline-item ${isUrgent ? 'urgent' : ''}">
+                                    <span class="deadline-date">${o.deadline}</span>
+                                    <span class="deadline-name">${o.title || 'Grant'}</span>
+                                    <span class="deadline-days">${o.diffDays === 0 ? 'Due Today!' : o.diffDays + ' days left'}</span>
+                                </a>
+                            `}).join('');
+                        } else {
+                            deadlinesList.innerHTML = '<em style="color:var(--color-text-secondary); grid-column: span 3;">No immediate upcoming deadlines tracked.</em>';
+                        }
+                    }
+
+                    // Update Matches Table
+                    // Update Matches Table - Scan top 30 to find at least 7 good ones
+                    const poolOpps = opps.slice(0, 30); 
+                    const tbody = document.getElementById('matches-tbody');
+                    
+                    // Initial render (Scoring state)
+                    tbody.innerHTML = poolOpps.slice(0, 7).map((o, idx) => `
+                        <tr data-opp-card="${o.opportunity_id}" style="display: none;">
+                            <td>
+                                <div style="font-weight: 600;">${o.title}</div>
+                                <div style="font-size: 0.75rem; color: var(--color-text-secondary); display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; margin-top: 4px;">
+                                    ${o.provider}
+                                    ${o.credibility_source ? `<span style="color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 99px; font-weight: 600; font-size: 0.65rem;" title="${o.credibility_source}">✓ Verified</span>` : ''}
+                                </div>
+                            </td>
+                            <td>${o.type || 'Grant'}</td>
+                            <td>${o.amount || 'Variable'}</td>
+                            <td>${o.deadline || 'Rolling'}</td>
+                            <td><span class="match-score-badge" data-score-for="${o.opportunity_id}" style="background: rgba(16, 185, 129, 0.05); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 10px; border-radius: 99px; font-weight: 700; font-size: 0.65rem;">✨ Scoring...</span></td>
+                            <td><a href="opportunity.html?opportunity_id=${o.opportunity_id}" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; text-decoration: none;">View</a></td>
+                            <td style="text-align: center;"><span class="bookmark-icon" onclick="event.stopPropagation(); this.classList.toggle('saved')">🔖</span></td>
+                        </tr>`).join('');
+
+                    // 1.5 Batch Scoring for Dashboard (Score the first 30)
+                    api.getBatchMatchScores(poolOpps).then(scores => {
+                        // Sort by score and filter out 0s
+                        const sortedScores = scores
+                            .filter(s => s.score > 0)
+                            .sort((a, b) => b.score - a.score)
+                            .slice(0, 7);
+
+                        if (sortedScores.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem; color: var(--color-text-secondary);">No high-relevance matches found yet. Try updating your profile for better results!</td></tr>';
+                            return;
+                        }
+
+                        // Render the actual winners
+                        tbody.innerHTML = sortedScores.map(s => {
+                            const o = opps.find(item => item.opportunity_id === s.opportunity_id);
+                            return `
+                            <tr onclick="window.location.href='opportunity.html?opportunity_id=${o.opportunity_id}'" data-opp-card="${o.opportunity_id}">
+                                <td>
+                                    <div style="font-weight: 600;">${o.title}</div>
+                                    <div style="font-size: 0.75rem; color: var(--color-text-secondary); display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; margin-top: 4px;">
+                                        ${o.provider}
+                                        ${o.credibility_source ? `<span style="color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 99px; font-weight: 600; font-size: 0.65rem;" title="${o.credibility_source}">✓ Verified</span>` : ''}
+                                    </div>
+                                </td>
+                                <td>${o.type || 'Grant'}</td>
+                                <td>${o.amount || 'Variable'}</td>
+                                <td>${o.deadline || 'Rolling'}</td>
+                                <td><span class="match-score-badge" data-score-for="${o.opportunity_id}" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4); padding: 4px 10px; border-radius: 99px; font-weight: 700; font-size: 0.65rem;">${s.score}% Match</span></td>
+                                <td><a href="opportunity.html?opportunity_id=${o.opportunity_id}" class="btn btn-primary" style="padding: 0.25rem 0.75rem; font-size: 0.75rem; text-decoration: none;">View</a></td>
+                                <td style="text-align: center;"><span class="bookmark-icon" onclick="event.stopPropagation(); this.classList.toggle('saved')">🔖</span></td>
+                            </tr>`;
+                        }).join('');
+                    });
+
+                    // Update metrics
+                    document.querySelectorAll('.metric-value')[0].innerText = opps.length;
+                    document.querySelectorAll('.metric-value')[1].innerText = closeOpps.length;
+                }
+
+                // 2. Load Drafts
+                const draftsResult = await api.getDrafts();
+                const draftsContainer = document.getElementById('drafts-container');
+                if(draftsContainer) {
+                    if(!draftsResult || draftsResult.length === 0) {
+                        draftsContainer.innerHTML = '<em style="color:var(--color-text-secondary); grid-column: span 2;">No drafts in progress. Explore opportunities to start one!</em>';
+                    } else {
+                        draftsContainer.innerHTML = draftsResult.slice(0, 2).map(d => `
+                            <div style="background: var(--color-bg-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); position: relative; border-top: 4px solid var(--color-accent); min-width: 0;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                                    <div style="font-weight: 700; font-size: 1.15rem; color: var(--color-primary-dark); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Draft: ${d.draft_id}</div>
+                                    <span style="font-size: 0.7rem; color: #047857; background: #ecfdf5; padding: 4px 10px; border-radius: 99px; font-weight: 700; flex-shrink: 0;">IN PROGRESS</span>
+                                </div>
+                                <div style="font-size: 0.8125rem; color: var(--color-text-secondary); margin-top: -0.5rem;">Last edited: ${d.last_saved || 'Recently'}</div>
+                                <button class="btn btn-primary" style="width: 100%; margin-top: 0.5rem; padding: 0.8rem;" onclick="window.location.href='draft-generator.html?opportunity_id=${d.opportunity_id}'">Continue Draft &rarr;</button>
+                            </div>
+                        `).join('');
+                    }
+                }
+
+            } catch (e) {
+                console.error("Error loading dynamic dashboard data", e);
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+[
+  {
+    "input": {
+      "profile": { "sector": "Fintech", "stage": "Early Revenue", "startup_name": "Bharat Fintech" },
+      "opportunities": [
+        { "opportunity_id": "opp_bsgc26", "sector": "FinTech", "stage": "Any", "title": "Bharat Startup Grand Challenge 2026" },
+        { "opportunity_id": "opp_hdfc26", "sector": "FinTech", "stage": "Early Revenue", "title": "HDFC Bank Parivartan SmartUp Grants (FY26)" },
+        { "opportunity_id": "opp_1", "sector": "DeepTech", "stage": "Any", "title": "FutureX AI Campus Fund" },
+        { "opportunity_id": "opp_2", "sector": "Biotech", "stage": "Early/Growth", "title": "BioVerse Challenge" },
+        { "opportunity_id": "opp_3", "sector": "Sustainable Fashion", "stage": "Any", "title": "R|Elan Circular Design Challenge" },
+        { "opportunity_id": "opp_4", "sector": "E-commerce", "stage": "Any", "title": "Amazon Saheli Accelerate" },
+        { "opportunity_id": "opp_5", "sector": "Agriculture and Sustainability", "stage": "Idea Stage", "title": "Innovate for Impact Challenge" },
+        { "opportunity_id": "opp_6", "sector": "All Sectors", "stage": "Ideation to Prototype", "title": "BioNEST Incubation Program" },
+        { "opportunity_id": "opp_7", "sector": "DeepTech", "stage": "Any", "title": "VJTI TBI DeepTech Incubator" },
+        { "opportunity_id": "opp_8", "sector": "AI", "stage": "Seed to Series A", "title": "Google for Startups Accelerator" },
+        { "opportunity_id": "opp_9", "sector": "DeepTech", "stage": "TRL 3+", "title": "Tamil Nadu Technology Hub" },
+        { "opportunity_id": "opp_10", "sector": "Biotech & MedTech", "stage": "Any", "title": "BIRAC LEAP Fund" }
+      ]
+    },
+    "expected_output": [
+      { "opportunity_id": "opp_bsgc26", "score": 95 },
+      { "opportunity_id": "opp_hdfc26", "score": 92 },
+      { "opportunity_id": "opp_1", "score": 30 },
+      { "opportunity_id": "opp_2", "score": 20 },
+      { "opportunity_id": "opp_3", "score": 10 },
+      { "opportunity_id": "opp_4", "score": 30 },
+      { "opportunity_id": "opp_5", "score": 20 },
+      { "opportunity_id": "opp_6", "score": 50 },
+      { "opportunity_id": "opp_7", "score": 30 },
+      { "opportunity_id": "opp_8", "score": 30 },
+      { "opportunity_id": "opp_9", "score": 30 },
+      { "opportunity_id": "opp_10", "score": 20 }
+    ]
+  },
+  {
+    "input": {
+      "profile": { "sector": "HealthTech", "stage": "Growth", "startup_name": "MediLink" },
+      "opportunities": [
+        { "opportunity_id": "opp_1", "sector": "DeepTech", "stage": "Any", "title": "FutureX AI Campus Fund" },
+        { "opportunity_id": "opp_2", "sector": "Biotech", "stage": "Early/Growth", "title": "BioVerse Challenge" },
+        { "opportunity_id": "opp_3", "sector": "Sustainable Fashion", "stage": "Any", "title": "R|Elan Circular Design Challenge" },
+        { "opportunity_id": "opp_4", "sector": "E-commerce", "stage": "Any", "title": "Amazon Saheli Accelerate" },
+        { "opportunity_id": "opp_5", "sector": "Agriculture and Sustainability", "stage": "Idea Stage", "title": "Innovate for Impact Challenge" },
+        { "opportunity_id": "opp_6", "sector": "All Sectors", "stage": "Ideation to Prototype", "title": "BioNEST Incubation Program" },
+        { "opportunity_id": "opp_7", "sector": "DeepTech", "stage": "Any", "title": "VJTI TBI DeepTech Incubator" },
+        { "opportunity_id": "opp_8", "sector": "AI", "stage": "Seed to Series A", "title": "Google for Startups Accelerator" },
+        { "opportunity_id": "opp_9", "sector": "DeepTech", "stage": "TRL 3+", "title": "Tamil Nadu Technology Hub" },
+        { "opportunity_id": "opp_10", "sector": "Biotech & MedTech", "stage": "Any", "title": "BIRAC LEAP Fund" }
+      ]
+    },
+    "expected_output": [
+      { "opportunity_id": "opp_10", "score": 90 },
+      { "opportunity_id": "opp_2", "score": 85 },
+      { "opportunity_id": "opp_6", "score": 75 },
+      { "opportunity_id": "opp_1", "score": 40 }
+    ]
+  },
+  {
+    "input": {
+      "profile": { "sector": "AgriTech", "stage": "Growth", "startup_name": "AgriSense AI", "solution_summary": "IoT sensors and predictive analytics using AI/ML" },
+      "opportunities": [
+        { "opportunity_id": "opp_1", "sector": "DeepTech", "stage": "Any", "title": "FutureX AI Campus Fund" },
+        { "opportunity_id": "opp_2", "sector": "Biotech", "stage": "Early/Growth", "title": "BioVerse Challenge" },
+        { "opportunity_id": "opp_3", "sector": "Sustainable Fashion", "stage": "Any", "title": "R|Elan Circular Design Challenge" },
+        { "opportunity_id": "opp_4", "sector": "E-commerce", "stage": "Any", "title": "Amazon Saheli Accelerate" },
+        { "opportunity_id": "opp_5", "sector": "Agriculture and Sustainability", "stage": "Idea Stage", "title": "Innovate for Impact Challenge" },
+        { "opportunity_id": "opp_6", "sector": "All Sectors", "stage": "Ideation to Prototype", "title": "BioNEST Incubation Program" },
+        { "opportunity_id": "opp_7", "sector": "DeepTech", "stage": "Any", "title": "VJTI TBI DeepTech Incubator" },
+        { "opportunity_id": "opp_8", "sector": "AI", "stage": "Seed to Series A", "title": "Google for Startups Accelerator" },
+        { "opportunity_id": "opp_9", "sector": "DeepTech", "stage": "TRL 3+", "title": "Tamil Nadu Technology Hub" },
+        { "opportunity_id": "opp_10", "sector": "Biotech & MedTech", "stage": "Any", "title": "BIRAC LEAP Fund" }
+      ]
+    },
+    "expected_output": [
+      { "opportunity_id": "opp_7", "score": 95 },
+      { "opportunity_id": "opp_5", "score": 85 },
+      { "opportunity_id": "opp_8", "score": 80 },
+      { "opportunity_id": "opp_1", "score": 70 }
+    ]
+  }
+]

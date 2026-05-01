@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Investor Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Zendenta/Clinik Inspired Profile Setup */
+        :root {
+            --color-text-main: #0f172a;
+            --color-text-secondary: #64748b;
+            --color-border: #e2e8f0;
+            --color-accent: #0ea5e9;
+        }
+
+        body {
+            background-color: var(--color-bg-body) !important; transition: background-color 0.3s ease, color 0.3s ease; 
+            font-family: 'Inter', sans-serif;
+        }
+
+        .main-content {
+            background: var(--color-bg-body) !important; transition: background 0.3s ease;
+            padding: 0 !important;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: #ffffff !important;
+            border-bottom: 1px solid var(--color-border) !important;
+            padding: 0 2rem !important;
+            height: 70px !important;
+            display: flex;
+            align-items: center;
+        }
+
+        .topbar-title {
+            font-size: 1.25rem !important;
+            font-weight: 700 !important;
+            color: var(--color-primary-dark) !important;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1400px !important;
+            padding: 2rem !important;
+            margin: 0 auto;
+        }
+
+        .profile-container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 1.5rem;
+            align-items: start;
+        }
+
+        @media (max-width: 1024px) {
+            .profile-container {
+                grid-template-columns: 1fr;
+                display: flex;
+                flex-direction: column;
+            }
+            .card {
+                width: 100%;
+            }
+        }
+
+        /* Card Reset */
+        .card {
+            background: #ffffff !important;
+            border: 1px solid var(--color-border) !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Specific Placements to match Grid */
+        .card:nth-child(1) { grid-column: 1; grid-row: 1 / span 5; }
+        .card:nth-child(2) { grid-column: 2; grid-row: 1; }
+        .card:nth-child(3) { grid-column: 2; grid-row: 2; }
+        .card:nth-child(4) { grid-column: 2; grid-row: 3; }
+        .card:nth-child(5) { grid-column: 2; grid-row: 4; }
+        .card:nth-child(6) { grid-column: 2; grid-row: 5; }
+
+        /* Headers within cards */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem !important;
+            border-bottom: 1px solid var(--color-border) !important;
+            padding-bottom: 1rem !important;
+        }
+
+        .section-title {
+            font-size: 1.1rem !important;
+            font-weight: 700 !important;
+            color: var(--color-primary-dark) !important;
+            margin: 0;
+        }
+
+        .btn-edit {
+            font-size: 0.75rem !important;
+            font-weight: 600 !important;
+            color: var(--color-text-secondary) !important;
+            border: 1px solid var(--color-border) !important;
+            background: #ffffff !important;
+            padding: 0.35rem 0.75rem !important;
+            border-radius: 6px !important;
+            text-decoration: none !important;
+            text-transform: capitalize !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            cursor: pointer;
+        }
+
+        .btn-edit::before {
+            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>');
+            display: inline-block;
+            line-height: 0;
+        }
+
+        .btn-edit:hover {
+            background: #f1f5f9 !important;
+            color: var(--color-primary-dark) !important;
+        }
+
+        /* Info Grid - The data displays */
+        .info-grid {
+            display: grid !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 1.5rem !important;
+        }
+
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+
+        .info-block {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem !important;
+            padding: 0 !important;
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .info-label {
+            font-size: 0.75rem !important;
+            font-weight: 500 !important;
+            color: var(--color-text-secondary) !important;
+            text-transform: none !important;
+            letter-spacing: 0 !important;
+        }
+
+        .info-value {
+            font-size: 0.875rem !important;
+            font-weight: 600 !important;
+            color: var(--color-text-main) !important;
+            line-height: 1.5 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* Avatar & Profile Identity */
+        .profile-identity {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .profile-name {
+            font-size: 1.25rem;
+            color: var(--color-primary-dark);
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .strength-bar-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .strength-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 8px;
+        }
+
+        .strength-header .info-label {
+            font-size: 0.75rem;
+            text-transform: none;
+            color: var(--color-text-secondary);
+        }
+
+        .strength-percentage {
+            font-size: 0.75rem !important;
+            color: var(--color-text-secondary) !important;
+            font-weight: 500 !important;
+        }
+
+        .strength-bar-bg {
+            height: 6px !important;
+            background: #f1f5f9 !important;
+            border-radius: 10px !important;
+            width: 100%;
+        }
+
+        .strength-bar-fill {
+            background: var(--color-accent) !important;
+            border-radius: 10px !important;
+            width: 85%;
+        }
+
+        /* Checklists */
+        .checklist-container {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 1rem !important;
+            margin-bottom: 1.5rem !important;
+        }
+        
+        /* Ensure specific checklist styles apply when not in card 1 */
+        .card:not(:nth-child(1)) .checklist-container {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)) !important;
+        }
+
+        .check-item {
+            display: flex !important;
+            align-items: center !important;
+            gap: 0.75rem !important;
+            font-size: 0.875rem !important;
+            padding: 0 !important;
+            color: var(--color-text-secondary) !important;
+        }
+
+        .check-item.done {
+            color: var(--color-text-main) !important;
+        }
+
+        .status-marker {
+            width: 18px !important;
+            height: 18px !important;
+            border-radius: 4px !important;
+            border: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent !important;
+        }
+
+        .status-marker.done {
+            background-color: var(--color-accent) !important;
+            border-color: var(--color-accent) !important;
+        }
+
+        .status-marker.done::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+        }
+
+        /* Buttons */
+        .btn-large {
+            padding: 0.6rem 1rem !important;
+            font-size: 0.85rem !important;
+            border-radius: 8px !important;
+            font-weight: 600 !important;
+            width: 100%;
+            background: #ffffff !important;
+            color: var(--color-text-main) !important;
+            border: 1px solid var(--color-border) !important;
+            box-shadow: none !important;
+            cursor: pointer;
+        }
+
+        .btn-large:hover {
+            background: #f1f5f9 !important;
+        }
+
+        .helper-text {
+            font-size: 0.75rem !important;
+            color: var(--color-text-secondary) !important;
+            text-align: center;
+            margin-top: 0.75rem !important;
+            display: block;
+        }
+
+        /* Quick Snapshot */
+        .snapshot-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        @media (max-width: 768px) {
+            .snapshot-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Essential Documents */
+        .document-item {
+            padding: 1rem 1.25rem !important;
+            border: 1px solid var(--color-border) !important;
+            margin-bottom: 0.75rem !important;
+            background: #ffffff !important;
+            border-radius: 8px !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+        }
+
+        .document-item:last-child {
+            margin-bottom: 0 !important;
+        }
+
+        .doc-meta {
+            display: flex !important;
+            flex-direction: column !important;
+            position: relative;
+            padding-left: 2.75rem;
+            justify-content: center;
+            min-height: 2.5rem;
+            gap: 2px !important;
+        }
+
+        .doc-meta::before {
+            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>');
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+        }
+
+        .doc-main {
+            font-size: 0.875rem !important;
+            font-weight: 500 !important;
+            color: var(--color-text-main) !important;
+        }
+
+        .doc-subtext {
+            font-size: 0.75rem !important;
+            color: var(--color-text-secondary) !important;
+        }
+
+        .document-item .btn {
+            width: auto !important;
+            padding: 0 !important;
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            cursor: pointer;
+        }
+
+        .document-item .btn-primary {
+            background: transparent !important;
+            border: none !important;
+            color: var(--color-accent) !important;
+            box-shadow: none !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .document-item .btn-primary::before {
+            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%230ea5e9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>');
+        }
+
+        .document-item .btn-outline {
+            border: none !important;
+            background: transparent !important;
+            color: var(--color-text-secondary) !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .document-item .btn-outline::before {
+            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2364748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>');
+            transform: rotate(180deg);
+        }
+
+        .tag-flat {
+            background: #f1f5f9 !important;
+            border: 1px solid var(--color-border) !important;
+            border-radius: 6px !important;
+            color: var(--color-text-secondary) !important;
+            font-size: 0.75rem !important;
+            padding: 0.35rem 0.75rem !important;
+            font-weight: 500 !important;
+            display: inline-block !important;
+            margin-right: 0.25rem !important;
+            margin-bottom: 0.25rem !important;
+        }
+        
+        .role-switch-box {
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 12px;
+        }
+        
+        .role-switch-box .btn-large {
+            background: var(--color-accent) !important;
+            color: white !important;
+            border: none !important;
+            width: auto;
+            padding: 10px 24px !important;
+            box-shadow: 0 4px 6px -1px rgba(14, 165, 233, 0.2) !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">FundMe.</span>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="investor-dashboard.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    <span class="nav-item-label">Dashboard</span>
+                </a>
+                <a href="investor-schemes.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.36 8-6.17 8-10.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2V15h2v1.5zm0-2.5h-2c0-2.5 2.5-2.5 2.5-4 0-1.5-1.5-1.5-1.5-1.5s-1.5 0-1.5 1.5h-2c0-3 3-3 3-3s3.5 0 3.5 3.5c0 2-2.5 2-2.5 4z" />
+                    </svg>
+                    <span class="nav-item-label">Schemes & Incentives</span>
+                </a>
+                <a href="investor-fund-calls.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                    </svg>
+                    <span class="nav-item-label">Fund Calls</span>
+                </a>
+                <a href="investor-licenses.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z" />
+                    </svg>
+                    <span class="nav-item-label">Licenses & TBI</span>
+                </a>
+                <a href="investor-eligibility.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    <span class="nav-item-label">Eligibility Check</span>
+                </a>
+                <a href="investor-watchlist.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    <span class="nav-item-label">Saved / Watchlist</span>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="investor-profile.html" class="nav-item active" data-tooltip="Investor Profile">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                    </svg>
+                    <span class="nav-item-label">Investor Profile</span>
+                </a>
+                <a href="investor-settings.html" class="nav-item">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.09 8.83a.488.488 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span class="nav-item-label">Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <button class="btn btn-outline" id="menu-toggle"
+                    style="margin-right: 1rem; padding: 4px 8px; display: none;">☰</button>
+                <div style="flex: 1;">
+                    <h1 class="topbar-title">Investor Profile</h1>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 0.875rem; text-align: right;">
+                        <div style="font-weight: 600;">DeepTech Ventures</div>
+                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);">VC Fund • AI, Climate</div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=DeepTech+Ventures&background=3b82f6&color=fff&size=32"
+                        alt="DeepTech Ventures" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                </div>
+            </header>
+
+            <div class="container" style="padding-top: var(--spacing-xl);">
+
+                <div class="profile-container">
+
+                    <!-- 1. Profile Identity & Strength -->
+                    <div class="card">
+                        <div class="profile-identity">
+                            <div class="avatar-wrapper">
+                                <img src="https://ui-avatars.com/api/?name=DeepTech+Ventures&background=3b82f6&color=fff&size=100"
+                                    alt="DeepTech Ventures" class="profile-avatar">
+                            </div>
+                            <h2 class="profile-name">DeepTech Ventures</h2>
+                        </div>
+
+                        <div class="strength-bar-container">
+                            <div class="strength-header">
+                                <span class="info-label">Profile Strength</span>
+                                <span class="strength-percentage">85% Complete</span>
+                            </div>
+                            <div class="strength-bar-bg">
+                                <div class="strength-bar-fill"></div>
+                            </div>
+                        </div>
+
+                        <div class="checklist-container">
+                            <div class="check-item done"><span class="status-marker done"></span> Entity basics — Done</div>
+                            <div class="check-item done"><span class="status-marker done"></span> Investment focus — Done</div>
+                            <div class="check-item done"><span class="status-marker done"></span> SEBI & DPIIT — Done</div>
+                            <div class="check-item"><span class="status-marker todo"></span> TBI Certification — Missing</div>
+                        </div>
+
+                        <div style="text-align: center; margin-top: 1rem;">
+                            <button class="btn btn-primary btn-large" style="padding: 10px 0;">Verify Regulatory Status</button>
+                            <span class="helper-text">Verified profiles receive 2.4x higher deal flow visibility.</span>
+                        </div>
+                    </div>
+
+                    <!-- 2. Basic Identity -->
+                    <div class="card">
+                        <div class="section-header">
+                            <h3 class="section-title">Basic Identity</h3>
+                            <a class="btn-edit">EDIT</a>
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-block">
+                                <span class="info-label">Investor Name</span>
+                                <span class="info-value">DeepTech Ventures</span>
+                            </div>
+                            <div class="info-block">
+                                <span class="info-label">Entity Type</span>
+                                <span class="info-value">VC / AIF Fund</span>
+                            </div>
+                            <div class="info-block">
+                                <span class="info-label">Headquarters</span>
+                                <span class="info-value">Bangalore, India</span>
+                            </div>
+                            <div class="info-block">
+                                <span class="info-label">Year Established</span>
+                                <span class="info-value">2018</span>
+                            </div>
+                            <div class="info-block" style="grid-column: span 2;">
+                                <span class="info-label">About the Investor</span>
+                                <p class="info-value" style="font-weight: 400; line-height: 1.6;">
+                                    A leading deep-tech focused venture fund backing high-impact innovations in AI, ML and ClimateTech. 
+                                    We provide more than just capital—we offer strategic market access and technical mentorship.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Quick Snapshot Row -->
+                        <div class="snapshot-row" style="grid-template-columns: 1fr;">
+                            <div class="info-block">
+                                <span class="info-label">Website</span>
+                                <span class="info-value"><a href="#" style="color: var(--color-accent); text-decoration: none;">https://deeptechventures.com</a></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Investment Focus -->
+                    <div class="card">
+                        <div class="section-header">
+                            <h3 class="section-title">Investment Focus</h3>
+                            <a class="btn-edit">EDIT</a>
+                        </div>
+                        <div class="info-grid" style="margin-bottom: var(--spacing-xl);">
+                            <div class="info-block">
+                                <span class="info-label">Typical Check Size</span>
+                                <span class="info-value">$250K - $1.5M</span>
+                            </div>
+                            <div class="info-block">
+                                <span class="info-label">Stage Focus</span>
+                                <span class="info-value">TRL 4 - TRL 9 (MVP to Growth)</span>
+                            </div>
+                        </div>
+                        <div class="info-block">
+                            <span class="info-label">Sector Keywords</span>
+                            <div style="margin-top: 12px;">
+                                <span class="tag-flat">AI / ML</span>
+                                <span class="tag-flat">DeepTech</span>
+                                <span class="tag-flat">ClimateTech</span>
+                                <span class="tag-flat">Sustainability</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. Ecosystem Participation -->
+                    <div class="card">
+                        <div class="section-header">
+                            <h3 class="section-title">Ecosystem Participation</h3>
+                            <a class="btn-edit">EDIT</a>
+                        </div>
+                        <div class="checklist-container" style="margin-bottom: 0;">
+                            <div class="check-item done"><span class="status-marker done"></span> Government Co-Investment</div>
+                            <div class="check-item done"><span class="status-marker done"></span> Fund-of-Funds Participant</div>
+                            <div class="check-item"><span class="status-marker todo"></span> Seeking TBI Recognition</div>
+                            <div class="check-item"><span class="status-marker todo"></span> Campus-Linked Support</div>
+                        </div>
+                    </div>
+
+                    <!-- 5. Regulatory Status -->
+                    <div class="card">
+                        <div class="section-header">
+                            <h3 class="section-title">Recognition & Regulatory</h3>
+                        </div>
+
+                        <div class="document-item">
+                            <div class="doc-meta">
+                                <span class="doc-main">DPIIT Recognition</span>
+                                <span class="doc-subtext">Verified • Valid until 2028</span>
+                            </div>
+                            <span class="tag-flat" style="background: #ECFDF5 !important; color: #065F46 !important; border-color: #A7F3D0 !important; margin: 0 !important;">VERIFIED</span>
+                        </div>
+
+                        <div class="document-item">
+                            <div class="doc-meta">
+                                <span class="doc-main">SEBI Registration Certificate</span>
+                                <span class="doc-subtext">Category I AIF • Updated Feb 2026</span>
+                            </div>
+                            <button class="btn btn-outline btn-large" style="padding: 8px 16px;">View</button>
+                        </div>
+
+                        <div class="document-item">
+                            <div class="doc-meta">
+                                <span class="doc-main">TBI Recognition</span>
+                                <span class="doc-subtext">Upload approval document to enable TBI-specific schemes</span>
+                            </div>
+                            <button class="btn btn-primary btn-large" style="padding: 8px 16px;">Upload</button>
+                        </div>
+                    </div>
+
+                    <!-- 6. Role Switch -->
+                    <div class="card" style="padding: 0; overflow: hidden; border: none; background: transparent !important; box-shadow: none !important;">
+                        <div class="role-switch-box">
+                            <div>
+                                <div style="font-weight: 700; color: var(--color-primary-dark); font-size: 1.125rem;">Switch to Founder View</div>
+                                <div style="font-size: 0.875rem; color: var(--color-text-secondary); margin-top: 0.5rem; max-width: 400px;">
+                                    Manage your own startup profiles or apply for programs as an entrepreneur.
+                                </div>
+                            </div>
+                            <a href="dashboard.html" class="btn btn-primary btn-large" style="text-decoration: none;">Launch Dashboard →</a>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: var(--spacing-xl); grid-column: 1 / -1;">
+                        <p style="font-size: 0.8125rem; color: var(--color-text-secondary); opacity: 0.6;">
+                            Profile visibility: <span style="color: #059669; font-weight: 600;">Public to Government Nodes</span> • Last updated March 3, 2026
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+
+</html>

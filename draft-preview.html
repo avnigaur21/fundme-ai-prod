@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Draft Review</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: var(--color-bg-body) !important;
+        }
+
+        .main-content {
+            background: var(--color-bg-body) !important;
+        }
+
+        .preview-container {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--color-bg-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .preview-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .preview-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .preview-subtitle {
+            font-size: 0.95rem;
+            color: var(--color-text-secondary);
+        }
+
+        .preview-banner {
+            margin-bottom: 1.5rem;
+            padding: 1rem 1.1rem;
+            border: 1px solid #dbeafe;
+            border-radius: 12px;
+            background: #f8fbff;
+            color: var(--color-text-main);
+            line-height: 1.5;
+        }
+
+        .preview-section {
+            margin-bottom: 2rem;
+        }
+
+        .preview-section-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            margin-bottom: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .preview-field {
+            margin-bottom: 1rem;
+        }
+
+        .preview-field-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: var(--color-text-secondary);
+            margin-bottom: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .preview-field-value {
+            font-size: 0.98rem;
+            color: var(--color-text-main);
+            line-height: 1.6;
+            background: var(--color-bg-body);
+            padding: 1rem 1.1rem;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--color-primary);
+            white-space: pre-wrap;
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">FundMe.</span>
+                <button class="sidebar-toggle" id="sidebar-toggle">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    <span class="nav-item-label">Dashboard</span>
+                </a>
+                <a href="explorer.html" class="nav-item" data-tooltip="Explorer">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                    <span class="nav-item-label">Explorer</span>
+                </a>
+                <a href="saved.html" class="nav-item" data-tooltip="Saved">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    <span class="nav-item-label">Saved</span>
+                </a>
+                <a href="drafts.html" class="nav-item active" data-tooltip="Drafts">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 0v6h6" />
+                    </svg>
+                    <span class="nav-item-label">Drafts</span>
+                </a>
+                <a href="applications.html" class="nav-item" data-tooltip="Applications">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                    </svg>
+                    <span class="nav-item-label">Applications</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <button class="btn btn-outline" id="menu-toggle" style="margin-right: 1rem; padding: 4px 8px; display: none;">Menu</button>
+                    <a href="drafts.html" style="color: var(--color-text-secondary); text-decoration: none;">Back</a>
+                    <h1 class="topbar-title">Draft Review</h1>
+                </div>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 0.875rem; text-align: right;">
+                        <div style="font-weight: 600;" id="header_user_name">...</div>
+                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);" id="header_user_meta">...</div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&size=32"
+                        alt="User Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;"
+                        id="header_user_avatar">
+                </div>
+            </header>
+
+            <div class="container" style="padding-top: var(--spacing-lg); padding-bottom: 4rem;">
+                <div class="preview-container">
+                    <div class="preview-header">
+                        <h2 class="preview-title" id="page-title">Application Draft</h2>
+                        <p class="preview-subtitle" id="page-subtitle">Loading your latest draft.</p>
+                    </div>
+
+                    <div class="preview-banner" id="preview-banner"></div>
+                    <div id="preview-content"></div>
+
+                    <div class="preview-actions">
+                        <button class="btn btn-outline" id="editDraftBtn">Edit Draft</button>
+                        <button class="btn btn-outline" onclick="copyAll()">Copy Text</button>
+                        <button class="btn btn-outline" onclick="exportDraft()">Export TXT</button>
+                        <button class="btn btn-primary" id="assistApplyBtn">Open Portal + Extension</button>
+                        <button class="btn btn-primary" id="markAppliedBtn" style="background: var(--color-success); border-color: var(--color-success);">Mark as Applied</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const opportunityId = params.get('opportunity_id');
+        const draftId = params.get('draft_id');
+        let currentDraft = null;
+        let currentOpportunity = null;
+
+        async function loadDraft() {
+            if (draftId) {
+                currentDraft = await api.getDraft(draftId);
+            } else if (opportunityId) {
+                currentDraft = await api.getDraftByOpportunity(opportunityId);
+            } else {
+                throw new Error('No draft context was provided.');
+            }
+
+            currentOpportunity = currentDraft.opportunity || (opportunityId ? await api.getOpportunity(opportunityId) : null);
+            document.getElementById('page-title').textContent = currentDraft.title || currentOpportunity?.title || 'Application Draft';
+            document.getElementById('page-subtitle').textContent = currentDraft.subtitle || 'Review the final answers before applying.';
+
+            const banner = document.getElementById('preview-banner');
+            banner.textContent = currentDraft.schema_source === 'extension_capture'
+                ? 'This draft is aligned to the live portal fields captured by the Chrome extension. Open the external site and use the extension to fill these answers after login.'
+                : 'This draft is AI-inferred from the opportunity. Capture the live external form with the extension for the highest-confidence submission flow.';
+
+            const container = document.getElementById('preview-content');
+            container.innerHTML = '';
+
+            (currentDraft.form_schema?.sections || []).forEach(section => {
+                const sectionEl = document.createElement('section');
+                sectionEl.className = 'preview-section';
+
+                const sectionTitle = document.createElement('div');
+                sectionTitle.className = 'preview-section-title';
+                sectionTitle.textContent = section.title;
+                sectionEl.appendChild(sectionTitle);
+
+                section.fields.forEach(field => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'preview-field';
+
+                    const label = document.createElement('div');
+                    label.className = 'preview-field-label';
+                    label.textContent = field.label;
+                    wrapper.appendChild(label);
+
+                    const value = document.createElement('div');
+                    value.className = 'preview-field-value';
+                    const raw = currentDraft.form_fields?.[field.id];
+                    value.textContent = raw === true ? 'Yes' : raw === false ? 'No' : (raw || 'Pending');
+                    wrapper.appendChild(value);
+
+                    sectionEl.appendChild(wrapper);
+                });
+
+                container.appendChild(sectionEl);
+            });
+
+            document.getElementById('editDraftBtn').onclick = () => {
+                window.location.href = `draft-generator.html?opportunity_id=${currentDraft.opportunity_id}`;
+            };
+
+            document.getElementById('assistApplyBtn').onclick = async () => {
+                if (!currentOpportunity?.link) {
+                    alert('This opportunity does not have an external application URL yet.');
+                    return;
+                }
+
+                try {
+                    await api.stageExtensionSession(currentDraft.opportunity_id, currentOpportunity.link);
+                    window.open(currentOpportunity.link, '_blank', 'noopener');
+                    alert('The portal session is staged. Open the FundMe extension on that site to capture or fill the live application form.');
+                } catch (err) {
+                    console.error(err);
+                    alert('Failed to stage the external portal session.');
+                }
+            };
+
+            document.getElementById('markAppliedBtn').onclick = async () => {
+                try {
+                    if (!confirm('Mark this opportunity as applied?')) return;
+                    await api.createApplication(currentDraft.opportunity_id, currentOpportunity?.deadline || null);
+                    window.location.href = 'applications.html';
+                } catch (err) {
+                    console.error(err);
+                    alert('Failed to mark as applied: ' + (err.message || err));
+                }
+            };
+        }
+
+        function buildTextExport() {
+            let text = `${currentDraft.title || 'Application Draft'}\n\n`;
+            (currentDraft.form_schema?.sections || []).forEach(section => {
+                text += `--- ${section.title} ---\n`;
+                section.fields.forEach(field => {
+                    const raw = currentDraft.form_fields?.[field.id];
+                    const value = raw === true ? 'Yes' : raw === false ? 'No' : (raw || '');
+                    text += `${field.label}\n${value}\n\n`;
+                });
+            });
+            return text;
+        }
+
+        function copyAll() {
+            navigator.clipboard.writeText(buildTextExport()).then(() => {
+                alert('Draft copied to clipboard.');
+            });
+        }
+
+        function exportDraft() {
+            const blob = new Blob([buildTextExport()], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `draft_${currentDraft.opportunity_id || 'application'}.txt`;
+            a.click();
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await loadDraft();
+            } catch (err) {
+                console.error(err);
+                document.getElementById('preview-content').innerHTML = `
+                    <div class="preview-banner" style="border-color:#fecaca;background:#fef2f2;">
+                        Failed to load this draft. ${err.message || ''}
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+
+</html>

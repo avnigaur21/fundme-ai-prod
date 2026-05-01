@@ -1,0 +1,98 @@
+[
+  {
+    "input": {
+      "profile": { "sector": "Fintech", "stage": "Early Revenue", "startup_name": "Bharat Fintech" },
+      "eligibility": ["Indian startups registered with DPIIT", "Solutions aligned with Fintech Inclusion"],
+      "opportunity_title": "Bharat Startup Grand Challenge 2026"
+    },
+    "expected_output": "eligible — Bharat Fintech is a DPIIT-recognized Fintech startup, matching the primary sector and stage for this challenge."
+  },
+  {
+    "input": {
+      "profile": { "sector": "Fintech", "stage": "Early Revenue", "startup_name": "Bharat Fintech" },
+      "eligibility": ["DPIIT-recognized Indian startups", "Focus on financial inclusion or MSME innovation"],
+      "opportunity_title": "HDFC Bank Parivartan SmartUp Grants (FY26)"
+    },
+    "expected_output": "eligible — Bharat Fintech's focus on MSME financial infrastructure and AI-driven automation is a direct match for HDFC's CSR grant criteria."
+  },
+  {
+    "input": {
+      "profile": { "sector": "Fintech", "stage": "Early Revenue", "startup_name": "Bharat Fintech" },
+      "eligibility": [],
+      "opportunity_title": "FutureX AI Campus Fund"
+    },
+    "expected_output": "not eligible — Bharat Fintech (Fintech) does not match the AI-first requirement of FutureX AI Campus Fund."
+  },
+  {
+    "input": {
+      "profile": { "sector": "HealthTech", "stage": "Growth", "startup_name": "MediLink" },
+      "eligibility": ["Registered with DPIIT", "Early-stage and growth-stage biotech startups"],
+      "opportunity_title": "BioVerse Challenge"
+    },
+    "expected_output": "not eligible — BioVerse is for Biotech startups. MediLink is HealthTech, which is distinct from strictly Biotech."
+  },
+  {
+    "input": {
+      "profile": { "sector": "AgriTech", "stage": "Growth", "startup_name": "AgriSense AI" },
+      "eligibility": ["Designers and startups", "Seed funding and mentorship offered"],
+      "opportunity_title": "R|Elan Circular Design Challenge"
+    },
+    "expected_output": "not eligible — R|Elan is for sustainable fashion/design innovations. AgriSense AI (AgriTech) is not a match."
+  },
+  {
+    "input": {
+      "profile": { "sector": "Fintech", "stage": "Early Revenue", "startup_name": "Bharat Fintech" },
+      "eligibility": ["Women-led e-commerce startups", "Accelerator program details not specified"],
+      "opportunity_title": "Amazon Saheli Accelerate"
+    },
+    "expected_output": "not eligible — Amazon Saheli targets women-led e-commerce. Bharat Fintech is a Fintech startup."
+  },
+  {
+    "input": {
+      "profile": { "sector": "AgriTech", "stage": "Growth", "startup_name": "AgriSense AI" },
+      "eligibility": ["Idea Stage", "Startups working on food security and sustainability"],
+      "opportunity_title": "Innovate for Impact Challenge"
+    },
+    "expected_output": "not eligible — AgriSense AI is at Growth stage, but the challenge requires Idea Stage startups."
+  },
+  {
+    "input": {
+      "profile": { "sector": "HealthTech", "stage": "Growth", "startup_name": "MediLink" },
+      "eligibility": ["Details available on program page."],
+      "opportunity_title": "BioNEST Incubation Program"
+    },
+    "expected_output": "eligible — BioNEST supports biotech/medtech. MediLink's AI healthcare solutions likely qualify."
+  },
+  {
+    "input": {
+      "profile": { "sector": "AgriTech", "stage": "Growth", "startup_name": "AgriSense AI", "solution_summary": "IoT sensors and predictive analytics" },
+      "eligibility": ["Startups in energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity sectors"],
+      "opportunity_title": "VJTI TBI DeepTech Incubator"
+    },
+    "expected_output": "eligible — AgriSense AI uses IoT and AI, which are core focus sectors for VJTI TBI."
+  },
+  {
+    "input": {
+      "profile": { "sector": "HealthTech", "stage": "Growth", "startup_name": "MediLink" },
+      "eligibility": ["AI-first startups in India", "Seed to Series A"],
+      "opportunity_title": "Google for Startups Accelerator"
+    },
+    "expected_output": "eligible — MediLink is an AI-driven HealthTech startup in India, fitting the program's stage and focus."
+  },
+  {
+    "input": {
+      "profile": { "sector": "Fintech", "stage": "Early Revenue", "startup_name": "Bharat Fintech", "location": "Bengaluru, India" },
+      "eligibility": ["Startups in Tier 2/3 cities of Tamil Nadu", "TRL 3+"],
+      "opportunity_title": "Tamil Nadu Technology Hub"
+    },
+    "expected_output": "not eligible — Bharat Fintech is based in Bengaluru, but the hub requires startups in Tier 2/3 cities of Tamil Nadu."
+  },
+  {
+    "input": {
+      "profile": { "sector": "HealthTech", "stage": "Growth", "startup_name": "MediLink" },
+      "eligibility": ["Startups in the biotech and medtech sectors"],
+      "opportunity_title": "BIRAC LEAP Fund"
+    },
+    "expected_output": "eligible — MediLink is a MedTech/HealthTech startup, fitting the BIRAC criteria."
+  }
+]

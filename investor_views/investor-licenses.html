@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Licenses & TBI Recognition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Base Styling for Consistency */
+        body { background-color: var(--color-bg-body) !important; transition: background-color 0.3s ease, color 0.3s ease; }
+        .main-content { background: var(--color-bg-body) !important; transition: background 0.3s ease; }
+    </style>
+    <style>
+        .guidance-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .recognition-block {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .recognition-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .recognition-content {
+            font-size: 0.9375rem;
+            line-height: 1.6;
+            color: var(--color-text-secondary);
+        }
+
+        /* Stepper Styles */
+        .stepper {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: var(--spacing-xl) 0;
+            position: relative;
+        }
+
+        .step-item {
+            display: flex;
+            gap: var(--spacing-lg);
+            position: relative;
+            padding-bottom: var(--spacing-xl);
+        }
+
+        .step-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .step-item::after {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 32px;
+            bottom: 0;
+            width: 2px;
+            background: #E5E7EB;
+        }
+
+        .step-item:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--color-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+            z-index: 1;
+        }
+
+        .step-body {
+            padding-top: 4px;
+        }
+
+        .step-title {
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: 4px;
+        }
+
+        .step-desc {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Timeline & Requirements */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-xl);
+            margin-top: var(--spacing-xl);
+        }
+
+        .requirement-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.875rem;
+            color: var(--color-text-primary);
+        }
+
+        .requirement-item svg {
+            width: 18px;
+            height: 18px;
+            color: #10B981;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .timeline-box {
+            background: var(--color-bg-body);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+        }
+
+        .timeline-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--color-border);
+        }
+
+        .timeline-row:last-child {
+            border-bottom: none;
+        }
+
+        .link-card {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            color: var(--color-text-primary);
+            transition: all 0.2s ease;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .link-card:hover {
+            border-color: var(--color-primary);
+            background: #F5F3FF;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">FundMe.</span>
+                <button class="sidebar-toggle" id="sidebar-toggle" title="Expand sidebar" aria-label="Expand sidebar">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="investor-dashboard.html" class="nav-item" data-tooltip="Dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    <span class="nav-item-label">Dashboard</span>
+                </a>
+                <a href="investor-schemes.html" class="nav-item" data-tooltip="Schemes & Incentives">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M11.5 2C6.81 2 3 5.81 3 10.5S6.81 19 11.5 19h.5v3c4.86-2.36 8-6.17 8-10.5C20 5.81 16.19 2 11.5 2zm1 14.5h-2V15h2v1.5zm0-2.5h-2c0-2.5 2.5-2.5 2.5-4 0-1.5-1.5-1.5-1.5-1.5s-1.5 0-1.5 1.5h-2c0-3 3-3 3-3s3.5 0 3.5 3.5c0 2-2.5 2-2.5 4z" />
+                    </svg>
+                    <span class="nav-item-label">Schemes & Incentives</span>
+                </a>
+                <a href="investor-fund-calls.html" class="nav-item" data-tooltip="Fund Calls">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                    </svg>
+                    <span class="nav-item-label">Fund Calls</span>
+                </a>
+                <a href="investor-licenses.html" class="nav-item active" data-tooltip="Licenses & TBI">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2l-5.5 9h11L12 2zm0 3.84L13.93 9h-3.87L12 5.84zM17.5 13c-2.49 0-4.5 2.01-4.5 4.5s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5-2.01-4.5-4.5-4.5zm0 7c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5zM3 21.5h8v-8H3v8zm2-6h4v4H5v-4z" />
+                    </svg>
+                    <span class="nav-item-label">Licenses & TBI</span>
+                </a>
+                <a href="investor-eligibility.html" class="nav-item" data-tooltip="Eligibility Check">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    <span class="nav-item-label">Eligibility Check</span>
+                </a>
+                <a href="investor-watchlist.html" class="nav-item" data-tooltip="Saved / Watchlist">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    <span class="nav-item-label">Saved / Watchlist</span>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="investor-profile.html" class="nav-item" data-tooltip="Investor Profile">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                    </svg>
+                    <span class="nav-item-label">Investor Profile</span>
+                </a>
+                <a href="investor-settings.html" class="nav-item" data-tooltip="Settings">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.09 8.83a.488.488 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span class="nav-item-label">Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <button class="btn btn-outline" id="menu-toggle"
+                    style="margin-right: 1rem; padding: 4px 8px; display: none;">☰</button>
+                <h1 class="topbar-title">Licenses & TBI Recognition</h1>
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <div style="font-size: 0.875rem; text-align: right;">
+                        <div style="font-weight: 600;">Sequoia India</div>
+                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Venture Capital • Tier 1
+                        </div>
+                    </div>
+                    <div style="width: 32px; height: 32px; background: #E5E7EB; border-radius: 50%;"></div>
+                </div>
+            </header>
+
+            <div class="container" style="padding-top: var(--spacing-lg); padding-bottom: 5rem;">
+                <div class="guidance-container">
+                    <div style="margin-bottom: var(--spacing-xl);">
+                        <p style="color: var(--color-text-secondary); max-width: 700px; font-size: 1.125rem;">
+                            Understand the pathways to become a recognized incubator, TBI, or eligible institution
+                            within the startup ecosystem.
+                        </p>
+                    </div>
+
+                    <!-- Recognition Blocks -->
+                    <div
+                        style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-lg); margin-bottom: var(--spacing-xl);">
+                        <div class="recognition-block" style="margin-bottom: 0;">
+                            <div class="recognition-title">TBI Recognition</div>
+                            <p class="recognition-content">
+                                Focused on technology-intensive startups, Technology Business Incubators (TBIs) provide
+                                specialized infrastructure and lab access. Recognition is typically provided by DST or
+                                MeitY.
+                            </p>
+                            <div
+                                style="margin-top: 12px; font-weight: 600; font-size: 0.8125rem; color: var(--color-primary);">
+                                FOR: Engineering Colleges & R&D Units</div>
+                        </div>
+                        <div class="recognition-block" style="margin-bottom: 0;">
+                            <div class="recognition-title">Incubator Accreditation</div>
+                            <p class="recognition-content">
+                                General startup incubators that provide physical space, mentorship, and Seed Fund
+                                support (e.g., SISFS). Evaluated based on network strength and sectoral focus.
+                            </p>
+                            <div
+                                style="margin-top: 12px; font-weight: 600; font-size: 0.8125rem; color: var(--color-primary);">
+                                FOR: Private Entities & Institutional Labs</div>
+                        </div>
+                    </div>
+
+                    <!-- Step-by-Step Flow -->
+                    <section class="card" style="padding: var(--spacing-xl); margin-bottom: var(--spacing-xl);">
+                        <h3 style="margin-bottom: var(--spacing-md);">Pathway to TBI Recognition</h3>
+                        <p
+                            style="color: var(--color-text-secondary); font-size: 0.875rem; margin-bottom: var(--spacing-lg);">
+                            A typical roadmap for an institution to achieve official TBI status.
+                        </p>
+                        <div class="stepper">
+                            <div class="step-item">
+                                <div class="step-icon">1</div>
+                                <div class="step-body">
+                                    <div class="step-title">Institutional Eligibility</div>
+                                    <div class="step-desc">Must be a host institute (HI) like a University, Engineering
+                                        College, or R&D institution with at least 5 years of history.</div>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-icon">2</div>
+                                <div class="step-body">
+                                    <div class="step-title">Infrastructure Readiness</div>
+                                    <div class="step-desc">Allocation of dedicated physical space (~10,000 sq ft) and
+                                        specialized lab equipment for startups.</div>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-icon">3</div>
+                                <div class="step-body">
+                                    <div class="step-title">Governance & Team</div>
+                                    <div class="step-desc">Formation of a dedicated Section 8 company and appointment of
+                                        a full-time CEO and management team.</div>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-icon">4</div>
+                                <div class="step-body">
+                                    <div class="step-title">Application & Evaluation</div>
+                                    <div class="step-desc">Submission of detailed project report (DPR) followed by
+                                        initial screening and committee evaluation.</div>
+                                </div>
+                            </div>
+                            <div class="step-item">
+                                <div class="step-icon">5</div>
+                                <div class="step-body">
+                                    <div class="step-title">Site Review & Recognition</div>
+                                    <div class="step-desc">Physical site visit by subject matter experts to verify
+                                        readiness, followed by final approval and licensing.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Requirements & Timeline -->
+                    <div class="info-grid">
+                        <section class="card" style="padding: var(--spacing-lg);">
+                            <h4 style="margin-bottom: var(--spacing-md);">Typical Requirements</h4>
+                            <ul class="requirement-list">
+                                <li class="requirement-item">
+                                    <svg fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    Registered Legal Entity (Section 8 Company)
+                                </li>
+                                <li class="requirement-item">
+                                    <svg fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    Dedicated CEO and full-time ops team
+                                </li>
+                                <li class="requirement-item">
+                                    <svg fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    Evidence of R&D or startup past support
+                                </li>
+                                <li class="requirement-item">
+                                    <svg fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd"
+                                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    Financial audit reports for last 3 years
+                                </li>
+                            </ul>
+                        </section>
+
+                        <section class="card" style="padding: var(--spacing-lg);">
+                            <h4 style="margin-bottom: var(--spacing-md);">Timeline Expectations</h4>
+                            <div class="timeline-box">
+                                <div class="timeline-row">
+                                    <span style="font-size: 0.875rem;">Phase 1: Preparation</span>
+                                    <span style="font-weight: 600; font-size: 0.875rem;">1–2 Months</span>
+                                </div>
+                                <div class="timeline-row">
+                                    <span style="font-size: 0.875rem;">Phase 2: Submission & Screen</span>
+                                    <span style="font-weight: 600; font-size: 0.875rem;">~1 Month</span>
+                                </div>
+                                <div class="timeline-row">
+                                    <span style="font-size: 0.875rem;">Phase 3: Committee Review</span>
+                                    <span style="font-weight: 600; font-size: 0.875rem;">2–3 Months</span>
+                                </div>
+                            </div>
+                            <p
+                                style="font-size: 0.75rem; color: var(--color-text-secondary); margin-top: 12px; font-style: italic;">
+                                Note: Timelines vary by ministry and sectoral focus.
+                            </p>
+                        </section>
+                    </div>
+
+                    <!-- Links -->
+                    <section style="margin-top: var(--spacing-xl);">
+                        <h4 style="margin-bottom: var(--spacing-md);">Official Resources</h4>
+                        <a href="#" class="link-card">
+                            <span style="font-size: 1.25rem;">🏛</span>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.875rem;">DPIIT Incubator Guidelines</div>
+                                <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Framework for
+                                    national accreditation</div>
+                            </div>
+                        </a>
+                        <a href="#" class="link-card">
+                            <span style="font-size: 1.25rem;">🔬</span>
+                            <div>
+                                <div style="font-weight: 600; font-size: 0.875rem;">DST TBI Portal</div>
+                                <div style="font-size: 0.75rem; color: var(--color-text-secondary);">Official DST
+                                    recognition pathway details</div>
+                            </div>
+                        </a>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script>
+        // (Removed redundant listener, now handled by js/app.js)
+    </script>
+</body>
+
+</html>

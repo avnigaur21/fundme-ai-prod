@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: var(--color-bg-body) !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .main-content {
+            background: var(--color-bg-body) !important;
+            transition: background 0.3s ease;
+        }
+
+        .opp-card {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .opp-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .results-area {
+            background: transparent !important;
+        }
+
+        .filter-sidebar {
+            background: var(--color-bg-surface) !important;
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar (collapsed by default, expand on hover or click) -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-logo">FundMe.</span>
+                <button class="sidebar-toggle" id="sidebar-toggle" title="Expand sidebar" aria-label="Expand sidebar">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+            </div>
+                        <nav class="sidebar-nav">
+                <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                    </svg>
+                    <span class="nav-item-label">Dashboard</span>
+                </a>
+                <a href="explorer.html" class="nav-item active" data-tooltip="Explorer">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                    </svg>
+                    <span class="nav-item-label">Explorer</span>
+                </a>
+                <a href="saved.html" class="nav-item" data-tooltip="Saved">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                    </svg>
+                    <span class="nav-item-label">Saved</span>
+                </a>
+                <a href="drafts.html" class="nav-item" data-tooltip="Drafts">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 0v6h6" />
+                    </svg>
+                    <span class="nav-item-label">Drafts</span>
+                </a>
+                <a href="applications.html" class="nav-item" data-tooltip="Applications">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                    </svg>
+                    <span class="nav-item-label">Applications</span>
+                </a>
+                <a href="business-opportunities.html" class="nav-item" data-tooltip="Business Opportunities">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" />
+                    </svg>
+                    <span class="nav-item-label">Business Opportunities</span>
+                </a>
+                <a href="profile.html" class="nav-item" data-tooltip="Startup Profile">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                    </svg>
+                    <span class="nav-item-label">Startup Profile</span>
+                </a>
+                <div class="sidebar-divider"></div>
+                <a href="settings.html" class="nav-item" data-tooltip="Settings">
+                    <svg class="nav-icon" viewBox="0 0 24 24">
+                        <path
+                            d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.09 8.83a.488.488 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                    </svg>
+                    <span class="nav-item-label">Settings</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div style="display: flex; align-items: center;">
+                    <button class="btn btn-outline" id="menu-toggle"
+                        style="margin-right: 0.5rem; padding: 4px 8px; display: none;">☰</button>
+                    <button class="btn btn-outline" id="filter-toggle"
+                        style="margin-right: 1rem; padding: 4px 8px; display: none;">Filters</button>
+                    <h1 class="topbar-title">Opportunities Explorer</h1>
+                </div>
+                                <a href="profile.html"
+                    style="display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; cursor: pointer;">
+                    <!-- User Profile -->
+                    <div style="font-size: 0.875rem; text-align: right;">
+                        <div style="font-weight: 600;" id="header_user_name">...</div>
+                        <div style="font-size: 0.75rem; color: var(--color-text-secondary);" id="header_user_meta">...
+                        </div>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&size=32"
+                        alt="User Profile" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;" id="header_user_avatar">
+                </a>
+            </header>
+
+            <!-- Explorer Container -->
+            <div class="explorer-container">
+                <!-- Filter Sidebar -->
+                <aside class="filter-sidebar" id="filter-sidebar">
+                    <div class="filter-group">
+                        <div class="filter-header">Startup Stage</div>
+                        <div class="filter-content" id="filter-stage">
+                            <label class="checkbox-label"><input type="checkbox" value="Idea"> Idea</label>
+                            <label class="checkbox-label"><input type="checkbox" value="MVP"> MVP</label>
+                            <label class="checkbox-label"><input type="checkbox" value="Early Revenue"> Early Revenue</label>
+                            <label class="checkbox-label"><input type="checkbox" value="Growth / PMF"> Growth / PMF</label>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-header">Sector</div>
+                        <div class="filter-content" id="filter-sector">
+                            <label class="checkbox-label"><input type="checkbox" value="AI / ML"> AI / ML</label>
+                            <label class="checkbox-label"><input type="checkbox" value="DeepTech"> DeepTech</label>
+                            <label class="checkbox-label"><input type="checkbox" value="FinTech"> FinTech</label>
+                            <label class="checkbox-label"><input type="checkbox" value="HealthTech"> HealthTech</label>
+                            <label class="checkbox-label"><input type="checkbox" value="AgriTech"> AgriTech</label>
+                        </div>
+                    </div>
+                    <div class="filter-group">
+                        <div class="filter-header">Funding Type</div>
+                        <div class="filter-content" id="filter-type">
+                            <label class="checkbox-label"><input type="checkbox" value="Grant"> Grant</label>
+                            <label class="checkbox-label"><input type="checkbox" value="Accelerator"> Accelerator</label>
+                            <label class="checkbox-label"><input type="checkbox" value="Incubation"> Incubation</label>
+                            <label class="checkbox-label"><input type="checkbox" value="Funding"> Funding</label>
+                        </div>
+                    </div>
+                    <!-- Removed static funding needs slider to simplify filtering logic for now -->
+                </aside>
+
+                <!-- Results View -->
+                <section class="results-area">
+                    <div class="results-header">
+                        <div style="font-weight: 600; font-size: 0.875rem; color: var(--color-text-secondary);">Showing
+                            14 matches</div>
+                        <div class="view-toggle">
+                            <button class="view-btn active" title="Grid View">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M4 11h5V5H4v6zm0 7h5v-6H4v6zm6 0h5v-6h-5v6zm6 0h5v-6h-5v6zm-6-7h5V5h-5v6zm6-6v6h5V5h-5z" />
+                                </svg>
+                            </button>
+                            <button class="view-btn" title="List View">
+                                <svg viewBox="0 0 24 24">
+                                    <path
+                                        d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2" id="results-grid">
+                        <div style="grid-column: span 2; text-align: center; padding: 2rem;">
+                            <em style="color: var(--color-text-secondary);">Loading opportunities...</em>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/header.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            var view = params.get('view');
+            if (view) {
+                var card = document.querySelector('.opp-card[data-opportunity="' + view + '"]');
+                if (card) {
+                    setTimeout(function () {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        card.classList.add('opp-card-highlight');
+                        setTimeout(function () { card.classList.remove('opp-card-highlight'); }, 2500);
+                    }, 100);
+                }
+            }
+
+            let allOpps = [];
+
+            function applyFilters() {
+                const stageCheckboxes = Array.from(document.querySelectorAll('#filter-stage input[type="checkbox"]:checked')).map(cb => cb.value);
+                const sectorCheckboxes = Array.from(document.querySelectorAll('#filter-sector input[type="checkbox"]:checked')).map(cb => cb.value);
+                const typeCheckboxes = Array.from(document.querySelectorAll('#filter-type input[type="checkbox"]:checked')).map(cb => cb.value);
+
+                const filtered = allOpps.filter(opp => {
+                    const matchStage = stageCheckboxes.length === 0 || stageCheckboxes.includes(opp.stage);
+                    const matchSector = sectorCheckboxes.length === 0 || sectorCheckboxes.includes(opp.sector);
+                    const matchType = typeCheckboxes.length === 0 || typeCheckboxes.includes(opp.type);
+                    return matchStage && matchSector && matchType;
+                });
+
+                renderOpportunities(filtered);
+            }
+
+            function setupFilters() {
+                const checkboxes = document.querySelectorAll('#filter-sidebar input[type="checkbox"]');
+                checkboxes.forEach(cb => {
+                    cb.addEventListener('change', applyFilters);
+                });
+            }
+
+            function renderOpportunities(opps) {
+                const grid = document.getElementById('results-grid');
+                grid.innerHTML = '';
+                
+                document.querySelector('.results-header div').innerText = `Showing ${opps.length} matches`;
+
+                opps.forEach(opp => {
+                        const card = document.createElement('div');
+                        card.className = 'opp-card';
+                        card.setAttribute('data-opportunity', opp.opportunity_id);
+                        
+                        const sector = opp.sector || 'Any Sector';
+                        const stage = opp.stage || 'Any Stage';
+                        const amount = opp.amount || 'Variable';
+                        const deadline = formatDeadline(opp.deadline || 'Rolling');
+                        
+                        // Prefer the summarized eligibility string for the card view
+                        let elig = opp.eligibility || 'See details for eligibility criteria.';
+                        if (Array.isArray(elig) && elig.length > 0) elig = elig[0];
+                        if (typeof elig === 'string' && elig.length > 90) elig = elig.substring(0, 87) + '...';
+                        
+                        const desc = opp.description || opp.summary || 'Click view details for more information.';
+
+                        card.innerHTML = `
+                            <div class="opp-header">
+                                <div>
+                                    <h3 class="opp-title">${opp.title || 'Untitled'}</h3>
+                                    <div style="font-size: 0.75rem; color: var(--color-text-secondary); display: flex; align-items: center; gap: 0.35rem;">
+                                        ${opp.provider || 'Provider'}
+                                        ${opp.credibility_source ? `<span style="color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 99px; font-weight: 600; font-size: 0.65rem;" title="${opp.credibility_source}">✓ Verified</span>` : ''}
+                                    </div>
+                                </div>
+                                <span class="badge badge-match" data-score-for="${opp.opportunity_id}">✨ Scoring...</span>
+                            </div>
+                            
+                            <div class="opp-badges" style="margin-top: 0.25rem; margin-bottom: 0.25rem;">
+                                <span class="badge badge-blue">${sector}</span>
+                                <span class="badge badge-green">${stage}</span>
+                                <span class="badge badge-yellow">${amount}</span>
+                            </div>
+
+                            <div style="margin-bottom: 0.5rem; font-size: 0.875rem;">
+                                Deadline: <span class="deadline-text">${deadline}</span>
+                            </div>
+
+                            <div class="opp-eligibility">
+                                <div class="opp-eligibility-title">Eligibility</div>
+                                <ul class="opp-eligibility-list">
+                                    ${Array.isArray(elig) 
+                                        ? elig.map(e => `<li>${e}</li>`).join('') 
+                                        : `<li>${elig}</li>`
+                                    }
+                                </ul>
+                            </div>
+
+                            <div class="opp-description">
+                                ${desc}
+                            </div>
+
+                            <div class="opp-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                                <button class="btn btn-outline" style="flex: 1; padding: 6px 0; font-size: 0.8rem; justify-content: center;" data-save-btn data-opportunity-id="${opp.opportunity_id}">Save</button>
+                                <button class="btn btn-primary" style="flex: 1.5; padding: 6px 0; font-size: 0.8rem; justify-content: center;" onclick="window.location.href='draft-generator.html?opportunity_id=${opp.opportunity_id}'">Prepare Draft</button>
+                                <button class="btn btn-outline" style="flex: 1.5; padding: 6px 0; font-size: 0.8rem; justify-content: center;" onclick="window.location.href='opportunity.html?opportunity_id=${opp.opportunity_id}'">View Details</button>
+                            </div>
+                        `;
+                        grid.appendChild(card);
+                    });
+
+                    // --- 2. Start Batch Scoring for Explorer ---
+                    const visibleOpps = opps; // Score all visible matches
+                    api.getBatchMatchScores(visibleOpps).then(scores => {
+                        scores.forEach(s => {
+                            const badge = document.querySelector(`[data-score-for="${s.opportunity_id}"]`);
+                            if (badge && s.score !== null) {
+                                badge.innerText = `${s.score}% Match`;
+                                if (s.score >= 85) {
+                                    badge.classList.add('high-score');
+                                } else {
+                                    badge.classList.remove('high-score');
+                                }
+                            } else if (badge) {
+                                badge.innerText = '--';
+                            }
+                        });
+                    });
+
+                    // Re-init save buttons
+                    if(typeof initSaveButtons === 'function') initSaveButtons();
+                    initAIFeatures();
+            }
+
+            // --- Dynamic Load ---
+            async function loadOpportunities() {
+                try {
+                    allOpps = await api.getOpportunities();
+                    setupFilters();
+                    
+                    // Uncheck all initial checkboxes so it shows all by default
+                    document.querySelectorAll('#filter-sidebar input[type="checkbox"]').forEach(cb => cb.checked = false);
+                    
+                    applyFilters();
+                } catch (err) {
+                    console.error('Failed to load opportunities:', err);
+                }
+            }
+
+            // --- AI INTEGRATION: Summarize and Eligibility ---
+            function initAIFeatures() {
+                const cards = document.querySelectorAll('.opp-card');
+                cards.forEach(card => {
+                    const oppActions = card.querySelector('.opp-actions');
+                    
+                    const aiButtonsDiv = document.createElement('div');
+                    aiButtonsDiv.style.display = 'flex';
+                    aiButtonsDiv.style.gap = '0.5rem';
+                    aiButtonsDiv.style.marginTop = '0.75rem';
+                    
+                    const eligibilityBtn = document.createElement('button');
+                    eligibilityBtn.className = 'btn btn-outline';
+                    eligibilityBtn.style.flex = '1';
+                    eligibilityBtn.style.fontSize = '0.8rem';
+                    eligibilityBtn.style.padding = '8px 0';
+                    eligibilityBtn.style.justifyContent = 'center';
+                    eligibilityBtn.style.background = 'linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1))';
+                    eligibilityBtn.style.border = '1px solid #d8b4fe';
+                    eligibilityBtn.style.borderRadius = '8px';
+                    eligibilityBtn.innerHTML = 'Check Eligibility';
+
+                    aiButtonsDiv.appendChild(eligibilityBtn);
+                    
+                    card.insertBefore(aiButtonsDiv, oppActions);
+
+                    eligibilityBtn.addEventListener('click', async () => {
+                        const eligEl = card.querySelector('.opp-eligibility');
+                        const originalHTML = eligEl.innerHTML;
+                        const criteriaList = card.querySelector('.opp-eligibility-list');
+                        const criteriaText = criteriaList ? criteriaList.innerText : '';
+                        
+                        eligEl.innerHTML = '<div class="opp-eligibility-title">Eligibility</div><em style="color:#8b5cf6;">Checking...</em>';
+                        eligibilityBtn.disabled = true;
+
+                        try {
+                            const user = JSON.parse(localStorage.getItem('user'));
+                            const userId = user ? user.user_id : 'u1';
+                            const profileRes = await fetch(`/api/founder/profile?user_id=${userId}`);
+                            let profile = {};
+                            if(profileRes.ok) profile = await profileRes.json();
+                            else profile = { "sector": "Technology", "stage": "Early", "description": "Startup" };
+                            
+                            const opportunity_title = card.querySelector('.opp-title').innerText;
+                            const opportunity_sector = card.querySelector('.badge-blue').innerText;
+                            const opportunity_id = card.getAttribute('data-opportunity');
+                            const descEl = card.querySelector('.opp-description');
+                            const description = descEl ? descEl.innerText : '';
+
+                            const res = await fetch('/api/ai/eligibility', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ 
+                                    profile, 
+                                    eligibility: criteriaText,
+                                    description,
+                                    opportunity_title,
+                                    opportunity_sector,
+                                    opportunity_id
+                                })
+                            });
+                            const data = await res.json();
+                            if (data.error) throw new Error(data.error);
+
+                                const lines = data.result.split('\n').filter(l => l.trim());
+                                const statusLine = lines.find(l => l.toUpperCase().includes('STATUS:')) || '';
+                                const isEligible = statusLine.toUpperCase().includes('ELIGIBLE') && !statusLine.toUpperCase().includes('INELIGIBLE');
+                                const reasons = lines.filter(l => l.trim().startsWith('-'));
+
+                                const bgColor = isEligible ? '#f0fdf4' : '#fffbeb';
+                                const borderColor = isEligible ? '#bbf7d0' : '#fde68a';
+                                const textColor = isEligible ? '#16a34a' : '#b45309';
+                                const title = isEligible ? 'Qualified' : 'Mismatch';
+
+                                eligEl.innerHTML = `
+                                    <div class="opp-eligibility-title" style="display:flex; justify-content:space-between; align-items:center;">
+                                        Eligibility Status 
+                                        <span style="font-size:0.7rem; font-weight:700; color:${textColor}; background:${bgColor}; padding:2px 8px; border-radius:10px; border:1px solid ${borderColor};">${title.toUpperCase()}</span>
+                                    </div>
+                                    <div style="font-size:0.8rem; color:var(--color-text-secondary); margin-top:6px; display:flex; flex-direction:column; gap:4px;">
+                                        ${reasons.slice(0, 3).map(r => `<div>• ${r.replace(/^[-*•]\s*/, '')}</div>`).join('')}
+                                    </div>`;
+                            eligibilityBtn.innerHTML = 'Checked';
+                        } catch(e) {
+                            eligEl.innerHTML = originalHTML;
+                            alert('Eligibility check failed');
+                            eligibilityBtn.disabled = false;
+                        }
+                    });
+                });
+            }
+
+            loadOpportunities();
+        })();
+    </script>
+</body>
+
+</html>

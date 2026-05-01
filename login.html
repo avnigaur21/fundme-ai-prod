@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In | FundMe</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: var(--color-bg-body);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: var(--spacing-md);
+        }
+
+        .login-card {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 420px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .logo-fundme {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: var(--color-primary-dark);
+            letter-spacing: -0.03em;
+            text-decoration: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-sub {
+            color: var(--color-text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-text-main);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.875rem;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .error-message {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FEE2E2;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .login-footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        .login-footer a {
+            color: var(--color-primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <header class="login-header">
+            <a href="index.html" class="logo-fundme">FundMe.</a>
+            <h1 class="login-title">Welcome back</h1>
+            <p class="login-sub">Enter your credentials to access your account</p>
+        </header>
+
+        <div id="error-box" class="error-message"></div>
+
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-input" placeholder="name@company.com" required>
+            </div>
+
+            <div class="form-group">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                    <label for="password" class="form-label" style="margin-bottom: 0;">Password</label>
+                    <a href="#" style="font-size: 0.75rem; color: var(--color-primary); text-decoration: none; font-weight: 500;">Forgot password?</a>
+                </div>
+                <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" id="submit-btn" class="btn btn-primary btn-login">
+                <span>Log In</span>
+                <span id="loader" style="display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite;"></span>
+            </button>
+        </form>
+
+        <p class="login-footer">
+            Don't have an account? <a href="onboarding.html">Get Started</a>
+        </p>
+    </div>
+
+    <style>
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+
+    <!-- Scripts -->
+    <script src="js/api.js"></script>
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('submit-btn');
+            const loader = document.getElementById('loader');
+            const errorBox = document.getElementById('error-box');
+
+            // Reset UI
+            errorBox.style.display = 'none';
+            submitBtn.disabled = true;
+            loader.style.display = 'inline-block';
+
+            try {
+                const response = await api.login({ email, password });
+                
+                // Save session
+                setSession(response.user);
+                
+                // Redirect based on role (default to dashboard.html for now as per plan)
+                window.location.href = 'dashboard.html';
+                
+            } catch (err) {
+                console.error('Login failed:', err);
+                errorBox.textContent = err.message || 'Login failed. Please check your credentials.';
+                errorBox.style.display = 'block';
+                submitBtn.disabled = false;
+                loader.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

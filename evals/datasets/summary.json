@@ -1,0 +1,100 @@
+[
+  {
+    "input": "Bharat Startup Grand Challenge (BSGC) 2026 is a DPIIT-approved national initiative designed to identify and scale high-impact indigenous innovations. Key tracks include Digital & FinTech Inclusion, Agri-Tech, and Healthcare. Selected startups receive grants up to ₹5 Lakh, expert mentorship, and incubation support. Open to startups at all stages from idea to early revenue.",
+    "expected_output": [
+      "DPIIT-approved national initiative for scaling innovations",
+      "Features tracks like Digital & FinTech Inclusion",
+      "Grants up to ₹5 Lakh plus mentorship and incubation",
+      "Open to idea stage to early revenue startups"
+    ]
+  },
+  {
+    "input": "HDFC Bank launched the FY26 edition of its Parivartan Start-up Grants programme. The bank has committed INR 20 crore in non-dilutive grants to support around 50 startups. Focus areas include financial inclusion, MSME innovation, and AI-driven social technology. Individual grants range up to ₹50 Lakh for selected startups through partner incubators.",
+    "expected_output": [
+      "HDFC Bank CSR grant program (FY26 edition)",
+      "Non-dilutive grants up to ₹50 Lakh per startup",
+      "Focus on financial inclusion and MSME innovation",
+      "Mentorship provided through partner incubators"
+    ]
+  },
+  {
+    "input": "FutureX AI is the second edition of Campus Fund's student startup platform, run with Google Cloud. It provides India's biggest platform for student-led AI startups. Selected teams receive investment up to $1,000,000 from Campus Fund and Google Cloud credits through the Google for Startups Cloud Program.",
+    "expected_output": [
+      "India's biggest platform for student-led AI startups",
+      "Investment up to $1,000,000 from Campus Fund",
+      "Google Cloud credits through Google for Startups Cloud Program"
+    ]
+  },
+  {
+    "input": "Early-stage and growth-stage biotech startups can participate in this nationwide challenge by Thermo Fisher Scientific. Must be registered with DPIIT.",
+    "expected_output": [
+      "Nationwide challenge by Thermo Fisher Scientific",
+      "For early-stage and growth-stage biotech startups",
+      "Must be registered with DPIIT"
+    ]
+  },
+  {
+    "input": "Global competition for sustainable fashion innovations by designers and startups. Seed funding and mentorship offered through the R|Elan Circular Design Challenge.",
+    "expected_output": [
+      "Global competition for sustainable fashion innovations",
+      "Open to designers and startups",
+      "Seed funding and mentorship offered"
+    ]
+  },
+  {
+    "input": "Amazon Saheli Accelerate is a women-focused accelerator program that provides mentorship and support to e-commerce startups in India.",
+    "expected_output": [
+      "Women-focused accelerator program",
+      "Provides mentorship and support",
+      "For e-commerce startups in India"
+    ]
+  },
+  {
+    "input": "A startup competition focused on food security and sustainability, with a grant of up to ₹45 Lakhs. Open to idea stage startups globally by the World Food Prize Foundation.",
+    "expected_output": [
+      "Competition focused on food security and sustainability",
+      "Grant of up to ₹45 Lakhs",
+      "Open to idea stage startups globally"
+    ]
+  },
+  {
+    "input": "BioNEST Incubation Program at FITT IIT Delhi supported by BIRAC. Biotech incubation for innovators at ideation to early prototype stages.",
+    "expected_output": [
+      "Biotech incubation at FITT IIT Delhi",
+      "Supported by BIRAC",
+      "For innovators at ideation to early prototype stages"
+    ]
+  },
+  {
+    "input": "VJTI TBI DeepTech Incubator is an incubation program for startups in energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity in Mumbai, India.",
+    "expected_output": [
+      "DeepTech incubation program at VJTI Mumbai",
+      "Covers energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity",
+      "Based in Mumbai, India"
+    ]
+  },
+  {
+    "input": "Accelerator for AI-first startups in India, Seed to Series A. Equity-free program by Google for Startups.",
+    "expected_output": [
+      "Equity-free accelerator by Google for Startups",
+      "For AI-first startups in India",
+      "Seed to Series A stage"
+    ]
+  },
+  {
+    "input": "Tamil Nadu Technology Hub is a deep tech accelerator for startups in Tier 2/3 cities of Tamil Nadu. Requires TRL 3+ readiness.",
+    "expected_output": [
+      "Deep tech accelerator in Tamil Nadu",
+      "For startups in Tier 2/3 cities",
+      "Requires TRL 3+ readiness"
+    ]
+  },
+  {
+    "input": "BIRAC LEAP Fund at IIT Delhi provides funding for biotech and medtech startups up to ₹70L. Equity funding for startups in the biotech and medtech sectors.",
+    "expected_output": [
+      "Funding up to ₹70 Lakhs for biotech and medtech startups",
+      "BIRAC LEAP Fund at IIT Delhi",
+      "Equity funding model"
+    ]
+  }
+]

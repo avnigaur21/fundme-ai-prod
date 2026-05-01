@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "FundMe Smart Apply",
+  "version": "1.0.0",
+  "description": "Capture external funding application forms, generate AI answers from FundMe, and fill them back into the live portal.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>",
+    "http://localhost:3000/*",
+    "http://127.0.0.1:3000/*"
+  ],
+  "action": {
+    "default_title": "FundMe Smart Apply",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}

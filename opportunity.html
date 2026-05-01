@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundMe | Opportunity Details</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: var(--color-bg-body) !important; transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .main-content {
+            background: var(--color-bg-body) !important; transition: background 0.3s ease;
+        }
+
+        .detail-section {
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .snapshot-card {
+            background: var(--color-bg-surface);
+            border: none;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            position: sticky;
+            top: calc(var(--header-height) + var(--spacing-lg));
+        }
+
+        #loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 400px;
+            color: var(--color-text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-logo">FundMe.</span>
+            <button class="sidebar-toggle" id="sidebar-toggle" title="Expand sidebar" aria-label="Expand sidebar">
+                <svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+            </button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="nav-item" data-tooltip="Dashboard">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
+                </svg>
+                <span class="nav-item-label">Dashboard</span>
+            </a>
+            <a href="explorer.html" class="nav-item active" data-tooltip="Explorer">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+                </svg>
+                <span class="nav-item-label">Explorer</span>
+            </a>
+            <a href="saved.html" class="nav-item" data-tooltip="Saved">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2z" />
+                </svg>
+                <span class="nav-item-label">Saved</span>
+            </a>
+            <a href="drafts.html" class="nav-item" data-tooltip="Drafts">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm0 0v6h6" />
+                </svg>
+                <span class="nav-item-label">Drafts</span>
+            </a>
+            <a href="applications.html" class="nav-item" data-tooltip="Applications">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z" />
+                </svg>
+                <span class="nav-item-label">Applications</span>
+            </a>
+            <a href="business-opportunities.html" class="nav-item" data-tooltip="Business Opportunities">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M20.5 6c-2.61.7-5.67 1-8.5 1s-5.89-.3-8.5-1L3 8c1.86.5 4 .83 6 1v13h2v-6h2v6h2V9c2-.17 4.14-.5 6-1l-.5-2zM12 6c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z" />
+                </svg>
+                <span class="nav-item-label">Business Opportunities</span>
+            </a>
+            <a href="profile.html" class="nav-item" data-tooltip="Startup Profile">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
+                </svg>
+                <span class="nav-item-label">Startup Profile</span>
+            </a>
+            <div class="sidebar-divider"></div>
+            <a href="settings.html" class="nav-item" data-tooltip="Settings">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path
+                        d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.484.484 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.09 8.83a.488.488 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.57 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                </svg>
+                <span class="nav-item-label">Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Topbar -->
+        <header class="topbar">
+             <div style="display: flex; align-items: center;">
+                <button class="btn btn-outline" id="menu-toggle" style="margin-right: 1rem; padding: 4px 8px; display: none;">☰</button>
+                <div class="breadcrumbs">
+                    <a href="dashboard.html" class="breadcrumb-item">Home</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <a href="explorer.html" class="breadcrumb-item">Explorer</a>
+                    <span class="breadcrumb-separator">/</span>
+                    <span class="breadcrumb-current" id="breadcrumb_name">Opportunity</span>
+                </div>
+             </div>
+             <a href="profile.html" id="header_user_link" style="display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; cursor: pointer;">
+                <div style="font-size: 0.875rem; text-align: right;">
+                    <div style="font-weight: 600;" id="header_user_name">...</div>
+                    <div style="font-size: 0.75rem; color: var(--color-text-secondary);" id="header_user_meta">...</div>
+                </div>
+                <img src="https://ui-avatars.com/api/?name=User&background=0ea5e9&color=fff&size=32" id="header_user_avatar" alt="User" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+            </a>
+        </header>
+
+        <div class="container" style="padding-top: var(--spacing-lg);">
+
+                <div class="detail-header">
+                    <h1 class="detail-title" id="page-title">Loading Opportunity...</h1>
+                    <div class="detail-org" id="page-provider" style="display: flex; gap: 8px; align-items: center;">
+                        <div style="width: 24px; height: 24px; background: #E5E7EB; border-radius: 50%;"></div>
+                        <span>...</span>
+                    </div>
+                </div>
+
+                <div class="detail-layout">
+                    <!-- Left Details -->
+                    <div class="detail-content">
+                        <div class="detail-section">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <h3 class="section-title" style="margin-bottom: 0;">Description</h3>
+                                <button class="btn btn-outline" id="aiSummarizeBtn"
+                                    style="padding: 4px 12px; font-size: 0.8rem; background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1)); border: 1px solid #d8b4fe;"
+                                    disabled>AI Summary</button>
+                            </div>
+                            <div id="opp-desc-content">
+                                <p class="detail-text"><em style="color: var(--color-text-secondary);">Loading full
+                                        scraped details...</em></p>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <div
+                                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <h3 class="section-title" style="margin-bottom: 0;">Eligibility Criteria</h3>
+                                <button class="btn btn-outline" id="aiEligibilityBtn"
+                                    style="padding: 4px 12px; font-size: 0.8rem; background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(236, 72, 153, 0.1)); border: 1px solid #d8b4fe;">AI Check</button>
+                            </div>
+                            <div id="opp-elig-content">
+                                <ul class="detail-list" id="opp-elig-list">
+                                    <li>Must have a functioning prototype or MVP demonstrating AI visual recognition.
+                                    </li>
+                                    <li>Registered entity with clearance for municipal data handling.</li>
+                                    <li>Team must commit to on-site testing for a minimum of 3 months.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3 class="section-title">Benefits & Funding</h3>
+                            <div id="opp-benefits-content">
+                                <ul class="detail-list" id="opp-benefits-list">
+                                    <li><em style="color: var(--color-primary); font-size: 0.85rem;">AI is extracting benefits...</em></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="detail-section">
+                            <h3 class="section-title">Submission Requirements</h3>
+                            <p class="detail-text" id="opp-submission-reqs">Technical architecture document, Demo video (max 3 minutes), and Data security compliance certificate.</p>
+                        </div>
+                    </div>
+
+                    <!-- Right Snapshot (Sticky) -->
+                    <div>
+                        <div class="snapshot-card">
+                            <div style="text-align: center; margin-bottom: 1.5rem;">
+                                <div
+                                    style="font-size: 0.875rem; color: var(--color-text-secondary); margin-bottom: 0.25rem;">
+                                    Match Score <span id="match-score-indicator"
+                                        style="font-size: 0.7rem; color: #a855f7;"></span></div>
+                                <div style="font-size: 2.5rem; font-weight: 700; color: #047857;" id="ai-match-score">
+                                    --%</div>
+                            </div>
+
+                            <div class="snapshot-row">
+                                <span class="snapshot-label">Type</span>
+                                <span class="snapshot-value" id="page-type">--</span>
+                            </div>
+                            <div class="snapshot-row">
+                                <span class="snapshot-label">Budget</span>
+                                <span class="snapshot-value" id="page-budget">--</span>
+                            </div>
+                            <div class="snapshot-row">
+                                <span class="snapshot-label">Deadline</span>
+                                <span class="snapshot-value" id="page-deadline">--</span>
+                            </div>
+                            <div class="snapshot-row">
+                                <span class="snapshot-label">Location</span>
+                                <span class="snapshot-value" id="page-location">--</span>
+                            </div>
+
+                            <div style="margin-top: var(--spacing-lg); display: grid; gap: var(--spacing-sm);">
+                                <button class="btn btn-primary" id="btn-draft" style="width: 100%;">Draft
+                                    Proposal</button>
+                                <a id="btn-external" target="_blank" class="btn btn-outline"
+                                    style="width: 100%; display: flex; justify-content: center; text-decoration: none;">Apply
+                                    Externally</a>
+                                <button class="btn btn-outline" id="btn-save" style="width: 100%;">Save
+                                    Opportunity</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+    </main>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/header.js"></script>
+<script src="js/app.js"></script>
+<script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const sumBtn = document.getElementById('aiSummarizeBtn');
+            const eligBtn = document.getElementById('aiEligibilityBtn');
+            const descContent = document.getElementById('opp-desc-content');
+            const eligContent = document.getElementById('opp-elig-content');
+
+            const params = new URLSearchParams(window.location.search);
+            let oppId = params.get('id') || params.get('opportunity_id');
+            let currentOpp = null;
+            let scrapedText = '';
+
+            // 1. Load Opportunity Metadata
+            try {
+                if (!oppId) {
+                    // Fail gracefully by picking the first opportunity from the explorer as a fallback
+                    const opps = await api.getOpportunities();
+                    if (opps && opps.length > 0) {
+                        oppId = opps[0].opportunity_id;
+                        console.log('No ID provided, falling back to first available:', oppId);
+                    } else {
+                        throw new Error('No opportunities available in database');
+                    }
+                }
+                
+                currentOpp = await api.getOpportunity(oppId);
+                document.getElementById('page-title').innerText = currentOpp.title || 'Untitled';
+                document.getElementById('breadcrumb_name').innerText = currentOpp.title || 'Opportunity';
+                document.querySelector('#page-provider span').innerText = currentOpp.provider || 'Provider';
+
+                document.getElementById('page-type').innerText = currentOpp.type || 'Grant';
+                document.getElementById('page-budget').innerText = currentOpp.amount || 'Variable';
+                document.getElementById('page-deadline').innerText = currentOpp.deadline || 'Rolling';
+                document.getElementById('page-location').innerText = currentOpp.location || 'Any';
+
+                document.getElementById('opp-elig-list').innerHTML = `<li>${currentOpp.eligibility || 'Check official guidelines for eligibility.'}</li>`;
+
+                // Buttons
+                document.getElementById('btn-draft').onclick = () => window.location.href = `draft-generator.html?opportunity_id=${oppId}`;
+                const extBtn = document.getElementById('btn-external');
+                if (currentOpp.link) {
+                    extBtn.onclick = async (e) => {
+                        e.preventDefault();
+                        try {
+                            await api.stageExtensionSession(oppId, currentOpp.link);
+                        } catch (err) {
+                            console.error('Failed to stage extension session', err);
+                        }
+                        window.open(currentOpp.link, '_blank');
+                    };
+                    extBtn.style.display = 'flex';
+                } else {
+                    extBtn.style.display = 'none';
+                }
+
+                document.getElementById('btn-save').setAttribute('data-opportunity-id', oppId);
+                document.getElementById('btn-save').setAttribute('data-save-btn', 'true');
+                if (typeof initSaveButtons === 'function') initSaveButtons();
+
+            } catch (err) {
+                console.error('Failed to load metadata', err);
+                document.getElementById('page-title').innerText = 'Opportunity Not Found';
+                document.getElementById('opp-desc-content').innerHTML = `
+                    <div style="padding: 2rem; text-align: center; border: 1px dashed var(--color-border); border-radius: 12px;">
+                        <p style="color: var(--color-text-secondary); margin-bottom: 1rem;">We couldn't find the opportunity you're looking for.</p>
+                        <a href="explorer.html" class="btn btn-primary">Back to Explorer</a>
+                    </div>
+                `;
+                return;
+            }
+
+            // 2. Load Details & Render Instantly
+            try {
+                // Check if we have formatted details already
+                if (currentOpp.formatted_details && currentOpp.formatted_details.about && 
+                    currentOpp.formatted_details.about !== "This is some raw text to format.") {
+                    renderStructuredDetails(currentOpp.formatted_details, "", currentOpp.link);
+                } else {
+                    // INSTANT DISPLAY: Use the pre-saved description and eligibility directly
+                    descContent.innerHTML = `
+                        <div class="opportunity-about" style="margin-bottom: 1.5rem;">
+                            <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.75rem;">
+                                About the Program
+                            </h3>
+                            <p style="line-height: 1.6; color: var(--color-text-main); font-size: 0.95rem;">${currentOpp.description || 'See official details for a more in-depth overview.'}</p>
+                        </div>
+                    `;
+
+                    const eligList = document.getElementById('opp-elig-list');
+                    if (currentOpp.eligibility) {
+                        eligList.innerHTML = `<li>${currentOpp.eligibility}</li>`;
+                    }
+                    
+                    // No automatic AI call here! We use what we have.
+                    console.log('Using pre-saved data from database. No AI call triggered.');
+                }
+
+                sumBtn.disabled = false;
+            } catch (err) {
+                console.warn('Rendering details failed', err);
+                descContent.innerHTML = `<p class="detail-text">${currentOpp.description || 'No detailed description available.'}</p>`;
+                sumBtn.disabled = false;
+            }
+
+            function renderStructuredDetails(details, rawText, fallbackLink) {
+                const link = fallbackLink || '#';
+                
+                // about section
+                descContent.innerHTML = `
+                    <div class="opportunity-about" style="margin-bottom: 1.5rem;">
+                        <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--color-primary); margin-bottom: 0.75rem;">
+                            About the Program
+                        </h3>
+                        <p style="line-height: 1.6; color: var(--color-text-main); font-size: 0.95rem;">${details.about || 'See official details for a more in-depth overview.'}</p>
+                    </div>
+                `;
+
+                // eligibility section
+                const eligList = document.getElementById('opp-elig-list');
+                const eligibilityItems = details.eligibility || [];
+                if (eligibilityItems.length > 0 && Array.isArray(eligibilityItems)) {
+                    eligList.innerHTML = eligibilityItems.map(item => `<li style="margin-bottom: 0.5rem;">${item}</li>`).join('');
+                } else if (typeof eligibilityItems === 'string' && eligibilityItems.length > 0) {
+                    eligList.innerHTML = `<li>${eligibilityItems}</li>`;
+                }
+
+                // benefits section 
+                const benefitsList = document.getElementById('opp-benefits-list');
+                const benefitItems = details.benefits || [];
+                if (benefitItems.length > 0) {
+                    benefitsList.innerHTML = benefitItems.map(item => `<li style="margin-bottom: 0.5rem;">${item}</li>`).join('');
+                } else {
+                    benefitsList.innerHTML = '<li>Check the official listing for specific award and benefit details.</li>';
+                }
+
+                // apply link
+                const portalBtn = document.getElementById('btn-external');
+                if (portalBtn) {
+                    portalBtn.href = link;
+                    if (link === '#' || !link) portalBtn.style.display = 'none';
+                    else portalBtn.style.display = 'flex';
+                }
+            }
+
+            // 3. Load Match Score
+            async function loadMatchScore() {
+                const scoreEl = document.getElementById('ai-match-score');
+                const indEl = document.getElementById('match-score-indicator');
+                indEl.innerText = '(AI Scoring...)';
+
+                try {
+                    const scores = await api.getBatchMatchScores([currentOpp]);
+                    const match = scores.find(s => s.opportunity_id === (currentOpp.opportunity_id || oppId));
+
+                    if (match && match.score !== null) {
+                        scoreEl.innerText = `${match.score}%`;
+                        indEl.innerText = '(AI)';
+                    } else {
+                        scoreEl.innerText = '--';
+                        indEl.innerText = '';
+                    }
+                } catch (err) {
+                    console.error('Match score loading failed:', err);
+                    scoreEl.innerText = '--';
+                    indEl.innerText = '';
+                }
+            }
+
+            loadMatchScore();
+
+            sumBtn.addEventListener('click', async () => {
+                sumBtn.disabled = true;
+                sumBtn.innerHTML = 'Summarizing...';
+                const originalHTML = descContent.innerHTML;
+                descContent.innerHTML = '<em style="color:var(--color-primary);">Generating deep summary of scraped content...</em>';
+
+                try {
+                    const contentToSummarize = scrapedText || currentOpp.description;
+                    const res = await fetch('/api/ai/summarize-opportunity', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ description: contentToSummarize.substring(0, 4000) })
+                    });
+                    const data = await res.json();
+                    if (data.error) throw new Error(data.error);
+
+                    descContent.innerHTML = `<div style="background:rgba(168, 85, 247, 0.05); padding:1.5rem; border-radius:12px; border:1px solid rgba(168, 85, 247, 0.2);">` +
+                        data.result.split('\n').filter(b => b.trim()).map(b => `<div style="margin-bottom:8px; display:flex; gap:10px; align-items:flex-start;"><span style="color:#a855f7;">✦</span> <span>${b.replace(/^[-*•]\s*/, '')}</span></div>`).join('') +
+                        `</div>`;
+                    sumBtn.innerHTML = 'Summarized';
+                } catch (err) {
+                    descContent.innerHTML = originalHTML;
+                    alert('Summary failed');
+                    sumBtn.disabled = false;
+                    sumBtn.innerHTML = 'AI Summary';
+                }
+            });
+
+            eligBtn.addEventListener('click', async () => {
+                eligBtn.disabled = true;
+                eligBtn.innerHTML = 'Checking...';
+                const oldHTML = eligContent.innerHTML;
+                eligContent.innerHTML = '<em style="color:var(--color-primary);">AI is reviewing your profile against requirements...</em>';
+
+                try {
+                    const user = getCurrentUser();
+                    const userId = user ? user.user_id : 'u1';
+                    const profile = await api.getProfile();
+                    
+                    const criteria = currentOpp.eligibility + " " + (scrapedText || "");
+
+                    const res = await fetch('/api/ai/eligibility', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            profile, 
+                            eligibility: criteria.substring(0, 4000),
+                            opportunity_title: currentOpp.title
+                        })
+                    });
+                    const data = await res.json();
+                    if (data.error) throw new Error(data.error);
+
+                    const lines = data.result.split('\n').filter(l => l.trim());
+                    const statusLine = lines.find(l => l.toUpperCase().includes('STATUS:')) || '';
+                    const isEligible = statusLine.toUpperCase().includes('ELIGIBLE') && !statusLine.toUpperCase().includes('INELIGIBLE');
+                    const reasons = lines.filter(l => !l.toUpperCase().includes('STATUS:'));
+
+                    const bgColor = isEligible ? 'rgba(16, 185, 129, 0.05)' : 'rgba(245, 158, 11, 0.05)';
+                    const borderColor = isEligible ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
+                    const textColor = isEligible ? '#065f46' : '#92400e';
+                    const icon = isEligible ? '✓' : '⚠';
+                    const title = isEligible ? 'Qualified' : 'Qualifications Mismatch';
+
+                    eligContent.innerHTML = `
+                        <div style="background:${bgColor}; padding:1.25rem; border-radius:12px; border:1px solid ${borderColor}; color:${textColor}; font-size: 0.95rem; line-height: 1.5;">
+                            <div style="font-weight:700; font-size:1.1rem; margin-bottom:0.75rem; display:flex; align-items:center; gap:8px;">
+                                <span>${icon}</span> ${title}
+                            </div>
+                            <div style="display:flex; flex-direction:column; gap:6px;">
+                                ${reasons.map(r => `<div style="display:flex; gap:10px; align-items:flex-start;"><span style="opacity:0.6">•</span> <span>${r.replace(/^[-*•]\s*/, '')}</span></div>`).join('')}
+                            </div>
+                        </div>`;
+                    eligBtn.innerHTML = 'Checked';
+                } catch (err) {
+                    eligContent.innerHTML = oldHTML;
+                    alert('Check failed');
+                    eligBtn.disabled = false;
+                    eligBtn.innerHTML = 'AI Check';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

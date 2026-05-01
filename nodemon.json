@@ -1,0 +1,9 @@
+{
+  "ignore": [
+    "data/*.json",
+    "evals/*.json",
+    "evals/datasets/*.json",
+    "**/node_modules/**"
+  ],
+  "delay": "1000"
+}
