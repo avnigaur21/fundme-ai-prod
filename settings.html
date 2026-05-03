@@ -522,15 +522,17 @@
         async function loadSettings() {
             const user = getCurrentUser();
             if (!user) return;
+            const displayName = user.name || 'Founder';
+            const displayEmail = user.email || '';
 
-            document.getElementById('settings_display_name').innerText = user.name;
-            document.getElementById('settings_display_email').innerText = user.email;
-            document.getElementById('settings_avatar_initials').innerText = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            document.getElementById('settings_display_name').innerText = displayName;
+            document.getElementById('settings_display_email').innerText = displayEmail;
+            document.getElementById('settings_avatar_initials').innerText = displayName.split(' ').map(n => n[0]).join('').toUpperCase();
 
             try {
                 const profile = await api.getProfile();
-                document.getElementById('settings_founder_name').value = user.name || '';
-                document.getElementById('settings_contact_email').value = profile.application_email || user.email;
+                document.getElementById('settings_founder_name').value = displayName;
+                document.getElementById('settings_contact_email').value = profile.application_email || displayEmail;
             } catch (err) {
                 console.error('Error loading settings profile:', err);
             }

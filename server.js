@@ -8,9 +8,9 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const cron = require('node-cron');
 const logger = require('./utils/logger');
-const { scrapeStartupGrants, scrapeDetails } = require('./services/scraper');
+const { scrapeStartupGrants, scrapeDetails, scrapeApplyLink, scrapeOpportunityDetailData } = require('./services/scraper');
 const { cleanWithAI, formatDetailedContent } = require('./services/aiCleaner');
-const { callOpenRouter } = require('./utils/ai');
+const { callOpenRouter, callLLM } = require('./utils/ai');
 const { extractTextFromPDF } = require('./utils/pdf');
 const { extractJSON } = require('./utils/jsonSanitizer');
 const {
@@ -447,6 +447,13 @@ app.get('/api/founder/profile', (req, res) => {
   const profile = db.founder_profiles.find(p => p.user_id === user_id);
   if (!profile) return res.status(404).json({ error: 'Profile not found' });
 
+  // Attach user's name from the users table
+  const user = db.users.find(u => u.user_id === user_id);
+  if (user) {
+    profile.founder_name = user.name;
+    profile.email = user.email; // Account email fallback
+  }
+
   res.json(profile);
 });
 
@@ -504,6 +511,9 @@ app.put('/api/founder/profile', (req, res) => {
 app.get('/api/opportunities', (req, res) => {
   const { type } = req.query;
   const db = readDB();
+  const cleanup = cleanExpiredOpportunities(db);
+  if (cleanup.removed > 0) writeDB(db);
+
   let opps = db.opportunities;
   if (type) opps = opps.filter(o => o.type === type);
   res.json(opps);
@@ -519,7 +529,11 @@ app.get('/api/opportunities/:id/details', async (req, res) => {
 
   // Return cached formatted data if it exists
   if (opp.formatted_details) {
-    return res.json({ formatted: opp.formatted_details, raw: opp.raw_scraped_text || '--' });
+    if (!opp.external_apply_url && opp.link) {
+      opp.external_apply_url = await scrapeApplyLink(opp.link);
+      writeDB(db);
+    }
+    return res.json({ formatted: opp.formatted_details, raw: opp.raw_scraped_text || '--', external_apply_url: opp.external_apply_url || '' });
   }
 
   if (!opp.link) return res.status(400).json({ error: 'No link available to scrape' });
@@ -528,8 +542,11 @@ app.get('/api/opportunities/:id/details', async (req, res) => {
     const raw = await scrapeDetails(opp.link);
     // Cache the raw text for future formatting
     opp.raw_scraped_text = raw;
+    if (!opp.external_apply_url) {
+      opp.external_apply_url = await scrapeApplyLink(opp.link);
+    }
     writeDB(db);
-    res.json({ raw });
+    res.json({ raw, external_apply_url: opp.external_apply_url || '' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to scrape details: ' + err.message });
   }
@@ -575,6 +592,9 @@ app.post('/api/ai/format-details', async (req, res) => {
 // GET /api/opportunities/:id
 app.get('/api/opportunities/:id', (req, res) => {
   const db = readDB();
+  const cleanup = cleanExpiredOpportunities(db);
+  if (cleanup.removed > 0) writeDB(db);
+
   const opp = db.opportunities.find(o => o.opportunity_id === req.params.id || o.slug === req.params.id);
   if (!opp) return res.status(404).json({ error: 'Opportunity not found' });
   res.json(opp);
@@ -586,33 +606,244 @@ const { cleanListingItem } = require('./services/aiCleaner');
 
 let _scraperStatus = { running: false, lastRun: null, lastResult: null };
 
+function parseDeadlineDate(deadline) {
+  if (!deadline || typeof deadline !== 'string') return null;
+  const normalized = deadline.trim();
+  if (!normalized || /^(rolling|variable|not specified|timeline based|as per challenge timeline)$/i.test(normalized)) {
+    return null;
+  }
+
+  const parsed = new Date(normalized);
+  if (Number.isNaN(parsed.getTime())) return null;
+  parsed.setHours(23, 59, 59, 999);
+  return parsed;
+}
+
+function isDeadlineExpired(deadline, now = new Date()) {
+  const deadlineDate = parseDeadlineDate(deadline);
+  return Boolean(deadlineDate && deadlineDate < now);
+}
+
+function isRollingDeadline(deadline) {
+  return !deadline || /^(rolling|variable|not specified|timeline based|as per challenge timeline)$/i.test(String(deadline).trim());
+}
+
+function cleanExpiredOpportunities(db, now = new Date()) {
+  const before = db.opportunities.length;
+  const removedIds = new Set();
+
+  db.opportunities = db.opportunities.filter(o => {
+    const expired = isDeadlineExpired(o.deadline, now);
+    if (expired) removedIds.add(o.opportunity_id);
+    return !expired;
+  });
+
+  if (removedIds.size > 0) {
+    db.saved_opportunities = (db.saved_opportunities || []).filter(s => !removedIds.has(s.opportunity_id));
+    db.extension_sessions = (db.extension_sessions || []).filter(s => !removedIds.has(s.opportunity_id));
+  }
+
+  return { removed: before - db.opportunities.length, removedIds: Array.from(removedIds) };
+}
+
+async function revalidateRollingOpportunities(limit = 12) {
+  const db = readDB();
+  const now = new Date();
+  const staleAfterMs = 24 * 60 * 60 * 1000;
+
+  const candidates = db.opportunities
+    .filter(o => o.link && isRollingDeadline(o.deadline))
+    .filter(o => !o.rolling_verified_at || now - new Date(o.rolling_verified_at) > staleAfterMs)
+    .slice(0, limit);
+
+  if (candidates.length === 0) return { checked: 0, removed: 0, updated: 0 };
+
+  let checked = 0;
+  let updated = 0;
+  const removeIds = new Set();
+
+  for (const opp of candidates) {
+    checked++;
+    const details = await scrapeOpportunityDetailData(opp.link);
+    const latestDeadline = details?.deadline;
+    opp.rolling_verified_at = now.toISOString();
+
+    if (latestDeadline && !isRollingDeadline(latestDeadline)) {
+      opp.deadline = latestDeadline;
+      updated++;
+      if (isDeadlineExpired(latestDeadline, now)) removeIds.add(opp.opportunity_id);
+    }
+
+    if (details?.raw_scraped_text) opp.raw_scraped_text = details.raw_scraped_text;
+    if (details?.external_apply_url && isValidExternalApplyUrl(details.external_apply_url)) {
+      opp.external_apply_url = details.external_apply_url;
+    }
+  }
+
+  if (removeIds.size > 0) {
+    db.opportunities = db.opportunities.filter(o => !removeIds.has(o.opportunity_id));
+    db.saved_opportunities = (db.saved_opportunities || []).filter(s => !removeIds.has(s.opportunity_id));
+    db.extension_sessions = (db.extension_sessions || []).filter(s => !removeIds.has(s.opportunity_id));
+  }
+
+  cleanExpiredOpportunities(db, now);
+  writeDB(db);
+  return { checked, updated, removed: removeIds.size };
+}
+
+function calculateLocalMatchScore(profile = {}, opportunity = {}) {
+  const profileSector = (profile.sector || profile.industry || '').toLowerCase();
+  const profileStage = (profile.stage || '').toLowerCase();
+  const profileText = `${profile.startup_overview || ''} ${profile.description || ''} ${profile.problem_statement || ''} ${profile.solution_summary || ''}`.toLowerCase();
+  const oppSector = (opportunity.sector || '').toLowerCase();
+  const oppStage = (opportunity.stage || '').toLowerCase();
+  const oppText = `${opportunity.title || ''} ${opportunity.description || ''}`.toLowerCase();
+
+  let score = 25;
+  if (!oppSector || /all sectors|sector agnostic|technology/i.test(opportunity.sector || '')) score += 30;
+  else if (profileSector && (oppSector.includes(profileSector) || profileSector.includes(oppSector))) score += 40;
+  else if (profileSector && oppText.includes(profileSector)) score += 25;
+
+  if (!oppStage || /idea|mvp|early|growth|scaling/i.test(oppStage)) score += 15;
+  if (profileStage && (oppStage.includes(profileStage) || profileStage.includes(oppStage))) score += 20;
+
+  const profileKeywords = profileText.split(/\W+/).filter(word => word.length > 4);
+  const overlap = profileKeywords.filter(word => oppText.includes(word)).slice(0, 4).length;
+  score += overlap * 5;
+
+  return Math.max(35, Math.min(95, Math.round(score)));
+}
+
+function isValidExternalApplyUrl(rawUrl) {
+  if (!rawUrl || typeof rawUrl !== 'string') return false;
+  try {
+    const url = new URL(rawUrl);
+    const host = url.hostname.replace(/^www\./, '');
+    if (host.includes('startupgrantsindia.com')) return false;
+    if (host.includes('googletagmanager.com') || host.includes('google-analytics.com')) return false;
+    if (host.includes('google.com') && url.pathname.includes('/ns.html')) return false;
+    if (rawUrl.includes('/cdn-cgi/')) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function enrichApplyLinks(items) {
+  const db = readDB();
+  const existingBySlug = new Map();
+  db.opportunities.forEach(o => {
+    if (o.slug) existingBySlug.set(o.slug, o);
+  });
+
+  const concurrency = 4;
+  let cursor = 0;
+
+  async function worker() {
+    while (cursor < items.length) {
+      const index = cursor++;
+      const item = items[index];
+      const existing = item.slug ? existingBySlug.get(item.slug) : null;
+      if (isValidExternalApplyUrl(existing?.external_apply_url)) {
+        item.external_apply_url = existing.external_apply_url;
+        continue;
+      }
+
+      if (!item.link) continue;
+      const applyUrl = await scrapeApplyLink(item.link);
+      if (applyUrl) item.external_apply_url = applyUrl;
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, () => worker()));
+  return items;
+}
+
+async function enrichDetailData(items) {
+  const concurrency = 4;
+  let cursor = 0;
+
+  async function worker() {
+    while (cursor < items.length) {
+      const index = cursor++;
+      const item = items[index];
+      if (!item.link) continue;
+
+      const details = await scrapeOpportunityDetailData(item.link);
+      if (!details || Object.keys(details).length === 0) continue;
+
+      item.title = details.title || item.title;
+      item.provider = details.provider || item.provider;
+      item.description = details.description || item.description;
+      item.eligibility = details.eligibility || item.eligibility;
+      item.benefits = details.benefits || item.benefits;
+      item.timeline = details.timeline || item.timeline;
+      item.about = details.about || item.about;
+      item.type = details.type || item.type;
+      item.amount = details.amount || item.amount;
+      item.deadline = details.deadline || item.deadline;
+      item.location = details.location || item.location;
+      item.external_apply_url = details.external_apply_url || item.external_apply_url;
+      item.raw_scraped_text = details.raw_scraped_text || item.raw_scraped_text;
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, () => worker()));
+  return items;
+}
+
+function selectScrapedOpportunities(items, limit = 10) {
+  if (items.length <= limit) return items;
+
+  const db = readDB();
+  const profile = db.founder_profiles.find(p => p.user_id === 'u1') || db.founder_profiles[0] || {};
+  const profileSector = (profile.sector || '').toLowerCase();
+  const profileStage = (profile.stage || '').toLowerCase();
+
+  const scored = items.map(item => {
+    let score = Math.random();
+    const sector = (item.sector || '').toLowerCase();
+    const stage = (item.stage || '').toLowerCase();
+    const text = `${item.title || ''} ${item.description || ''}`.toLowerCase();
+
+    if (sector && (sector === 'all sectors' || sector === 'sector agnostic')) score += 4;
+    if (profileSector && (sector.includes(profileSector) || profileSector.includes(sector) || text.includes(profileSector))) score += 6;
+    if (profileStage && (stage.includes(profileStage) || profileStage.includes(stage))) score += 3;
+
+    return { item, score };
+  });
+
+  const profileMatches = scored
+    .filter(entry => entry.score >= 3)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, Math.ceil(limit * 0.6))
+    .map(entry => entry.item);
+
+  const selectedIds = new Set(profileMatches.map(item => item.slug || item.link || item.title));
+  const randomRest = scored
+    .filter(entry => !selectedIds.has(entry.item.slug || entry.item.link || entry.item.title))
+    .sort(() => Math.random() - 0.5)
+    .slice(0, limit - profileMatches.length)
+    .map(entry => entry.item);
+
+  return [...profileMatches, ...randomRest].slice(0, limit);
+}
+
 function saveScrapedToDB(newData) {
   const db = readDB();
   const now = new Date();
+  const activeNewData = newData.filter(item => !isDeadlineExpired(item.deadline, now));
 
   // IDs with active user data — never delete these
-  const appliedIds = new Set(db.applications.map(a => a.opportunity_id));
-  const savedIds = new Set(db.saved_opportunities.map(s => s.opportunity_id));
-  const draftIds = new Set(db.drafts.map(d => d.opportunity_id));
-  const protectedIds = new Set([...appliedIds, ...savedIds, ...draftIds]);
-
-  // Build slug index for fast dedup
-  const existingSlugs = new Map();
-  db.opportunities.forEach(o => {
-    if (o.slug) existingSlugs.set(o.slug, o);
-    if (o.link) existingSlugs.set(o.link, o);
-  });
 
   // 1. Clean expired scraped entries — keep manual and user-linked ones
   db.opportunities = db.opportunities.filter(o => {
     if (!o.opportunity_id.startsWith('opp_')) return true;
-    if (protectedIds.has(o.opportunity_id)) return true;
-
-    // Deadline expiry
-    if (o.deadline && o.deadline !== 'Rolling' && o.deadline !== 'Variable') {
-      const deadlineDate = new Date(o.deadline);
-      if (!isNaN(deadlineDate) && deadlineDate < now) return false;
+    if (o.external_apply_url && !isValidExternalApplyUrl(o.external_apply_url)) {
+      o.external_apply_url = '';
     }
+    // Deadline expiry
+    if (isDeadlineExpired(o.deadline, now)) return false;
 
     // Stale: not seen in 7 days (was 3 — too aggressive for paginated scraping)
     if (o.last_seen_at) {
@@ -623,11 +854,17 @@ function saveScrapedToDB(newData) {
     return true;
   });
 
+  const existingSlugs = new Map();
+  db.opportunities.forEach(o => {
+    if (o.slug) existingSlugs.set(o.slug, o);
+    if (o.link) existingSlugs.set(o.link, o);
+  });
+
   // 2. Merge: update existing or insert new
   let addedCount = 0;
   let updatedCount = 0;
 
-  for (const item of newData) {
+  for (const item of activeNewData) {
     const existing = existingSlugs.get(item.slug) || existingSlugs.get(item.link);
 
     if (existing) {
@@ -639,6 +876,14 @@ function saveScrapedToDB(newData) {
       existing.stage = item.stage || existing.stage;
       existing.sector = item.sector || existing.sector;
       existing.location = item.location || existing.location;
+      existing.eligibility = item.eligibility || existing.eligibility;
+      existing.benefits = item.benefits || existing.benefits;
+      existing.timeline = item.timeline || existing.timeline;
+      existing.about = item.about || existing.about;
+      existing.raw_scraped_text = item.raw_scraped_text || existing.raw_scraped_text;
+      existing.external_apply_url = isValidExternalApplyUrl(item.external_apply_url)
+        ? item.external_apply_url
+        : (isValidExternalApplyUrl(existing.external_apply_url) ? existing.external_apply_url : '');
       if (item.amount && item.amount !== 'Variable') existing.amount = item.amount;
       if (item.deadline && item.deadline !== 'Rolling') existing.deadline = item.deadline;
       existing.last_seen_at = now.toISOString();
@@ -650,7 +895,10 @@ function saveScrapedToDB(newData) {
         title: item.title,
         provider: item.provider || 'Startup Grants India',
         description: item.description || item.title,
-        eligibility: 'See opportunity page for detailed eligibility criteria.',
+        eligibility: item.eligibility || 'See opportunity page for detailed eligibility criteria.',
+        benefits: item.benefits || '',
+        timeline: item.timeline || '',
+        about: item.about || '',
         type: item.type || 'Grant',
         amount: item.amount || 'Variable',
         deadline: item.deadline || 'Rolling',
@@ -658,7 +906,9 @@ function saveScrapedToDB(newData) {
         sector: item.sector || 'All Sectors',
         stage: item.stage || '',
         link: item.link,
+        external_apply_url: isValidExternalApplyUrl(item.external_apply_url) ? item.external_apply_url : '',
         slug: item.slug || '',
+        raw_scraped_text: item.raw_scraped_text || '',
         credibility_source: 'Verified via StartupGrantsIndia.com',
         match_score: 0,
         scraped_at: now.toISOString(),
@@ -699,10 +949,21 @@ async function runScraper() {
 
     console.log(`🧹 Cleaned ${cleaned.length} valid opportunities.`);
 
+    const candidatePool = selectScrapedOpportunities(cleaned, 50);
+    console.log(`Selected ${candidatePool.length} candidates for detail enrichment before final 10 active opportunities.`);
+
+    // Phase 2.5: Capture full detail-page data and the real external Apply Now URL.
+    const enrichedDetails = await enrichDetailData(candidatePool);
+    const activeDetailed = enrichedDetails.filter(item => !isDeadlineExpired(item.deadline));
+    const selected = selectScrapedOpportunities(activeDetailed, 10);
+    console.log(`Detail-enriched ${enrichedDetails.length} candidates (${activeDetailed.length} active, ${selected.length} selected for refresh).`);
+
     // Phase 3: Merge into database
-    const result = saveScrapedToDB(cleaned);
+    const result = saveScrapedToDB(selected);
+    const rollingCheck = await revalidateRollingOpportunities(12);
 
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+    console.log(`   Rolling recheck: ${rollingCheck.checked} checked, ${rollingCheck.updated} updated, ${rollingCheck.removed} removed`);
     console.log(`\n✅ Scraper complete in ${elapsed}s`);
     console.log(`   📊 Added: ${result.added} | Updated: ${result.updated} | Total in DB: ${result.total}`);
     console.log('═══════════════════════════════════════════════════════════\n');
@@ -710,7 +971,7 @@ async function runScraper() {
     _scraperStatus = {
       running: false,
       lastRun: new Date().toISOString(),
-      lastResult: { ...result, elapsed_seconds: parseFloat(elapsed), raw_scraped: rawItems.length },
+      lastResult: { ...result, rolling_recheck: rollingCheck, elapsed_seconds: parseFloat(elapsed), raw_scraped: rawItems.length },
     };
 
     return _scraperStatus;
@@ -741,8 +1002,8 @@ app.get('/api/scraper-status', (req, res) => {
   });
 });
 
-// Cron: every 6 hours
-cron.schedule('0 */6 * * *', async () => {
+// Cron: every 2 hours
+cron.schedule('0 */2 * * *', async () => {
   console.log('⏰ Auto scraping started by Cron…');
   await runScraper();
 });
@@ -831,6 +1092,73 @@ app.get('/api/applications', (req, res) => {
   });
 
   res.json(enriched);
+});
+
+// GET /api/applications/deadline-reminders?user_id=
+app.get('/api/applications/deadline-reminders', (req, res) => {
+  const { user_id } = req.query;
+  if (!user_id) return res.status(400).json({ error: 'user_id is required' });
+
+  const db = readDB();
+  const applications = db.applications.filter(a => a.user_id === user_id);
+  const reminders = [];
+
+  applications.forEach(app => {
+    const opportunity = db.opportunities.find(o => o.opportunity_id === app.opportunity_id);
+    if (!opportunity || !opportunity.deadline || opportunity.deadline === 'Rolling') return;
+
+    const deadlineDate = parseDeadlineDate(opportunity.deadline);
+    if (!deadlineDate) return;
+
+    const today = new Date();
+    const daysUntilDeadline = Math.ceil((deadlineDate - today) / (1000 * 60 * 60 * 24));
+
+    if (daysUntilDeadline <= 7 && daysUntilDeadline >= 0) {
+      reminders.push({
+        application_id: app.application_id,
+        opportunity_title: opportunity.title,
+        deadline: opportunity.deadline,
+        days_until_deadline: daysUntilDeadline,
+        urgency: daysUntilDeadline <= 3 ? 'high' : daysUntilDeadline <= 5 ? 'medium' : 'low',
+        status: app.status
+      });
+    }
+  });
+
+  reminders.sort((a, b) => a.days_until_deadline - b.days_until_deadline);
+  res.json(reminders);
+});
+
+// GET /api/applications/analytics?user_id=
+app.get('/api/applications/analytics', (req, res) => {
+  const { user_id } = req.query;
+  if (!user_id) return res.status(400).json({ error: 'user_id is required' });
+
+  const db = readDB();
+  const applications = db.applications.filter(a => a.user_id === user_id);
+
+  const analytics = {
+    total_applications: applications.length,
+    status_breakdown: {},
+    monthly_submissions: {},
+    success_rate: 0,
+    average_response_time: 0
+  };
+
+  applications.forEach(app => {
+    analytics.status_breakdown[app.status] = (analytics.status_breakdown[app.status] || 0) + 1;
+
+    if (app.submitted_at) {
+      const month = app.submitted_at.slice(0, 7);
+      analytics.monthly_submissions[month] = (analytics.monthly_submissions[month] || 0) + 1;
+    }
+  });
+
+  const successfulStatuses = ['Accepted', 'Approved', 'Funded', 'Selected'];
+  const successful = applications.filter(app => successfulStatuses.includes(app.status)).length;
+  analytics.success_rate = applications.length > 0 ? Math.round((successful / applications.length) * 100) : 0;
+
+  res.json(analytics);
 });
 
 // GET /api/applications/:id
@@ -1383,6 +1711,25 @@ app.post('/api/ai/feedback-insights', async (req, res) => {
   }
 });
 
+function getProfileSignature(profile = {}) {
+  return JSON.stringify({
+    sector: profile.sector || profile.industry || '',
+    stage: profile.stage || '',
+    startup_overview: profile.startup_overview || profile.description || '',
+    problem_statement: profile.problem_statement || '',
+    solution_summary: profile.solution_summary || '',
+    target_customers: profile.target_customers || '',
+    business_model: profile.business_model || '',
+    location: profile.location || ''
+  });
+}
+
+function normalizeMatchScore(score) {
+  const parsed = Number(score);
+  if (!Number.isFinite(parsed)) return 0;
+  return Math.max(0, Math.min(100, Math.round(parsed)));
+}
+
 // Rank opportunities with match score (0-100)
 app.post('/api/ai/match-opportunities', async (req, res) => {
   try {
@@ -1390,49 +1737,97 @@ app.post('/api/ai/match-opportunities', async (req, res) => {
     if (!opportunities || !Array.isArray(opportunities) || opportunities.length === 0) {
       return res.json({ result: [] });
     }
+    const userId = profile?.user_id || 'anonymous';
+    const profileSignature = getProfileSignature(profile || {});
+    const db = readDB();
+    if (!db.match_scores) db.match_scores = [];
+
+    const cached = [];
+    const toScore = [];
+    opportunities.forEach(opportunity => {
+      const cachedScore = db.match_scores.find(item =>
+        item.user_id === userId &&
+        item.opportunity_id === opportunity.opportunity_id &&
+        item.profile_signature === profileSignature
+      );
+
+      if (cachedScore) {
+        cached.push({
+          opportunity_id: opportunity.opportunity_id,
+          score: cachedScore.score,
+          cached: true,
+          reasons: cachedScore.reasons || []
+        });
+      } else {
+        toScore.push(opportunity);
+      }
+    });
+
+    if (toScore.length === 0) {
+      return res.json({ result: cached });
+    }
     console.log(`✨ Incoming match request for ${opportunities.length} items...`);
     
     // Chunk array to prevent LLM token limits and JSON truncation errors
     const CHUNK_SIZE = 5;
     let allResults = [];
     
-    for (let i = 0; i < opportunities.length; i += CHUNK_SIZE) {
-      const chunk = opportunities.slice(i, i + CHUNK_SIZE);
+    for (let i = 0; i < toScore.length; i += CHUNK_SIZE) {
+      const chunk = toScore.slice(i, i + CHUNK_SIZE);
       console.log(`🤖 Requesting AI match scores for chunk ${Math.floor(i/CHUNK_SIZE) + 1} (${chunk.length} items)...`);
       
       const prompt = `
-        You are a JSON data generator for a matching engine. Evaluate the startup against the list of funding opportunities and output a Match Score (0-100) for each.
+        You are a strict startup funding analyst. Evaluate how strongly this founder profile matches each funding opportunity.
         
         DO NOT WRITE ANY CODE OR SCRIPTS. ONLY OUTPUT JSON.
         
-        SCORING RULES:
-        1. Sector Match (up to 40 points): 
-           - If the opportunity's sector is "All Sectors", "Sector Agnostic", or perfectly matches the startup, award 40 points.
-           - If it's somewhat related (e.g., HealthTech startup and AI opportunity), award 20 points.
-           - If completely unrelated, award 0 points.
-        2. Stage Match (up to 30 points):
-           - If the startup's stage aligns with the opportunity's stage, award 30 points.
-           - If the opportunity is flexible or doesn't specify a stage, award 20 points.
-           - If wildly mismatched, award 0 points.
-        3. Deep Synergy (up to 30 points):
-           - Read the startup's description vs the opportunity's description. If there is a good strategic fit, award up to 30 points.
+        SCORE BANDS:
+        - 90-100: Excellent fit. Sector/problem, stage, geography, and applicant type all clearly align.
+        - 75-89: Strong fit. Most requirements align and the funding/support is highly relevant.
+        - 55-74: Moderate fit. Generic or sector-agnostic opportunity with no obvious disqualifier, or partial sector/stage fit.
+        - 30-54: Weak fit. Some usefulness, but sector, stage, geography, or applicant type is uncertain or loosely aligned.
+        - 0-29: Poor fit. Clear mismatch, expired/closed, wrong geography, wrong applicant type, or incompatible stage.
+
+        RUBRIC:
+        1. Penalize clear hard mismatches. Do not give high scores just because the opportunity is a grant.
+        2. Sector/problem fit is the strongest positive signal.
+        3. Stage fit matters: idea-only, student-only, women-only, nonprofit-only, geography-only, or cohort-specific programs should score low when the profile does not match.
+        4. All Sectors or Pan India is not automatically excellent. It should usually be 55-75 unless benefits and stage are strongly relevant.
+        5. Benefits raise the score only if useful to this startup profile.
+        6. Return varied, realistic scores and include 1-3 short reasons.
+
+        Return a realistic score for every provided opportunity_id.
 
         CRITICAL: Never output markdown. Only output a valid JSON array. Do not output python code.
-        Format: [ { "opportunity_id": "...", "score": 85 }, ... ]
+        Format: [ { "opportunity_id": "...", "score": 85, "reasons": ["sector fit", "stage fit"] }, ... ]
         
         Founder Profile:
+        - Startup: ${profile.startup_name || 'Unknown'}
         - Sector: ${profile.sector || 'Unknown'}
         - Stage: ${profile.stage || 'Unknown'}
-        - Desc: ${profile.description || 'Unknown'}
+        - Overview: ${profile.startup_overview || profile.description || 'Unknown'}
+        - Problem: ${profile.problem_statement || 'Unknown'}
+        - Solution: ${profile.solution_summary || 'Unknown'}
+        - Customers: ${profile.target_customers || 'Unknown'}
+        - Business Model: ${profile.business_model || 'Unknown'}
 
-        Opportunities to Evaluate: 
-        ${JSON.stringify(chunk.map(o => ({ 
-          opportunity_id: o.opportunity_id, 
-          title: o.title, 
-          sector: o.sector, 
-          stage: o.stage, 
-          desc: (o.description || '').substring(0, 300) 
-        })))}
+	        Opportunities to Evaluate: 
+	        ${JSON.stringify(chunk.map(o => ({ 
+	          opportunity_id: o.opportunity_id, 
+	          title: o.title, 
+	          sector: o.sector, 
+	          stage: o.stage, 
+	          type: o.type,
+	          amount: o.amount,
+	          deadline: o.deadline,
+	          location: o.location,
+	          desc: (o.description || '').substring(0, 900),
+	          about: (o.about || '').substring(0, 1000),
+	          eligibility: (o.eligibility || '').substring(0, 1000),
+	          benefits: (o.benefits || '').substring(0, 700),
+            timeline: (o.timeline || '').substring(0, 500),
+            raw: (o.raw_scraped_text || '').substring(0, 1200)
+	        })))}
       `;
 
       let resultText = await callLLM(prompt);
@@ -1440,31 +1835,52 @@ app.post('/api/ai/match-opportunities', async (req, res) => {
       // Clean potential markdown or chatter - Use robust regex to find the [ array ] or { object }
       let results = extractJSON(resultText);
 
-      if (!results) {
-        chunk.forEach(o => allResults.push({ opportunity_id: o.opportunity_id, score: 0 }));
-        continue;
-      }
+	      if (!results) {
+	        chunk.forEach(o => allResults.push({ opportunity_id: o.opportunity_id, score: 0 }));
+	        continue;
+	      }
 
       let items = Array.isArray(results) ? results : (Object.values(results).find(v => Array.isArray(v)) || [results]);
-      if (Array.isArray(items)) {
-        allResults = allResults.concat(items);
-      } else {
-        chunk.forEach(o => allResults.push({ opportunity_id: o.opportunity_id, score: 0 }));
-      }
+	      if (Array.isArray(items)) {
+	        allResults = allResults.concat(items.map(item => ({
+            opportunity_id: item.opportunity_id,
+            score: normalizeMatchScore(item.score),
+            reasons: Array.isArray(item.reasons) ? item.reasons.slice(0, 3) : []
+          })));
+	      } else {
+	        chunk.forEach(o => allResults.push({ opportunity_id: o.opportunity_id, score: 0 }));
+	      }
     }
 
     // ID RECOVERY: Ensure every opportunity has a score
     const scoredIds = allResults.filter(p => p && p.opportunity_id).map(p => p.opportunity_id);
     const finalScores = allResults.filter(p => p && p.opportunity_id);
 
-    opportunities.forEach(o => {
-      if (!scoredIds.includes(o.opportunity_id)) {
-        finalScores.push({ opportunity_id: o.opportunity_id, score: 0 });
-      }
-    });
+	    toScore.forEach(o => {
+	      if (!scoredIds.includes(o.opportunity_id)) {
+	        finalScores.push({ opportunity_id: o.opportunity_id, score: calculateLocalMatchScore(profile, o), reasons: ['Local fallback score'] });
+	      }
+	    });
 
     console.log(`✅ AI delivered scores for ${finalScores.length} items.`);
-    res.json({ result: finalScores });
+    finalScores.forEach(item => {
+      db.match_scores = db.match_scores.filter(score =>
+        !(score.user_id === userId && score.opportunity_id === item.opportunity_id)
+      );
+      db.match_scores.push({
+        user_id: userId,
+        opportunity_id: item.opportunity_id,
+        profile_signature: profileSignature,
+        score: normalizeMatchScore(item.score),
+        reasons: item.reasons || [],
+        scored_at: new Date().toISOString()
+      });
+    });
+    db.match_scores = db.match_scores.slice(-2000);
+    writeDB(db);
+
+    console.log(`Match scoring returned ${cached.length + finalScores.length} items (${cached.length} cached).`);
+    res.json({ result: [...cached, ...finalScores] });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -1533,17 +1949,21 @@ app.post('/api/ai/generate-draft', async (req, res) => {
         const { profile, form_fields, form_schema, opportunity } = req.body;
         console.log('[AI] Opportunity:', opportunity?.title || opportunity?.opportunity_id);
     const normalizedSchema = form_schema ? normalizeSchema(form_schema, opportunity?.title || 'Application Draft') : null;
+
+
     const fieldContext = normalizedSchema
       ? flattenSchema(normalizedSchema).map(field => ({
           id: field.id,
           label: field.label,
           type: field.type,
           required: field.required,
+          placeholder: field.placeholder || '',
+          name: field.name || '',
           options: field.options,
           help_text: field.help_text,
           max_words: field.max_words
         }))
-      : Object.entries(form_fields || {}).map(([id, label]) => ({ id, label, type: 'textarea', required: false }));
+      : [];
 
     // Enhanced prompt with better context and validation
     const prompt = `
@@ -1553,12 +1973,23 @@ app.post('/api/ai/generate-draft', async (req, res) => {
       1. ONLY use information explicitly stated in the profile
       2. NEVER invent metrics, revenue figures, customer counts, or partnerships
       3. For financial numbers, use exact figures from profile or leave empty
-      4. Keep responses concise and professional
-      5. For unknown/missing information, use empty string ""
-      6. Match the exact field requirements (word limits, format)
+      4. NAME SPLITTING (FORCED RULE): 
+         - If a field id/label/name/placeholder contains "First", "Given", or "Forename" -> Use ONLY the first name.
+         - If a field id/label/name/placeholder contains "Last", "Family", or "Surname" -> Use ONLY the last name.
+         - NEVER repeat the full name in both. If you only have one name field, use the full name.
+      5. EMAIL RULE: ALWAYS use the "application_email" from the profile for any email fields.
+      6. Keep responses concise and professional
+      6. For unknown/missing information, use empty string ""
+      7. Match the exact field requirements (word limits, format)
       
       Profile Analysis:
+      - Founder Full Name: ${profile.founder_name || 'Not specified'}
+      - Founder First Name: ${(profile.founder_name || '').split(' ')[0] || ''}
+      - Founder Last Name: ${(profile.founder_name || '').split(' ').slice(1).join(' ') || ''}
+      - Application Email: ${profile.application_email || profile.email || 'Not specified'}
+      - Contact Phone: ${profile.phone || 'Not specified'}
       - Startup: ${profile.startup_name || 'Not specified'}
+      - Website: ${profile.website || 'Not specified'}
       - Sector: ${profile.sector || 'Not specified'}
       - Stage: ${profile.stage || 'Not specified'}
       - Overview: ${profile.startup_overview || 'Not specified'}
@@ -1658,11 +2089,23 @@ app.post('/api/ai/map-fields', async (req, res) => {
             ${JSON.stringify(draftFields, null, 2)}
             
             PORTAL FIELDS (Found on the live webpage):
-            ${JSON.stringify(pageFields.map(f => ({ id: f.id, label: f.label })), null, 2)}
+            ${JSON.stringify(pageFields.map(f => ({ 
+                id: f.id, 
+                label: f.label, 
+                name: f.name || '', 
+                placeholder: f.placeholder || '' 
+            })), null, 2)}
             
             TASK:
             Map the PORTAL FIELDS to the DRAFT FIELDS.
             Many portal labels might be slightly different (e.g. "Company Name" vs "Startup Name").
+            
+            STRICT RULES:
+            1. NEVER map both a "First Name" and "Last Name" portal field to the same draft field.
+            2. Map "First Name" portal fields to "First Name" draft fields ONLY.
+            3. Map "Last Name" portal fields to "Last Name" draft fields ONLY.
+            4. If portal fields are generically labeled (e.g., both are "Name"), use their IDs or placeholders to differentiate.
+            5. For "Full Name" portal fields, map to a "Full Name" draft field if it exists, otherwise leave for manual split.
             
             RETURN ONLY a JSON object where the key is the PORTAL FIELD ID and the value is the matching DRAFT FIELD ID.
             If no match is found for a portal field, omit it.

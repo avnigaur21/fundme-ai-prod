@@ -1,13 +1,13 @@
 {
-  "timestamp": "2026-04-10T06:32:57.641Z",
+  "timestamp": "2026-05-02T11:13:19.151Z",
   "pass_threshold": 7,
-  "overall_avg": 6.92,
+  "overall_avg": 0,
   "all_passed": false,
   "evaluations": [
     {
       "name": "Profile Generation",
-      "avg": 10,
-      "passed": true,
+      "avg": 0,
+      "passed": false,
       "results": [
         {
           "test_case": 1,
@@ -22,18 +22,9 @@
             "target_customers": "Commercial farmers, agricultural cooperatives, and large-scale plantation owners seeking operational efficiency.",
             "business_model": "Software-as-a-Service (SaaS) model with subscription tiers for the monitoring platform, plus revenue from IoT hardware sales."
           },
-          "actual_output": {
-            "startup_name": "AgriSense AI",
-            "sector": "Agricultural Technology (Agri-Tech)",
-            "stage": "Early Growth",
-            "startup_overview": "AgriSense AI is a pioneering agri-tech startup harnessing the power of Artificial Intelligence (AI) and Internet of Things (IoT) to revolutionize the agricultural sector. By leveraging cutting-edge technologies, we aim to enhance crop yields, reduce waste, and promote sustainable farming practices.",
-            "problem_statement": "The agricultural sector faces significant challenges, including crop yield variability, inefficient resource allocation, and environmental degradation. Current farming practices often rely on manual labor, outdated methods, and limited data-driven insights, resulting in reduced productivity and profitability.",
-            "solution_summary": "AgriSense AI's innovative solution integrates AI and IoT to provide farmers with real-time data-driven insights, enabling them to make informed decisions and optimize their farming practices. Our platform includes features such as precision agriculture, predictive analytics, and automated decision support, empowering farmers to improve crop yields, reduce costs, and promote sustainable agriculture.",
-            "target_customers": "Our primary target customers are farmers, agricultural cooperatives, and farming businesses seeking to improve their efficiency, productivity, and sustainability. We also cater to agricultural suppliers, input providers, and other stakeholders in the agricultural value chain.",
-            "business_model": "AgriSense AI operates on a Software-as-a-Service (SaaS) model, offering a subscription-based platform to farmers and agricultural businesses. We generate revenue through a tiered pricing structure, with premium features and support available for larger customers. Additionally, we explore partnerships with agricultural suppliers and input providers to offer bundled services and expand our revenue streams."
-          },
-          "score": 10,
-          "reason": "The actual output perfectly matches the expected output in terms of content, structure, and semantic meaning, adhering to all JSON lenience rules."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
           "test_case": 2,
@@ -48,18 +39,9 @@
             "target_customers": "Patients in remote areas, private clinics, and hospital networks looking to scale their digital health offerings.",
             "business_model": "Transactional model based on consultation fees and B2B licensing for clinics and hospitals."
           },
-          "actual_output": {
-            "startup_name": "MediLink",
-            "sector": "Healthcare Technology",
-            "stage": "Scaling",
-            "startup_overview": "MediLink is a pioneering healthcare startup that is revolutionizing the delivery of medical care through its cutting-edge telemedicine solutions. Leveraging the power of Artificial Intelligence (AI)-driven diagnostics, MediLink is poised to transform the way patients access quality healthcare, bridging the gap between urban and rural communities.",
-            "problem_statement": "The current healthcare system faces significant challenges, including limited access to quality medical care, particularly in rural and underserved areas. Long wait times, high costs, and a shortage of healthcare professionals exacerbate these issues, leading to poor health outcomes and decreased patient satisfaction.",
-            "solution_summary": "MediLink's AI-driven telemedicine platform addresses these challenges by providing patients with convenient, affordable, and high-quality medical care from the comfort of their own homes. The platform enables remote consultations, diagnoses, and treatment plans, reducing the need for in-person visits and minimizing wait times.",
-            "target_customers": "MediLink's primary target customers are individuals living in rural or underserved areas, as well as those with limited access to quality healthcare due to mobility issues, chronic conditions, or other factors. Additionally, the platform caters to healthcare providers seeking to expand their reach and improve patient outcomes.",
-            "business_model": "MediLink operates on a subscription-based model, offering patients and healthcare providers a range of services, including remote consultations, AI-driven diagnostics, and personalized treatment plans. The startup generates revenue through a combination of subscription fees, pay-per-use services, and partnerships with healthcare organizations and insurance providers."
-          },
-          "score": 10,
-          "reason": "The actual output perfectly matches the expected output in terms of content, structure, and semantic meaning, demonstrating a high-quality understanding and generation."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
           "test_case": 3,
@@ -74,151 +56,168 @@
             "target_customers": "Rural micro-entrepreneurs, small-scale farmers, and daily wage earners in Tier 2 and Tier 3 cities.",
             "business_model": "Interest-based revenue model on disbursed loans, with processing fees and data-driven credit assessment services for larger financial partners."
           },
-          "actual_output": {
-            "startup_name": "Bharat Fintech Solutions",
-            "sector": "Fintech",
-            "stage": "Early Revenue",
-            "startup_overview": "Bharat Fintech Solutions is a pioneering fintech startup that has successfully bridged the financial inclusion gap in rural India by introducing UPI-based micro-lending solutions. Leveraging the power of digital payments, the company has created a robust platform that empowers underserved communities to access credit and financial services.",
-            "problem_statement": "Rural India faces significant challenges in accessing credit and financial services, resulting in limited economic opportunities and perpetuating poverty. Traditional lending models often exclude rural communities due to lack of collateral, credit history, and geographical constraints.",
-            "solution_summary": "Bharat Fintech Solutions addresses this pressing issue by providing UPI-based micro-lending solutions that cater to the unique needs of rural India. The platform utilizes digital payments to facilitate seamless transactions, ensuring efficient and secure credit disbursal. By leveraging the vast potential of UPI, the company has created a scalable and inclusive financial ecosystem.",
-            "target_customers": "Rural communities, small-scale farmers, artisans, and micro-entrepreneurs in India who require access to credit and financial services.",
-            "business_model": "Bharat Fintech Solutions operates on a B2B2C model, partnering with local financial institutions and microfinance organizations to provide UPI-based micro-lending solutions to rural communities. The company generates revenue through interest income on loans disbursed, transaction fees, and data analytics services."
-          },
-          "score": 10,
-          "reason": "The actual output accurately captures all expected fields with semantically equivalent and contextually relevant information, demonstrating a high degree of quality and adherence to the expected pattern."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         }
       ]
     },
     {
       "name": "Opportunity Summary",
-      "avg": 9.8,
-      "passed": true,
+      "avg": 0,
+      "passed": false,
       "results": [
         {
           "test_case": 1,
+          "input": "Bharat Startup Grand Challenge (BSGC) 2026 is a DPIIT-approved national initiative designed to identify and scale high-impact indigenous innovations. Key tracks include Digital & FinTech Inclusion, Agri-Tech, and Healthcare. Selected startups receive grants up to ₹5 Lakh, expert mentorship, and incubation support. Open to startups at all stages from idea to early revenue.",
+          "expected": [
+            "DPIIT-approved national initiative for scaling innovations",
+            "Features tracks like Digital & FinTech Inclusion",
+            "Grants up to ₹5 Lakh plus mentorship and incubation",
+            "Open to idea stage to early revenue startups"
+          ],
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
+        },
+        {
+          "test_case": 2,
+          "input": "HDFC Bank launched the FY26 edition of its Parivartan Start-up Grants programme. The bank has committed INR 20 crore in non-dilutive grants to support around 50 startups. Focus areas include financial inclusion, MSME innovation, and AI-driven social technology. Individual grants range up to ₹50 Lakh for selected startups through partner incubators.",
+          "expected": [
+            "HDFC Bank CSR grant program (FY26 edition)",
+            "Non-dilutive grants up to ₹50 Lakh per startup",
+            "Focus on financial inclusion and MSME innovation",
+            "Mentorship provided through partner incubators"
+          ],
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
+        },
+        {
+          "test_case": 3,
           "input": "FutureX AI is the second edition of Campus Fund's student startup platform, run with Google Cloud. It provides India's biggest platform for student-led AI startups. Selected teams receive investment up to $1,000,000 from Campus Fund and Google Cloud credits through the Google for Startups Cloud Program.",
           "expected": [
             "India's biggest platform for student-led AI startups",
             "Investment up to $1,000,000 from Campus Fund",
             "Google Cloud credits through Google for Startups Cloud Program"
           ],
-          "actual_output": "• FutureX AI is a student startup platform for AI startups in India.\n• Selected teams receive up to $1,000,000 in investment from Campus Fund.\n• Teams also get Google Cloud credits through the Google for Startups Cloud Program.",
-          "score": 9,
-          "reason": "The actual output accurately captures the key information from the input, with minor phrasing differences that do not alter the meaning."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 2,
+          "test_case": 4,
           "input": "Early-stage and growth-stage biotech startups can participate in this nationwide challenge by Thermo Fisher Scientific. Must be registered with DPIIT.",
           "expected": [
             "Nationwide challenge by Thermo Fisher Scientific",
             "For early-stage and growth-stage biotech startups",
             "Must be registered with DPIIT"
           ],
-          "actual_output": "• Nationwide biotech challenge for early-stage and growth-stage startups.\n• Hosted by Thermo Fisher Scientific.\n• Registration with DPIIT required.",
-          "score": 10,
-          "reason": "The actual output perfectly matches the expected output in terms of content and phrasing, capturing all key details of the challenge."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 3,
+          "test_case": 5,
           "input": "Global competition for sustainable fashion innovations by designers and startups. Seed funding and mentorship offered through the R|Elan Circular Design Challenge.",
           "expected": [
             "Global competition for sustainable fashion innovations",
             "Open to designers and startups",
             "Seed funding and mentorship offered"
           ],
-          "actual_output": "• Global competition for sustainable fashion innovations.\n• Seed funding and mentorship offered.\n• Open to designers and startups.",
-          "score": 10,
-          "reason": "The actual output perfectly matches the expected output in terms of content and structure, with only minor formatting differences."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 4,
+          "test_case": 6,
           "input": "Amazon Saheli Accelerate is a women-focused accelerator program that provides mentorship and support to e-commerce startups in India.",
           "expected": [
             "Women-focused accelerator program",
             "Provides mentorship and support",
             "For e-commerce startups in India"
           ],
-          "actual_output": "• Amazon Saheli Accelerate is a women-focused accelerator program.\n• It provides mentorship and support to e-commerce startups in India.\n• The program aims to empower women-led businesses in the Indian e-commerce space.",
-          "score": 10,
-          "reason": "The actual output perfectly captures all the key phrases from the expected output, with minor stylistic differences."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 5,
+          "test_case": 7,
           "input": "A startup competition focused on food security and sustainability, with a grant of up to ₹45 Lakhs. Open to idea stage startups globally by the World Food Prize Foundation.",
           "expected": [
             "Competition focused on food security and sustainability",
             "Grant of up to ₹45 Lakhs",
             "Open to idea stage startups globally"
           ],
-          "actual_output": "• A startup competition focused on food security and sustainability.\n• Up to ₹45 Lakhs grant available.\n• Open to idea stage startups globally.",
-          "score": 10,
-          "reason": "The actual output perfectly matches the expected output in terms of content and structure, capturing all key details accurately."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 6,
+          "test_case": 8,
           "input": "BioNEST Incubation Program at FITT IIT Delhi supported by BIRAC. Biotech incubation for innovators at ideation to early prototype stages.",
           "expected": [
             "Biotech incubation at FITT IIT Delhi",
             "Supported by BIRAC",
             "For innovators at ideation to early prototype stages"
           ],
-          "actual_output": "• BioNEST Incubation Program at FITT IIT Delhi.\n• Supported by BIRAC.\n• Biotech incubation for innovators at ideation to early prototype stages.",
-          "score": 10,
-          "reason": "The actual output perfectly matches the expected output, capturing all key phrases and their essence."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 7,
+          "test_case": 9,
           "input": "VJTI TBI DeepTech Incubator is an incubation program for startups in energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity in Mumbai, India.",
           "expected": [
             "DeepTech incubation program at VJTI Mumbai",
             "Covers energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity",
             "Based in Mumbai, India"
           ],
-          "actual_output": "• Incubation program for startups in various tech fields.\n• Located in Mumbai, India.\n• Focus areas include energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity.",
-          "score": 9,
-          "reason": "The actual output accurately captures all the key information from the expected output, with minor formatting differences."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 8,
+          "test_case": 10,
           "input": "Accelerator for AI-first startups in India, Seed to Series A. Equity-free program by Google for Startups.",
           "expected": [
             "Equity-free accelerator by Google for Startups",
             "For AI-first startups in India",
             "Seed to Series A stage"
           ],
-          "actual_output": "• Accelerator for AI-first startups in India.\n• Seed to Series A funding stage.\n• Equity-free program by Google for Startups.",
-          "score": 10,
-          "reason": "The actual output perfectly matches the expected output in terms of content and structure, capturing all key aspects of the input."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 9,
+          "test_case": 11,
           "input": "Tamil Nadu Technology Hub is a deep tech accelerator for startups in Tier 2/3 cities of Tamil Nadu. Requires TRL 3+ readiness.",
           "expected": [
             "Deep tech accelerator in Tamil Nadu",
             "For startups in Tier 2/3 cities",
             "Requires TRL 3+ readiness"
           ],
-          "actual_output": "• Tamil Nadu Technology Hub is a deep tech accelerator.\n• For startups in Tier 2/3 cities of Tamil Nadu.\n• Requires TRL 3+ readiness.",
-          "score": 10,
-          "reason": "The actual output perfectly matches the expected output, capturing all key details and structure."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 10,
+          "test_case": 12,
           "input": "BIRAC LEAP Fund at IIT Delhi provides funding for biotech and medtech startups up to ₹70L. Equity funding for startups in the biotech and medtech sectors.",
           "expected": [
             "Funding up to ₹70 Lakhs for biotech and medtech startups",
             "BIRAC LEAP Fund at IIT Delhi",
             "Equity funding model"
           ],
-          "actual_output": "• Funding up to ₹70L for biotech and medtech startups.\n• Equity funding for startups in the biotech and medtech sectors.\n• Provided by BIRAC LEAP Fund at IIT Delhi.",
-          "score": 10,
-          "reason": "The actual output perfectly matches the expected output in terms of content and structure, capturing all key details."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         }
       ]
     },
     {
       "name": "Eligibility Check",
-      "avg": 4,
+      "avg": 0,
       "passed": false,
       "results": [
         {
@@ -229,16 +228,54 @@
               "stage": "Early Revenue",
               "startup_name": "Bharat Fintech"
             },
+            "eligibility": [
+              "Indian startups registered with DPIIT",
+              "Solutions aligned with Fintech Inclusion"
+            ],
+            "opportunity_title": "Bharat Startup Grand Challenge 2026"
+          },
+          "expected": "eligible — Bharat Fintech is a DPIIT-recognized Fintech startup, matching the primary sector and stage for this challenge.",
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
+        },
+        {
+          "test_case": 2,
+          "input": {
+            "profile": {
+              "sector": "Fintech",
+              "stage": "Early Revenue",
+              "startup_name": "Bharat Fintech"
+            },
+            "eligibility": [
+              "DPIIT-recognized Indian startups",
+              "Focus on financial inclusion or MSME innovation"
+            ],
+            "opportunity_title": "HDFC Bank Parivartan SmartUp Grants (FY26)"
+          },
+          "expected": "eligible — Bharat Fintech's focus on MSME financial infrastructure and AI-driven automation is a direct match for HDFC's CSR grant criteria.",
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
+        },
+        {
+          "test_case": 3,
+          "input": {
+            "profile": {
+              "sector": "Fintech",
+              "stage": "Early Revenue",
+              "startup_name": "Bharat Fintech"
+            },
             "eligibility": [],
             "opportunity_title": "FutureX AI Campus Fund"
           },
           "expected": "not eligible — Bharat Fintech (Fintech) does not match the AI-first requirement of FutureX AI Campus Fund.",
-          "actual_output": "eligible — Profile matches the Fintech sector requirement.\n\neligible — Profile is in the Early Revenue stage, which falls under the Idea/Seed/Growth stages.\n\nNote: The location is not specified in the provided profile, so I will assume it is not a requirement for eligibility.\n\neligible — Since the sector and stage match, and there is no specified location requirement, the startup is eligible.",
-          "score": 1,
-          "reason": "The actual output incorrectly determined the startup as eligible, failing to recognize the AI-first requirement mismatch highlighted in the expected output."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 2,
+          "test_case": 4,
           "input": {
             "profile": {
               "sector": "HealthTech",
@@ -252,12 +289,12 @@
             "opportunity_title": "BioVerse Challenge"
           },
           "expected": "not eligible — BioVerse is for Biotech startups. MediLink is HealthTech, which is distinct from strictly Biotech.",
-          "actual_output": "ineligible — Sector 'HealthTech' does not strictly match the 'biotech' requirement.\n\nExplanation: \n1. The sector 'HealthTech' does not strictly match the 'biotech' requirement. HealthTech is a broader category that encompasses various health-related technologies, not just biotechnology. \n\n2. The stage 'Growth' matches the eligibility criteria.\n\n3. The location is not mentioned in the profile, but it's not a requirement in the eligibility criteria.",
-          "score": 8,
-          "reason": "The actual output correctly identifies the startup as ineligible due to the sector mismatch, providing a clear and accurate explanation."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 3,
+          "test_case": 5,
           "input": {
             "profile": {
               "sector": "AgriTech",
@@ -271,12 +308,12 @@
             "opportunity_title": "R|Elan Circular Design Challenge"
           },
           "expected": "not eligible — R|Elan is for sustainable fashion/design innovations. AgriSense AI (AgriTech) is not a match.",
-          "actual_output": "ineligible — Profile is AgriTech which does not match the \"Designers and startups\" requirement.\n\nNote: The eligibility criteria is not specific to a sector, but rather a broad category that includes designers and startups. AgriTech is a valid sector, but it does not explicitly match the \"Designers and startups\" requirement.",
-          "score": 8,
-          "reason": "The AI correctly identified the startup as ineligible and provided a relevant, albeit slightly verbose, explanation based on the sector mismatch."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 4,
+          "test_case": 6,
           "input": {
             "profile": {
               "sector": "Fintech",
@@ -290,12 +327,12 @@
             "opportunity_title": "Amazon Saheli Accelerate"
           },
           "expected": "not eligible — Amazon Saheli targets women-led e-commerce. Bharat Fintech is a Fintech startup.",
-          "actual_output": "ineligible — Profile is Fintech which does not match the Women-led e-commerce startups requirement.\n\nReasoning:\n1. The sector does not match because the eligibility criteria specifically mentions \"Women-led e-commerce startups\" and the provided profile is in the Fintech sector.\n2. The stage is not specified as a requirement in the eligibility criteria, so it's not a reason for ineligibility.\n3. The location is not mentioned in the eligibility criteria, so it's not a reason for ineligibility.",
-          "score": 9,
-          "reason": "The actual output correctly identifies the startup as ineligible and provides accurate reasoning based on the sector mismatch, aligning perfectly with the expected output's core message."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 5,
+          "test_case": 7,
           "input": {
             "profile": {
               "sector": "AgriTech",
@@ -309,12 +346,12 @@
             "opportunity_title": "Innovate for Impact Challenge"
           },
           "expected": "not eligible — AgriSense AI is at Growth stage, but the challenge requires Idea Stage startups.",
-          "actual_output": "ineligible — Sector 'AgriTech' does not match the 'Idea Stage' requirement, which is one of the eligibility criteria.\n\nNote: The sector 'AgriTech' does match one of the eligibility criteria, which is 'Startups working on food security and sustainability'. However, the stage 'Growth' does not match the 'Idea Stage' requirement.",
-          "score": 7,
-          "reason": "The AI correctly identified the startup as ineligible but provided a slightly convoluted explanation, mixing sector and stage eligibility."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 6,
+          "test_case": 8,
           "input": {
             "profile": {
               "sector": "HealthTech",
@@ -327,12 +364,12 @@
             "opportunity_title": "BioNEST Incubation Program"
           },
           "expected": "eligible — BioNEST supports biotech/medtech. MediLink's AI healthcare solutions likely qualify.",
-          "actual_output": "ineligible — Profile does not provide details on the program page, which is a required eligibility criterion.\n\nHowever, if we were to ignore the missing information, we could analyze the provided details:\n\n eligible — Sector 'HealthTech' matches the eligibility criteria, as it is a valid sector.\n\n eligible — Stage 'Growth' matches the eligibility criteria, as it is one of the allowed stages (Idea/Seed/Growth).\n\nHowever, since the location is not provided in the given profile, we cannot determine if it matches the eligibility criteria.\n\nTo make a final determination, we would need more information about the startup's location.",
-          "score": 2,
-          "reason": "The actual output incorrectly determined the startup as ineligible, contradicting the expected output's reasoning and the provided profile information."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 7,
+          "test_case": 9,
           "input": {
             "profile": {
               "sector": "AgriTech",
@@ -346,12 +383,12 @@
             "opportunity_title": "VJTI TBI DeepTech Incubator"
           },
           "expected": "eligible — AgriSense AI uses IoT and AI, which are core focus sectors for VJTI TBI.",
-          "actual_output": "ineligible — Sector 'AgriTech' does not match the eligibility criteria which includes energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity sectors.",
-          "score": 1,
-          "reason": "The actual output incorrectly determined the startup as ineligible, misinterpreting 'AgriTech' as not matching the eligibility criteria when IoT and AI are explicitly mentioned."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 8,
+          "test_case": 10,
           "input": {
             "profile": {
               "sector": "HealthTech",
@@ -365,12 +402,12 @@
             "opportunity_title": "Google for Startups Accelerator"
           },
           "expected": "eligible — MediLink is an AI-driven HealthTech startup in India, fitting the program's stage and focus.",
-          "actual_output": "ineligible — Profile is in the HealthTech sector which does not strictly match the AI-first requirement.\n\nExplanation:\n1. The sector \"HealthTech\" does not strictly match the \"AI-first startups in India\" requirement. Although HealthTech can involve AI, the eligibility criteria is looking for startups that are \"AI-first\", implying that AI is the primary technology driving the startup. HealthTech is a broader sector that encompasses various technologies, including AI, but it's not a guarantee that AI is the primary focus.\n2. The stage \"Growth\" matches the \"Seed to Series A\" requirement.\n3. The location is not specified in the profile, but since the eligibility criteria mentions \"India\", the location should be India for the startup to be eligible. However, since the location is not specified, we cannot determine if it matches the requirement.\n\nSince the sector does not strictly match the requirement, the startup is not eligible.",
-          "score": 1,
-          "reason": "The actual output incorrectly determined the startup as ineligible, misinterpreting the 'AI-first' requirement and failing to recognize that HealthTech startups often leverage AI as their primary technology."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 9,
+          "test_case": 11,
           "input": {
             "profile": {
               "sector": "Fintech",
@@ -385,12 +422,12 @@
             "opportunity_title": "Tamil Nadu Technology Hub"
           },
           "expected": "not eligible — Bharat Fintech is based in Bengaluru, but the hub requires startups in Tier 2/3 cities of Tamil Nadu.",
-          "actual_output": "ineligible — Profile is in Fintech sector which does not match the requirement of being in Tier 2/3 cities of Tamil Nadu.\n\nExplanation:\n1. The sector does not match as the eligibility criteria is not specified for Fintech, but rather the profile does not match the Tier 2/3 cities of Tamil Nadu requirement.\n2. The stage does not need to be evaluated as the sector mismatch disqualifies the startup.\n3. The location does not match the eligibility criteria as the startup is in Bengaluru, India, which is not a Tier 2/3 city of Tamil Nadu.",
-          "score": 2,
-          "reason": "The actual output incorrectly identifies the sector as the reason for ineligibility, when the primary reason is the location mismatch with the specified cities in Tamil Nadu."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 10,
+          "test_case": 12,
           "input": {
             "profile": {
               "sector": "HealthTech",
@@ -403,15 +440,15 @@
             "opportunity_title": "BIRAC LEAP Fund"
           },
           "expected": "eligible — MediLink is a MedTech/HealthTech startup, fitting the BIRAC criteria.",
-          "actual_output": "ineligible — Profile is in the HealthTech sector, which does not match the Biotech and medtech sectors requirement.\n\nNote: The given eligibility criteria only specify Biotech and medtech sectors, but the profile is in the HealthTech sector, which is a broader category that includes both biotech and medtech, but also other health-related technologies. However, since the criteria are strict and do not explicitly include HealthTech, the startup does not meet the eligibility criteria.",
-          "score": 1,
-          "reason": "The actual output incorrectly determined the startup as ineligible despite the profile being in HealthTech, which semantically aligns with the 'medtech' sector mentioned in the eligibility criteria."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         }
       ]
     },
     {
       "name": "Match Opportunities",
-      "avg": 5.33,
+      "avg": 0,
       "passed": false,
       "results": [
         {
@@ -423,6 +460,18 @@
               "startup_name": "Bharat Fintech"
             },
             "opportunities": [
+              {
+                "opportunity_id": "opp_bsgc26",
+                "sector": "FinTech",
+                "stage": "Any",
+                "title": "Bharat Startup Grand Challenge 2026"
+              },
+              {
+                "opportunity_id": "opp_hdfc26",
+                "sector": "FinTech",
+                "stage": "Early Revenue",
+                "title": "HDFC Bank Parivartan SmartUp Grants (FY26)"
+              },
               {
                 "opportunity_id": "opp_1",
                 "sector": "DeepTech",
@@ -487,6 +536,14 @@
           },
           "expected": [
             {
+              "opportunity_id": "opp_bsgc26",
+              "score": 95
+            },
+            {
+              "opportunity_id": "opp_hdfc26",
+              "score": 92
+            },
+            {
               "opportunity_id": "opp_1",
               "score": 30
             },
@@ -527,50 +584,9 @@
               "score": 20
             }
           ],
-          "actual_output": [
-            {
-              "opportunity_id": "opp_1",
-              "score": 0
-            },
-            {
-              "opportunity_id": "opp_2",
-              "score": 0
-            },
-            {
-              "opportunity_id": "opp_3",
-              "score": 0
-            },
-            {
-              "opportunity_id": "opp_4",
-              "score": 0
-            },
-            {
-              "opportunity_id": "opp_5",
-              "score": 0
-            },
-            {
-              "opportunity_id": "opp_6",
-              "score": 0
-            },
-            {
-              "opportunity_id": "opp_7",
-              "score": 85
-            },
-            {
-              "opportunity_id": "opp_8",
-              "score": 0
-            },
-            {
-              "opportunity_id": "opp_9",
-              "score": 85
-            },
-            {
-              "opportunity_id": "opp_10",
-              "score": 0
-            }
-          ],
-          "score": 2,
-          "reason": "The actual output incorrectly assigns high scores to irrelevant opportunities and zero scores to highly relevant ones, failing to match the expected ranking."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: API /api/ai/match-opportunities returned HTTP 500: {\"error\":\"callLLM is not defined\"}"
         },
         {
           "test_case": 2,
@@ -661,50 +677,9 @@
               "score": 40
             }
           ],
-          "actual_output": [
-            {
-              "opportunity_id": "opp_2",
-              "score": 80
-            },
-            {
-              "opportunity_id": "opp_10",
-              "score": 90
-            },
-            {
-              "opportunity_id": "opp_7",
-              "score": 85
-            },
-            {
-              "opportunity_id": "opp_8",
-              "score": 70
-            },
-            {
-              "opportunity_id": "opp_9",
-              "score": 80
-            },
-            {
-              "opportunity_id": "opp_1",
-              "score": 60
-            },
-            {
-              "opportunity_id": "opp_6",
-              "score": 40
-            },
-            {
-              "opportunity_id": "opp_5",
-              "score": 30
-            },
-            {
-              "opportunity_id": "opp_4",
-              "score": 20
-            },
-            {
-              "opportunity_id": "opp_3",
-              "score": 10
-            }
-          ],
-          "score": 8,
-          "reason": "The actual output correctly identifies the top relevant opportunities and ranks them appropriately, with minor discrepancies in the exact scores and inclusion of some less relevant opportunities."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: API /api/ai/match-opportunities returned HTTP 500: {\"error\":\"callLLM is not defined\"}"
         },
         {
           "test_case": 3,
@@ -796,60 +771,61 @@
               "score": 70
             }
           ],
-          "actual_output": [
-            {
-              "opportunity_id": "opp_5",
-              "score": 90
-            },
-            {
-              "opportunity_id": "opp_2",
-              "score": 80
-            },
-            {
-              "opportunity_id": "opp_10",
-              "score": 70
-            },
-            {
-              "opportunity_id": "opp_1",
-              "score": 60
-            },
-            {
-              "opportunity_id": "opp_8",
-              "score": 50
-            },
-            {
-              "opportunity_id": "opp_7",
-              "score": 40
-            },
-            {
-              "opportunity_id": "opp_9",
-              "score": 30
-            },
-            {
-              "opportunity_id": "opp_6",
-              "score": 20
-            },
-            {
-              "opportunity_id": "opp_4",
-              "score": 10
-            },
-            {
-              "opportunity_id": "opp_3",
-              "score": 0
-            }
-          ],
-          "score": 6,
-          "reason": "The actual output correctly identifies some relevant opportunities but misranks the top matches and includes irrelevant ones with higher scores than some relevant ones."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: API /api/ai/match-opportunities returned HTTP 500: {\"error\":\"callLLM is not defined\"}"
         }
       ]
     },
     {
       "name": "Format Details",
-      "avg": 8.9,
-      "passed": true,
+      "avg": 0,
+      "passed": false,
       "results": [
         {
           "test_case": 1,
+          "input": "Bharat Startup Grand Challenge (BSGC) 2026 is a DPIIT-approved national initiative designed to identify and scale high-impact indigenous innovations. Key tracks include Digital & FinTech Inclusion, Agri-Tech, and Healthcare. Selected startups receive grants up to ₹5 Lakh, expert mentorship, and incubation support. Open to startups at all stages from idea to early revenue.",
+          "expected": {
+            "about": "The Bharat Startup Grand Challenge 2026 identifies and scales high-impact innovations across 12 strategic themes, including Fintech Inclusion, through grants and mentorship.",
+            "eligibility": [
+              "Indian startups registered with DPIIT",
+              "Idea stage to early revenue startups",
+              "Solutions aligned with Fintech Inclusion, Agri-Tech, or Healthcare"
+            ],
+            "benefits": [
+              "Grants up to ₹5 Lakh",
+              "Mentorship and incubation support",
+              "National visibility"
+            ],
+            "official_deadline": "Dec 31, 2026"
+          },
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
+        },
+        {
+          "test_case": 2,
+          "input": "HDFC Bank launched the FY26 edition of its Parivartan Start-up Grants programme. The bank has committed INR 20 crore in non-dilutive grants to support around 50 startups. Focus areas include financial inclusion, MSME innovation, and AI-driven social technology. Individual grants range up to ₹50 Lakh for selected startups through partner incubators.",
+          "expected": {
+            "about": "HDFC Bank Parivartan SmartUp Grants supports social impact startups scaling innovations in financial inclusion, agriculture, and MSME tech.",
+            "eligibility": [
+              "DPIIT-recognized Indian startups",
+              "Proven prototype or early commercialization stage",
+              "Focus on financial inclusion or MSME innovation"
+            ],
+            "benefits": [
+              "Non-dilutive grants up to ₹50 Lakh",
+              "Mentorship from premier incubators",
+              "Access to HDFC Bank's startup ecosystem"
+            ],
+            "official_deadline": "Jan 31, 2026"
+          },
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
+        },
+        {
+          "test_case": 3,
           "input": "🎉 95% off on Lovable → Exclusive dealLoading...FutureX AI – Campus Fund (2nd Edition) by Campus Fund, Google CloudCampus Fund, Google CloudAmountUpto ₹8.5 CrDeadlineApr 10, 2026TypeacceleratorCategoriesTechnologyTagsaistudent-leddeeptech+6 moreAbout this OpportunityFutureX AI is the second edition of Campus Fund's student startup platform, run with Google Cloud. It provides India's biggest platform for student-led AI startups. Selected teams receive investment up to $1,000,000 from Campus Fund and Google Cloud credits through the Google for Startups Cloud Program. The program includes workshops on AI product building, fundraising, and scaling. Participants also attend masterclasses focused on AI innovations. A Grand Finale event will be held at the Google Bengaluru office on May 29, 2026, followed by long-term post-program support for selected startups. Applications are open to current students (undergraduate, postgraduate, or research) or graduates/dropouts from 2023 onwards. Applicants must hold at least 25% equity in their AI-first startup. The program seeks startups across foundational models, AI in healthcare, climate, fintech, agritech, and AI-enabled hardware.Eligibility The startup must be led by founders who are currently enrolled as students (undergraduate, postgraduate, or research) at any university, or by individuals who have graduated or dropped out from a university program in 2023 or any year thereafter. Founders leading the startup must collectively possess a minimum equity stake of 25% in their venture. The startup's core operations must be firmly rooted in the artificial intelligence domain, explicitly demonstrating the application of Machine Learning, Generative AI, or advanced Data Intelligence technologies in its products or services. Apply OnlineSharestartupgrantsindia.com/futurex-ai-campus-fund-2nd-edition-by-campus-fund-google-cloudCopyWhatsAppLinkedInRecommended ProgramsGRO8 Cohort 2 by 888VC888VCUp to ₹4.2 CrGoogle for Startups Accelerator: IndiaGoogle for StartupsACE $100k High-Touch AI Accelerator by Invention EngineInvention EngineUp to ₹90 LWEnnovate 2.0 – Women in Deep Tech & Immersive ExperienceKarnavati Innovation and Incubation Foundation (KIIF), Karnavati UniversityAVINYA AI Accelerator – Cohort 2 by ACSEL Technology ForumACSEL Technology ForumUp to ₹1 CrPopular DealsLovable₹4L+ Worth Lovable AI Credits at 98% discount!NotionUnlock Rs.6000+ worth of NOTION Credits for FREEZohoUnlock Rs.9000+ worth of ZOHO Credits for FREE",
           "expected": {
             "about": "FutureX AI is the second edition of Campus Fund's student startup platform, run with Google Cloud. It provides India's biggest platform for student-led AI startups. Selected teams receive investment up to $1,000,000 from Campus Fund and Google Cloud credits through the Google for Startups Cloud Program.",
@@ -867,26 +843,12 @@
             ],
             "official_deadline": "Apr 10, 2026"
           },
-          "actual_output": {
-            "about": "FutureX AI is the second edition of Campus Fund's student startup platform, run with Google Cloud. It provides India's biggest platform for student-led AI startups. Selected teams receive investment up to $1,000,000 from Campus Fund and Google Cloud credits through the Google for Startups Cloud Program.",
-            "eligibility": [
-              "The startup must be led by founders who are currently enrolled as students (undergraduate, postgraduate, or research) at any university, or by individuals who have graduated or dropped out from a university program in 2023 or any year thereafter.",
-              "Founders leading the startup must collectively possess a minimum equity stake of 25% in their venture."
-            ],
-            "benefits": [
-              "Up to $1,000,000 investment from Campus Fund",
-              "Google Cloud credits through the Google for Startups Cloud Program",
-              "Workshops on AI product building, fundraising, and scaling",
-              "Masterclasses focused on AI innovations",
-              "Long-term post-program support for selected startups"
-            ],
-            "official_deadline": "Apr 10, 2026"
-          },
-          "score": 9,
-          "reason": "The actual output is very close to the expected output, missing only one point in the eligibility criteria."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 2,
+          "test_case": 4,
           "input": "🎉 95% off on Lovable → Exclusive dealLoading...BioVerse Challenge 2025 by Thermo Fisher ScientificThermo Fisher ScientificAmountNot specifiedDeadlineApr 10, 2026TypeacceleratorStageearly_revenuegrowthCategoriesTechnologyTagsbiotechnologyhealthcarelife-sciences+5 moreAbout this OpportunityThermo Fisher Scientific, a global leader in serving science, has launched the BioVerse Challenge 2025, a nationwide initiative designed to accelerate high-potential biotech startups across India. This program aims to foster world-leading innovation within India's bioeconomy by providing critical resources for scaling and commercialization. The challenge targets innovations across several key areas, including Biologics, Industrial Biotechnology, Bioenergy, Green Biotech, Marine Biotechnology, Agri & Food Biotech, and Medtech & Diagnostics. The challenge categorizes participants into two distinct groups: Trailblazers and Rising Stars. Trailblazers, a maximum of 20 startups, receive comprehensive support including access to Thermo Fisher's state-of-the-art facilities and technologies in India, customized skill-building programs, and expert mentorship. They also gain access to strategic partnerships and collaboration opportunities. Rising Stars, comprising up to 50 startups, specifically benefit from expert mentorship, strategic partnerships, and collaboration opportunities, focusing on advancing their ventures through targeted guidance. The program underscores a commitment to enhancing India's biotech ecosystem.Eligibility The program specifically supports startups founded by Indian nationals who are ly seeking access to cutting-edge technology and expert mentorship to advance their innovations. Applicants must be formally registered with DPIIT/Startup India to be considered for this challenge. The BioVerse Challenge is designed for early-stage and growth-stage startups that exhibit significant potential for successful scale-up and commercialization within the biotech sector. Participating startups must demonstrate clear technology prowess, ensuring their solutions are well-aligned with existing market needs and demands. A defined or evolving business model is required, alongside a clear and compelling value proposition that outlines the startup's unique offering and competitive advantage. Linkage with incubators, academic institutions, government bodies, or industry partners is considered an added advantage during evaluation. Application Process Startups must submit a detailed business case covering problem, solution, market, model, financials, traction, impact, and support needed. Evaluation by Thermo Fisher Scientific and a BioVerse Advisory Board of experts from industry, government, and academia. Selected startups are designated as Trailblazers or Rising Stars based on this evaluation. Apply OnlineSharestartupgrantsindia.com/bioverse-challenge-2025-by-thermo-fisher-scientificCopyWhatsAppLinkedInRecommended ProgramsC-CAMP Wadhwani Innovation Network (WIN) Centre of Excellence Non-Dilutive Funding ProgramCentre for Cellular and Molecular Platforms (C-CAMP), Wadhwani FoundationUp to ₹1 CrCentre of Excellence for Sustainability & Climate Action at C-CAMPC-CAMP, Ashraya Hastha TrustGoogle for Startups Accelerator: IndiaGoogle for StartupsMG Developer Program & Grant Season 6.0JSW MG Motor India, DPIITWEnnovate 2.0 – Women in Deep Tech & Immersive ExperienceKarnavati Innovation and Incubation Foundation (KIIF), Karnavati UniversityPopular DealsLovable₹4L+ Worth Lovable AI Credits at 98% discount!NotionUnlock Rs.6000+ worth of NOTION Credits for FREEZohoUnlock Rs.9000+ worth of ZOHO Credits for FREE",
           "expected": {
             "about": "Thermo Fisher Scientific has launched the BioVerse Challenge 2025, a nationwide initiative designed to accelerate high-potential biotech startups across India. The challenge targets innovations in Biologics, Industrial Biotechnology, Bioenergy, Green Biotech, Marine Biotechnology, Agri & Food Biotech, and Medtech & Diagnostics.",
@@ -903,26 +865,12 @@
             ],
             "official_deadline": "Apr 10, 2026"
           },
-          "actual_output": {
-            "about": "Thermo Fisher Scientific has launched the BioVerse Challenge 2025, a nationwide initiative to accelerate high-potential biotech startups across India. The program provides critical resources for scaling and commercialization, targeting innovations across several key areas. It aims to foster world-leading innovation within India's bioeconomy.",
-            "eligibility": [
-              "Startups founded by Indian nationals seeking access to cutting-edge technology and expert mentorship.",
-              "Applicants must be formally registered with DPIIT/Startup India.",
-              "Early-stage and growth-stage startups with significant potential for successful scale-up and commercialization within the biotech sector.",
-              "Startups must demonstrate clear technology prowess, a defined or evolving business model, and a clear value proposition."
-            ],
-            "benefits": [
-              "Trailblazers: access to Thermo Fisher's state-of-the-art facilities and technologies, customized skill-building programs, expert mentorship, strategic partnerships, and collaboration opportunities.",
-              "Rising Stars: expert mentorship, strategic partnerships, and collaboration opportunities, focusing on advancing their ventures through targeted guidance.",
-              "Up to ₹1 Cr non-dilutive funding"
-            ],
-            "official_deadline": "Apr 10, 2026"
-          },
-          "score": 9,
-          "reason": "The actual output closely matches the expected output in terms of content and structure, with only a minor discrepancy in the 'benefits' section."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 3,
+          "test_case": 5,
           "input": "🎉 95% off on Lovable → Exclusive dealLoading...R|Elan Circular Design Challenge 2026R|Elan (Reliance Industries), United Nations IndiaAmount₹5 Lakhs – ₹15 LakhsDeadlineApr 14, 2026TypecontestStageideamvpearly_revenueCategoriesEnvironmentTagscircular-fashionsustainable-textilesbiomaterials+6 moreAbout this OpportunityR|Elan Circular Design Challenge is a global design competition by R|Elan, an initiative of Reliance Industries, in partnership with United Nations India, Lakmé Fashion Week, and FDCI. It aims to identify and support designers, entrepreneurs, and startups engaged in sustainable fashion innovation. The program offers significant support including seed funding and mentorship from global sustainability experts. Participants are selected to showcase their collections at Lakmé Fashion Week x FDCI in India. The total prize pool exceeds Rs. 20 lakhs, distributed between a winner and a runner-up. The winner receives INR 15 lakhs in seed funding, a trophy, and six months of mentorship. The runner-up is awarded INR 5 lakhs in seed funding and mentorship. The challenge focuses on promoting circularity across the textile value chain through the use of recycled materials, innovative dyes, resource efficiency, and waste reduction. It seeks original, unpublished work demonstrating measurable environmental and social benefits within the sustainable fashion and textile industry.Eligibility Organizations or labels are eligible, provided they have been operating for a maximum of eight years. Individual designers are encouraged to apply, as are consortiums composed of up to four professionals. The competition is open to global applicants, with assessments conducted regionally across EU, UK, India, Asia Pacific, and the rest of the world. Startups and entrepreneurs ly developing innovations within the sustainable fashion sector are specifically targeted. All submissions are mandated to explicitly demonstrate principles of circularity throughout the entire textile value chain. Eligible projects must incorporate and showcase the use of recycled materials, innovative alternative dyes, strategies for resource efficiency, and/or proven methods for waste reduction. Submissions are required to clearly articulate and evidence measurable environmental benefits and positive social impacts. Only original work that has not been previously published or showcased will be considered for the challenge. Application Process Applications are reviewed by an expert panel consisting of designers, sustainability organizations, media, and UN representatives. Shortlisted participants are required to attend in-person jury events in their respective countries. Finalists must be physically present for model fittings and the final showcase at Lakmé Fashion Week x FDCI in India. Apply OnlineSharestartupgrantsindia.com/r-elan-circular-design-challenge-2026CopyWhatsAppLinkedInRecommended ProgramsThe Pitch by Deel 2026 - DeelDeelBUILD 5.0 – Boeing University Innovation Leadership Development Program by FITT IIT DelhiFoundation for Innovation and Technology Transfer (FITT), IIT Delhi in partnership with BoeingUp to ₹10 LL'Oréal Green Sciences Incubator 2026L'Oréal Research & Innovation, Hello TomorrowBUILD 5.0 – Boeing University Innovation Leadership Development ProgramBoeing India, T-HubUp to ₹10 LCircular Bharat AcceleratorNSRCEL, Hindustan Unilever Limited (HUL), NITI Aayog, and XynteoPopular DealsLovable₹4L+ Worth Lovable AI Credits at 98% discount!NotionUnlock Rs.6000+ worth of NOTION Credits for FREEZohoUnlock Rs.9000+ worth of ZOHO Credits for FREE",
           "expected": {
             "about": "R|Elan Circular Design Challenge is a global design competition by R|Elan (Reliance Industries) in partnership with United Nations India, Lakmé Fashion Week, and FDCI. It aims to support designers, entrepreneurs, and startups engaged in sustainable fashion innovation.",
@@ -940,26 +888,12 @@
             ],
             "official_deadline": "Apr 14, 2026"
           },
-          "actual_output": {
-            "about": "R|Elan Circular Design Challenge is a global design competition by R|Elan, an initiative of Reliance Industries, in partnership with United Nations India, Lakmé Fashion Week, and FDCI. It aims to identify and support designers, entrepreneurs, and startups engaged in sustainable fashion innovation. The program offers significant support including seed funding and mentorship from global sustainability experts.",
-            "eligibility": [
-              "Organizations or labels are eligible, provided they have been operating for a maximum of eight years.",
-              "Individual designers are encouraged to apply, as are consortiums composed of up to four professionals.",
-              "The competition is open to global applicants, with assessments conducted regionally across EU, UK, India, Asia Pacific, and the rest of the world.",
-              "Startups and entrepreneurs developing innovations within the sustainable fashion sector are specifically targeted."
-            ],
-            "benefits": [
-              "Winner: INR 15 lakhs in seed funding, a trophy, and six months of mentorship.",
-              "Runner-up: INR 5 lakhs in seed funding and mentorship.",
-              "Total prize pool exceeds Rs. 20 lakhs, distributed between a winner and a runner-up."
-            ],
-            "official_deadline": "Apr 14, 2026"
-          },
-          "score": 9,
-          "reason": "The actual output is very close to the expected output, with minor differences in the 'about' and 'benefits' sections, and the 'eligibility' section is slightly less comprehensive."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 4,
+          "test_case": 6,
           "input": "🎉 95% off on Lovable → Exclusive dealLoading...Amazon Saheli Accelerate Season 2Amazon IndiaAmountNot specifiedDeadlineDec 20, 2025TypeacceleratorStageanyCategoriesSocial ImpactFinanceOtherTagswomenacceleratoramazon+5 moreAbout this OpportunityAmazon Saheli Accelerate Season 2 is a business scale-up and mentorship program designed to nurture and empower women-led businesses across India. The program provides deep, expert-led support to help entrepreneurs grow their ventures effectively through structured capacity building, curated resources, high-quality mentoring, and strong networking opportunities. Participants gain access to strategic guidance from Amazon leaders and industry experts, frameworks for scaling operations, exclusive learning tracks, and brand-building support for becoming successful D2C businesses. The program also provides visibility on Amazon Saheli storefronts, opportunities to participate in Amazon campaigns, and recognition through Saheli certification. A key highlight is the direct access to venture capitalists during Demo Day, where selected founders can pitch for funding support. The program supports women-led enterprises working across varied sectors, including sustainability, social impact, and e-commerce–focused product innovation.Eligibility Women-led or women-founded businesses, cooperatives, or self-help groups. Businesses registered in India as a sole proprietorship, partnership, LLP, or private limited company. Entrepreneurs who are sellers or planning to launch their business on Amazon.in. Applicants must demonstrate potential for growth, product innovation, and readiness to participate in accelerator activities. Application Process Apply through the link given below. Submit the required business and founder details along with supporting documents. Shortlisted applicants will be evaluated based on product innovation, business potential, and alignment with the program objectives. Selected founders will be onboarded into the accelerator cohort and provided with mentorship, growth resources, and program benefits. Apply OnlineSharestartupgrantsindia.com/amazon-saheli-accelerate-season-2-262CopyWhatsAppLinkedInRecommended ProgramsY Combinator Summer 2026 Batch AcceleratorY CombinatorUp to ₹4.5 CrToilet Board Coalition Accelerator 2027Toilet Board CoalitionWE-Engage SPARK Cohort 3WE Hub, Government of TelanganaNext Bharat Residency ProgramNext Bharat Ventures IFSC Private LimitedUp to ₹5 CrACE $100k High-Touch AI Accelerator by Invention EngineInvention EngineUp to ₹90 LPopular DealsLovable₹4L+ Worth Lovable AI Credits at 98% discount!NotionUnlock Rs.6000+ worth of NOTION Credits for FREEZohoUnlock Rs.9000+ worth of ZOHO Credits for FREE",
           "expected": {
             "about": "Amazon Saheli Accelerate Season 2 is a business scale-up and mentorship program designed to nurture and empower women-led businesses across India. The program provides structured capacity building, mentoring, and networking opportunities.",
@@ -977,24 +911,12 @@
             ],
             "official_deadline": "Dec 20, 2025"
           },
-          "actual_output": {
-            "about": "Amazon Saheli Accelerate Season 2 is a business scale-up and mentorship program designed to nurture and empower women-led businesses across India. The program provides deep, expert-led support to help entrepreneurs grow their ventures effectively through structured capacity building, curated resources, high-quality mentoring, and strong networking opportunities.",
-            "eligibility": [
-              "Women-led or women-founded businesses, cooperatives, or self-help groups.",
-              "Businesses registered in India as a sole proprietorship, partnership, LLP, or private limited company.",
-              "Entrepreneurs who are sellers or planning to launch their business on Amazon.in."
-            ],
-            "benefits": [
-              "Up to ₹4.5 Cr",
-              "Visibility on Amazon Saheli storefronts, opportunities to participate in Amazon campaigns, recognition through Saheli certification, and direct access to venture capitalists during Demo Day."
-            ],
-            "official_deadline": "Dec 20, 2025"
-          },
-          "score": 8,
-          "reason": "The actual output closely matches the expected output in terms of content and structure, with minor omissions in the eligibility and benefits sections."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 5,
+          "test_case": 7,
           "input": "🎉 95% off on Lovable → Exclusive dealLoading...Innovate for Impact Challenge 2026World Food Prize FoundationAmountUpto ₹45 LakhsDeadlineApr 15, 2026TypegrantStageIdeaPrototypeMVP+1 moreCategoriesAgricultureTechnologyEnvironmentTagsagtechagriculturesustainability+3 moreAbout this OpportunityThe Innovate for Impact Challenge is a global initiative hosted by the World Food Prize Foundation in collaboration with America's Cultivation Corridor. The program is designed to accelerate early-stage, technology-driven AgTech startups that address critical challenges related to global food security and sustainability. Unveiled at the 2024 Norman E. Borlaug International Dialogue, the Challenge invites entrepreneurs from around the world to showcase breakthrough agricultural technologies with the potential to transform food systems. Key Highlights Global call for early-stage AgTech startups Strong emphasis on innovation, sustainability, and scalability Live pitch competition at the 2026 Borlaug Dialogue in Des Moines, Iowa Top prize of $50,000 USD for the winning startup Significant global exposure to investors, policymakers, and agricultural leaders Eligibility Must be an early-stage, for-profit startup operating in the AgTech space Stage of development can range from validated concept to pre-Series A At least one founder must be working full-time on the startup Must demonstrate: Strong innovation and technological differentiation Clear market potential within the agricultural sector Alignment with environmental and social sustainability goals Applications are evaluated based on: Innovation impact and novelty Market viability and demand Sustainability contribution Scalability and replicability across regions and contexts Application Process Create an account on the application portal and start a new application. Complete the full online application form with all required information. Submit the application before the deadline. Selection Timeline Applications Open: January 21, 2026 Submission April 15, 2026 Top 10 Announced: July 16, 2026 Selected startups submit pitch videos and financial details Virtual Public Voting: July 16–25, 2026 Top 3 Announced: August 5, 2026 Finalists must travel to Des Moines, Iowa Final Live Pitch: October 20–22, 2026 at the Borlaug Dialogue Judges review written submissions and live pitches to determine 1st, 2nd, and 3rd place winners.Apply OnlineSharestartupgrantsindia.com/innovate-for-impact-challenge-2026-by-world-food-prize-foundation-326CopyWhatsAppLinkedInRecommended ProgramsBUILD 5.0 – Boeing University Innovation Leadership Development ProgramBoeing India, T-HubUp to ₹10 LC-CAMP Wadhwani Innovation Network (WIN) Centre of Excellence Non-Dilutive Funding ProgramCentre for Cellular and Molecular Platforms (C-CAMP), Wadhwani FoundationUp to ₹1 CrAgri-Tech Grant SchemeDepartment of Agricultural Marketing & Agri Business, Government of Tamil NaduUp to ₹25 LCentre of Excellence for Sustainability & Climate Action at C-CAMPC-CAMP, Ashraya Hastha TrustO'Shaughnessy Fellowships & GrantsO'Shaughnessy Ventures (OSV)Up to ₹90 LPopular DealsLovable₹4L+ Worth Lovable AI Credits at 98% discount!NotionUnlock Rs.6000+ worth of NOTION Credits for FREEZohoUnlock Rs.9000+ worth of ZOHO Credits for FREE",
           "expected": {
             "about": "The Innovate for Impact Challenge is a global initiative by the World Food Prize Foundation to accelerate early-stage AgTech startups addressing food security and sustainability. It features a live pitch competition at the 2026 Borlaug Dialogue in Des Moines, Iowa.",
@@ -1011,25 +933,12 @@
             ],
             "official_deadline": "Apr 15, 2026"
           },
-          "actual_output": {
-            "about": "The Innovate for Impact Challenge is a global initiative hosted by the World Food Prize Foundation to accelerate early-stage, technology-driven AgTech startups addressing global food security and sustainability challenges.",
-            "eligibility": [
-              "Must be an early-stage, for-profit startup operating in the AgTech space",
-              "Stage of development can range from validated concept to pre-Series A",
-              "At least one founder must be working full-time on the startup",
-              "Must demonstrate: Strong innovation and technological differentiation, Clear market potential within the agricultural sector, Alignment with environmental and social sustainability goals"
-            ],
-            "benefits": [
-              "$50,000 USD for the winning startup",
-              "Significant global exposure to investors, policymakers, and agricultural leaders"
-            ],
-            "official_deadline": "Apr 15, 2026"
-          },
-          "score": 9,
-          "reason": "The actual output closely matches the expected output in terms of content and structure, with minor differences in phrasing and completeness of the 'benefits' section."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 6,
+          "test_case": 8,
           "input": "🎉 95% off on Lovable → Exclusive dealLoading...BioNEST Incubation Program – FITT IIT DelhiFITT IIT Delhi, BIRACAmountNot specifiedDeadlineApr 15, 2026TypeincubationStageideamvpearly_revenueCategoriesHealthcareTechnologyTagsbiotechnologybiomedical devicesnanotechnology+7 moreAbout this OpportunityThe BioNEST Incubation Program, operated by FITT (Foundation for Innovation and Technology Transfer) at IIT Delhi and generously supported by BIRAC (Biotechnology Industry Research Assistance Council), this program is a dedicated biotechnology business incubation facility under BIRAC's BISS (Bioincubators Igniting Novel and Emerging Technologies in Science) initiative, underscoring its central role in the national biotech ecosystem. Its primary purpose is to provide a nurturing and resource-rich environment for biotech innovators and startups, particularly those at the ideation, proof-of-concept, or early prototype stages, transforming novel scientific ideas into viable market-ready products. The program offers crucial in-kind support, including access to shared laboratory equipment and cutting-edge facilities located within the esteemed IIT Delhi campus, minimizing the prohibitive costs typically associated with biotech R&D. Beyond physical infrastructure, incubatees benefit from comprehensive mentoring by renowned IIT Delhi faculty and seasoned industry experts, guiding them through scientific and business challenges. The ecosystem support extends to critical business development areas such as business plan refinement, intellectual property rights (IPR) filing guidance, and technology transfer assistance, ensuring that innovations are protected and commercialized effectively. The program also facilitates extensive networking opportunities with investors and corporate partners, essential for future growth and market penetration. With a remarkable track record of incubating 38 innovators and startups, leading to 24 market-launched products, over 30 intellectual property filings, and the creation of more than 200 jobs, alongside raising over Rs 50 crore in funds, the BioNEST Incubation Program at FITT IIT Delhi significantly contributes to India's biotech landscape, fostering first-generation entrepreneurs and driving innovation in biotechnology, biomedical devices, and nanotechnology.Eligibility Biotech innovators and startups are eligible. Startups must be at ideation, proof-of-concept, or early prototype stages. Focus sectors include Biotechnology, biomedical devices, and nanotechnology. First-generation entrepreneurs in biotech are specifically targeted. IIT Delhi students and faculty are preferred, but not exclusively. Apply OnlineSharestartupgrantsindia.com/bionest-incubation-program-fitt-iit-delhiCopyWhatsAppLinkedInRecommended ProgramsCentre of Excellence for Sustainability & Climate Action at C-CAMPC-CAMP, Ashraya Hastha TrustHealthcare Incubation Program – NSRCEL, IIM BangaloreNSRCEL, IIM BangaloreL'Oréal Green Sciences Incubator 2026L'Oréal Research & Innovation, Hello TomorrowDBDIC Incubation Cohort 2026Dr. Bansi Dhar Incubation Centre (DBDIC)Cohort 7 Incubation Program at VJTI TBI FoundationVJTI TBI FoundationPopular DealsLovable₹4L+ Worth Lovable AI Credits at 98% discount!NotionUnlock Rs.6000+ worth of NOTION Credits for FREEZohoUnlock Rs.9000+ worth of ZOHO Credits for FREE",
           "expected": {
             "about": "The BioNEST Incubation Program at FITT IIT Delhi, supported by BIRAC, is a dedicated biotechnology business incubation facility. It provides a resource-rich environment for biotech innovators at ideation, proof-of-concept, or early prototype stages.",
@@ -1047,31 +956,12 @@
             ],
             "official_deadline": "Apr 15, 2026"
           },
-          "actual_output": {
-            "about": "The BioNEST Incubation Program is a biotechnology business incubation facility that provides a nurturing environment for biotech innovators and startups. It offers in-kind support, including access to shared laboratory equipment and cutting-edge facilities, as well as comprehensive mentoring and ecosystem support. The program aims to transform novel scientific ideas into viable market-ready products.",
-            "eligibility": [
-              "Biotech innovators and startups are eligible.",
-              "Startups must be at ideation, proof-of-concept, or early prototype stages.",
-              "Focus sectors include Biotechnology, biomedical devices, and nanotechnology.",
-              "First-generation entrepreneurs in biotech are specifically targeted.",
-              "IIT Delhi students and faculty are preferred, but not exclusively."
-            ],
-            "benefits": [
-              "Over Rs 50 crore in funds raised",
-              "Creation of more than 200 jobs",
-              "24 market-launched products",
-              "Over 30 intellectual property filings",
-              "Access to shared laboratory equipment and cutting-edge facilities",
-              "Comprehensive mentoring by renowned IIT Delhi faculty and seasoned industry experts",
-              "Extensive networking opportunities with investors and corporate partners"
-            ],
-            "official_deadline": "Apr 15, 2026"
-          },
-          "score": 9,
-          "reason": "The actual output closely matches the expected output in terms of content and structure, with minor differences in the 'about' and 'benefits' sections."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 7,
+          "test_case": 9,
           "input": "🎉 95% off on Lovable → Exclusive dealLoading...Cohort 7 Incubation Program at VJTI TBI FoundationVJTI TBI FoundationAmountNot specifiedDeadlineApr 17, 2026TypeincubationCategoriesTechnologyTagsincubationenergyelectric vehicles+6 moreAbout this OpportunityThe VJTI Technology Business Incubator (TBI) Foundation, hosted at Veermata Jijabai Technological Institute in Mumbai, is launching Cohort 7 of its incubation program. VJTI TBI is a government-affiliated incubator focused on deep technology sectors. The program invites startups building in energy, electric vehicles, semiconductors, IoT, artificial intelligence, machine learning, and cybersecurity to apply for a structured incubation experience. Selected startups receive access to state-of-the-art laboratory and testing infrastructure, which is central to product development and technical validation. The program provides entrepreneurship training and mentorship from experienced industry professionals, along with facilitated investor connections and networking to support fundraising. Participants also receive marketing and go-to-market support, assistance with talent recruitment, and advisory services covering business strategy and financial planning. Applications are open from March 28 to April 17, 2026. The program's core value is access to infrastructure, networks, and advisory support from VJTI TBI's ecosystem.Eligibility Startups must be focused on building products or solutions in at least one of the designated technology domains: Energy, Electric Vehicles (EV), Semiconductors, Internet of Things (IoT), Artificial Intelligence and Machine Learning (AI/ML), or Cyber Security. Applications must be submitted through the Startup India portal within the application window: March 28, 2026 to April 17, 2026. Apply OnlineSharestartupgrantsindia.com/cohort-7-incubation-program-at-vjti-tbi-foundationCopyWhatsAppLinkedInRecommended ProgramsNasscom Deeptech Club Launchpad Incubation ProgramNasscomNASSCOM CoE – IoT & AI Gurugram Incubation ProgramNASSCOM CoE – IoT & AI, GurugramDBDIC Incubation Cohort 2026Dr. Bansi Dhar Incubation Centre (DBDIC)BioNEST Incubation Program – FITT IIT DelhiFITT IIT Delhi, BIRACL'Oréal Green Sciences Incubator 2026L'Oréal Research & Innovation, Hello TomorrowPopular DealsLovable₹4L+ Worth Lovable AI Credits at 98% discount!NotionUnlock Rs.6000+ worth of NOTION Credits for FREEZohoUnlock Rs.9000+ worth of ZOHO Credits for FREE",
           "expected": {
             "about": "VJTI TBI Foundation in Mumbai is launching Cohort 7 of its deep tech incubation program. The program invites startups in energy, electric vehicles, semiconductors, IoT, AI/ML, and cybersecurity for a structured incubation experience.",
@@ -1089,27 +979,12 @@
             ],
             "official_deadline": "Apr 17, 2026"
           },
-          "actual_output": {
-            "about": "The VJTI Technology Business Incubator (TBI) Foundation is launching Cohort 7 of its incubation program, inviting startups to apply for a structured incubation experience. The program provides access to state-of-the-art laboratory and testing infrastructure, entrepreneurship training, mentorship, and facilitated investor connections. Selected startups receive marketing and go-to-market support, assistance with talent recruitment, and advisory services.",
-            "eligibility": [
-              "Startups must be focused on building products or solutions in at least one of the designated technology domains: Energy, Electric Vehicles (EV), Semiconductors, Internet of Things (IoT), Artificial Intelligence and Machine Learning (AI/ML), or Cyber Security.",
-              "Applications must be submitted through the Startup India portal within the application window: March 28, 2026 to April 17, 2026."
-            ],
-            "benefits": [
-              "Access to state-of-the-art laboratory and testing infrastructure",
-              "Entrepreneurship training and mentorship",
-              "Facilitated investor connections",
-              "Marketing and go-to-market support",
-              "Assistance with talent recruitment",
-              "Advisory services covering business strategy and financial planning"
-            ],
-            "official_deadline": "Apr 17, 2026"
-          },
-          "score": 9,
-          "reason": "The actual output closely matches the expected output in terms of content and structure, with minor differences in phrasing and completeness of the 'eligibility' field."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 8,
+          "test_case": 10,
           "input": "🎉 95% off on Lovable → Exclusive dealLoading...Google for Startups Accelerator: IndiaGoogle for StartupsAmountNot specifiedDeadlineApr 19, 2026TypeacceleratorStageearly_revenuegrowthCategoriesTechnologyTagsaimldeeptech+6 moreAbout this OpportunityThe Google for Startups Accelerator: India is a three-month, equity-free program designed for AI-first startups operating between the Seed and Series A stages. Google for Startups runs this accelerator to support innovative companies headquartered in India that are developing core AI applications or agentic AI solutions. The program offers equity-free support, dedicated mentoring from Google teams, and exclusive invitations to technical bootcamps. Participants receive access to Google's extensive network of industry experts, early access to new Google AI products via Trusted Tester and EAP benefits, and Google product credits. Eligible startups also benefit from Cloud credits and free Cloud TPU access for open-source machine learning research. The accelerator provides strategic support on company and product strategy, fostering technical project partnerships to address significant technological challenges. Each cohort, comprising 10-15 startups, addresses technical hurdles through a blend of remote and in-person sessions. The curriculum includes one-on-one and group learning, alongside sprint projects. Founders collaborate with Google experts and industry specialists to outline and resolve their primary technical challenges. Deep dives and workshops also cover critical areas like product design, customer acquisition, and leadership development.Eligibility Startups must be demonstrating clear market traction, ideally positioning them between the Seed and Series A funding stages. The applicant startup is required to be based or headquartered within India. Applicants need to be developing a scalable product or service designed to address a significant total addressable market. The proposed product or service must also exhibit a strong and defensible growth model for sustained expansion. The startup's core operations must be deeply technical, extensively leveraging machine learning and advanced AI technologies. Eligibility extends to startups building core AI products, with a particular interest in agentic, multimodal, thinking/reasoning, or other innovative Generative AI applications. Startups focused on developing foundational models are also considered within the program's scope. A clear requirement is the identification of potential Google AI use cases integrated within the startup's technology or product offering. Founder(s) and other key personnel are expected to provide a firm commitment to ly participate in all mandatory program sessions. Apply OnlineSharestartupgrantsindia.com/google-for-startups-accelerator-indiaCopyWhatsAppLinkedInRecommended ProgramsWEnnovate 2.0 – Women in Deep Tech & Immersive ExperienceKarnavati Innovation and Incubation Foundation (KIIF), Karnavati UniversityGRO8 Cohort 2 by 888VC888VCUp to ₹4.2 CrACE $100k High-Touch AI Accelerator by Invention EngineInvention EngineUp to ₹90 LFutureX AI – Campus Fund (2nd Edition) by Campus Fund, Google CloudCampus Fund, Google CloudUp to ₹8.5 CrAVINYA AI Accelerator – Cohort 2 by ACSEL Technology ForumACSEL Technology ForumUp to ₹1 CrPopular DealsLovable₹4L+ Worth Lovable AI Credits at 98% discount!NotionUnlock Rs.6000+ worth of NOTION Credits for FREEZohoUnlock Rs.9000+ worth of ZOHO Credits for FREE",
           "expected": {
             "about": "The Google for Startups Accelerator: India is a three-month, equity-free program for AI-first startups at Seed to Series A stages. It supports companies headquartered in India developing core AI applications or agentic AI solutions.",
@@ -1129,34 +1004,12 @@
             ],
             "official_deadline": "Apr 19, 2026"
           },
-          "actual_output": {
-            "about": "The Google for Startups Accelerator: India is a three-month, equity-free program designed for AI-first startups operating between the Seed and Series A stages. It offers equity-free support, dedicated mentoring, and exclusive invitations to technical bootcamps. Participants receive access to Google's extensive network of industry experts and early access to new Google AI products.",
-            "eligibility": [
-              "Startups must be demonstrating clear market traction, ideally positioning them between the Seed and Series A funding stages.",
-              "The applicant startup is required to be based or headquartered within India.",
-              "Applicants need to be developing a scalable product or service designed to address a significant total addressable market.",
-              "The proposed product or service must also exhibit a strong and defensible growth model for sustained expansion.",
-              "The startup's core operations must be deeply technical, extensively leveraging machine learning and advanced AI technologies.",
-              "Eligibility extends to startups building core AI products, with a particular interest in agentic, multimodal, thinking/reasoning, or other innovative Generative AI applications."
-            ],
-            "benefits": [
-              "Up to ₹4.2 Cr in funding",
-              "Equity-free support",
-              "Dedicated mentoring from Google teams",
-              "Exclusive invitations to technical bootcamps",
-              "Access to Google's extensive network of industry experts",
-              "Early access to new Google AI products via Trusted Tester and EAP benefits",
-              "Google product credits",
-              "Cloud credits",
-              "Free Cloud TPU access for open-source machine learning research"
-            ],
-            "official_deadline": "Apr 19, 2026"
-          },
-          "score": 9,
-          "reason": "The actual output closely matches the expected output in terms of content and structure, with minor differences in the detail of benefits and eligibility."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 9,
+          "test_case": 11,
           "input": "🎉 95% off on Lovable → Exclusive dealLoading...iAccelerate Batch 2Tamil Nadu Technology Hub (iTNT Hub)AmountUpto ₹40 LakhsDeadlineApr 20, 2026TypeacceleratorStagemvpearly_revenuegrowthCategoriesDeeptechTagsdeeptechacceleratortamil-nadu+3 moreAbout this OpportunityiAccelerate Batch 2 is an accelerator program spearheaded by the Tamil Nadu Technology Hub (iTNT Hub), an initiative of the Government of Tamil Nadu. This program is specifically designed to support deep tech and emerging technology startups originating from Tier 2 and Tier 3 cities within Tamil Nadu. It targets ventures that have progressed beyond the ideation stage, demonstrating readiness for market entry and growth. The program focuses on startups that have achieved TRL 3 and above, evidenced by a working prototype, a Minimum Viable Product (MVP), or early market traction. iAccelerate provides expert-led strategy sessions, offering crucial guidance for scaling. Participants gain access to corporate and government partners, connect with over 30 investor partners, and receive pitch opportunities to sector-focused investors, with seed funding of up to Rs. 40 lakh available for graduating startups.Eligibility The program is exclusively open to Deep Tech and Emerging Technology startups with founders or operations based in Tier 2 or Tier 3 cities in Tamil Nadu; startups from Chennai or other Tier 1 locations are not eligible. Applicants must be at Technology Readiness Level (TRL) 3 or above, meaning a working prototype, MVP, or early market traction is required; pure ideation-stage ventures are not considered. The program targets technology-first startups in areas such as AI, hardware, clean tech, health tech, agri tech, and advanced manufacturing — the solution must be built around a deep or emerging technology. Startups must be ly operating beyond the concept stage with a clearly defined product or technology already in development or early deployment. Graduating startups from the cohort are eligible to apply for seed funding of up to Rs. 40 lakh each, subject to evaluation criteria set by iTNT Hub. Applicants must be willing to participate in expert-led strategy sessions, investor pitches, and structured mentoring engagements throughout the program duration. Apply OnlineSharestartupgrantsindia.com/iaccelerate-batch-2-itnt-hub-tamil-naduCopyWhatsAppLinkedInRecommended ProgramsGoogle for Startups Accelerator: IndiaGoogle for StartupsIIMA Ventures Aerospace & Defence Acceleration FundIIMA Ventures and Jaivel AerospaceUp to ₹3.7 CrGRO8 Cohort 2 by 888VC888VCUp to ₹4.2 CrACE $100k High-Touch AI Accelerator by Invention EngineInvention EngineUp to ₹90 LFutureX AI – Campus Fund (2nd Edition) by Campus Fund, Google CloudCampus Fund, Google CloudUp to ₹8.5 CrPopular DealsLovable₹4L+ Worth Lovable AI Credits at 98% discount!NotionUnlock Rs.6000+ worth of NOTION Credits for FREEZohoUnlock Rs.9000+ worth of ZOHO Credits for FREE",
           "expected": {
             "about": "iAccelerate Batch 2 by Tamil Nadu Technology Hub (iTNT Hub) is a Government of Tamil Nadu initiative to support deep tech startups from Tier 2 and Tier 3 cities. It targets ventures with TRL 3+ readiness for market entry and growth.",
@@ -1175,26 +1028,12 @@
             ],
             "official_deadline": "Apr 20, 2026"
           },
-          "actual_output": {
-            "about": "iAccelerate Batch 2 is an accelerator program spearheaded by the Tamil Nadu Technology Hub (iTNT Hub), an initiative of the Government of Tamil Nadu. This program is specifically designed to support deep tech and emerging technology startups originating from Tier 2 and Tier 3 cities within Tamil Nadu. It targets ventures that have progressed beyond the ideation stage, demonstrating readiness for market entry and growth.",
-            "eligibility": [
-              "The program is exclusively open to Deep Tech and Emerging Technology startups with founders or operations based in Tier 2 or Tier 3 cities in Tamil Nadu.",
-              "Applicants must be at Technology Readiness Level (TRL) 3 or above, meaning a working prototype, MVP, or early market traction is required; pure ideation-stage ventures are not considered."
-            ],
-            "benefits": [
-              "seed funding of up to Rs. 40 lakh available for graduating startups",
-              "expert-led strategy sessions",
-              "access to corporate and government partners",
-              "connect with over 30 investor partners",
-              "pitch opportunities to sector-focused investors"
-            ],
-            "official_deadline": "Apr 20, 2026"
-          },
-          "score": 9,
-          "reason": "The actual output closely matches the expected output in terms of content and structure, with only minor omissions in the eligibility and benefits sections."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 10,
+          "test_case": 12,
           "input": "🎉 95% off on Lovable → Exclusive dealLoading...FITT IIT Delhi – BIRAC LEAP Fund for Biotech & MedTech StartupsFITT, IIT DelhiAmountUpto ₹70 LakhsDeadlineApr 20, 2026TypefundingStagemvpearly_revenueCategoriesHealthcareTagsbiracbiotechmedtech+7 moreAbout this OpportunityThe LEAP Fund is a flagship funding initiative supported by BIRAC and administered through the Foundation for Innovation and Technology Transfer (FITT) at IIT Delhi. It is designed to support high-potential startups operating in the biotechnology and healthcare sectors that have progressed beyond early-stage validation and are preparing for pilot deployment or early commercialization. The program specifically focuses on startups building innovative, IP-driven solutions that address critical unmet needs in healthcare and life sciences. The fund provides equity-linked investment of up to ₹70 lakh, acting as a crucial bridge between proof-of-concept and market entry. This capital support enables startups to refine their products, conduct validation studies, navigate regulatory pathways, and accelerate commercialization timelines. The structure of the funding ensures alignment with long-term growth, as it is tied to the startup's equity and future potential rather than being a non-dilutive grant. In addition to financial support, selected startups gain access to IIT Delhi's deep innovation ecosystem. This includes co-working spaces and advanced laboratory infrastructure, along with mentorship from experienced academicians, clinicians, and industry experts. Startups also receive guidance on regulatory compliance, clinical validation, intellectual property strategy, and business model development, all of which are critical for healthcare ventures.Eligibility Startups must operate in biotechnology, healthcare, diagnostics, biopharma, bioprinting, personalized medicine, or tissue engineering sectors Must be developing novel, IP-driven products; service-based or pure IT businesses are not eligible More than 51% of shareholding must be held by resident Indian individuals Must be registered as a Private Limited Company Startups that have previously received LEAP funding from any other incubator are not eligible Application Process Submit application through FITT's official online portal Initial screening to verify eligibility and assess innovation relevance Detailed evaluation of the startup's technology, IP strength, market potential, and commercialization readiness Assessment of founding team's technical expertise and business capabilities Shortlisted applicants may be invited to present their solution through a pitch or demo session Final selection is made based on overall viability and strategic fit, followed by equity-linked funding offer and optional onboarding into FITT incubation programs Apply OnlineSharestartupgrantsindia.com/fitt-iit-delhi-birac-leap-fund-biotech-medtech-startups-456CopyWhatsAppLinkedInRecommended ProgramsIHFC–India Accelerator MedTech Impact Call 2026IHFC, IIT Delhi & India AcceleratorUp to ₹5 CrHealthcare Incubation Program – NSRCEL, IIM BangaloreNSRCEL, IIM BangaloreBioNEST Incubation Program – FITT IIT DelhiFITT IIT Delhi, BIRACTamil Nadu SC/ST Startup Fund (Equity Fund) by StartupTNStartupTNC-CAMP Wadhwani Innovation Network (WIN) Centre of Excellence Non-Dilutive Funding ProgramCentre for Cellular and Molecular Platforms (C-CAMP), Wadhwani FoundationUp to ₹1 CrPopular DealsLovable₹4L+ Worth Lovable AI Credits at 98% discount!NotionUnlock Rs.6000+ worth of NOTION Credits for FREEZohoUnlock Rs.9000+ worth of ZOHO Credits for FREE",
           "expected": {
             "about": "The LEAP Fund by BIRAC, administered through FITT at IIT Delhi, supports high-potential biotech and healthcare startups preparing for pilot deployment or early commercialization. It provides equity-linked investment of up to ₹70 lakh as a bridge between proof-of-concept and market entry.",
@@ -1213,33 +1052,51 @@
             ],
             "official_deadline": "Apr 20, 2026"
           },
-          "actual_output": {
-            "about": "The LEAP Fund is a flagship funding initiative supported by BIRAC and administered through the Foundation for Innovation and Technology Transfer (FITT) at IIT Delhi. It is designed to support high-potential startups operating in the biotechnology and healthcare sectors. The fund provides equity-linked investment of up to ₹70 lakh, enabling startups to refine their products, conduct validation studies, and accelerate commercialization timelines.",
-            "eligibility": [
-              "Startups must operate in biotechnology, healthcare, diagnostics, biopharma, bioprinting, personalized medicine, or tissue engineering sectors",
-              "Must be developing novel, IP-driven products; service-based or pure IT businesses are not eligible",
-              "More than 51% of shareholding must be held by resident Indian individuals",
-              "Must be registered as a Private Limited Company",
-              "Startups that have previously received LEAP funding from any other incubator are not eligible"
-            ],
-            "benefits": [
-              "Up to ₹70 lakh equity-linked investment",
-              "Access to IIT Delhi's deep innovation ecosystem, including co-working spaces, advanced laboratory infrastructure, and mentorship from experienced academicians, clinicians, and industry experts"
-            ],
-            "official_deadline": "Apr 20, 2026"
-          },
-          "score": 9,
-          "reason": "The actual output is very close to the expected output, with minor differences in phrasing and completeness of the benefits section."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         }
       ]
     },
     {
       "name": "Scraper Clean (cleanWithAI)",
-      "avg": 3.5,
+      "avg": 0,
       "passed": false,
       "results": [
         {
           "test_case": 1,
+          "input": {
+            "title": "Bharat Startup Grand Challenge 2026",
+            "description": "Bharat Startup Grand Challenge (BSGC) 2026 by Startup India / MASA ForumgrantNational initiative identifying and scaling high-impact innovations in Digital & FinTech Inclusion. Dec 31, 2026Up to: ₹5 Lakh"
+          },
+          "expected": {
+            "title": "Bharat Startup Grand Challenge",
+            "sector": "FinTech",
+            "deadline": "Dec 31, 2026",
+            "amount": "₹5 Lakh"
+          },
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
+        },
+        {
+          "test_case": 2,
+          "input": {
+            "title": "HDFC Bank Parivartan SmartUp Grants (FY26)",
+            "description": "HDFC Bank Parivartan SmartUp Grants (FY26) by HDFC BankgrantNon-dilutive grants for social impact startups focused on financial inclusion and MSME innovations. Jan 31, 2026Up to: ₹50 Lakh"
+          },
+          "expected": {
+            "title": "HDFC Bank Parivartan SmartUp Grants",
+            "sector": "FinTech",
+            "deadline": "Jan 31, 2026",
+            "amount": "₹50 Lakh"
+          },
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
+        },
+        {
+          "test_case": 3,
           "input": {
             "title": "FutureX AI – Campus Fund (2nd Edition) by Campus Fund, Google CloudCampus Fund, Google CloudAmountUpto ₹8.5 CrDeadlineApr 10, 2026Typeaccelerator",
             "description": "Investment platform and accelerator contest for student-led AI startups. Selected teams receive investment up to $1,000,000 from Campus Fund and Google Cloud credits. Applications open to current students or graduates/dropouts from 2023 onwards."
@@ -1256,22 +1113,12 @@
               "Current students or graduates/dropouts from 2023 onwards"
             ]
           },
-          "actual_output": {
-            "title": "FutureX AI Campus Fund",
-            "sector": "AI",
-            "deadline": "Apr 10, 2026",
-            "location": "Any",
-            "type": "Accelerator",
-            "summary": "Investment platform and accelerator contest for student-led AI startups. Selected teams receive investment up to $1,000,000 from Campus Fund and Google Cloud credits.",
-            "eligibility": [
-              "Current students or graduates/dropouts from 2023 onwards"
-            ]
-          },
+          "actual_output": null,
           "score": 0,
-          "reason": "Judge failed to return valid JSON"
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 2,
+          "test_case": 4,
           "input": {
             "title": "BioVerse Challenge 2025 by Thermo Fisher ScientificThermo Fisher ScientificAmountNot specifiedDeadlineApr 10, 2026Typeaccelerator",
             "description": "Nationwide challenge by Thermo Fisher for early-stage and growth-stage biotech startups registered with DPIIT. Covers Biologics, Industrial Biotechnology, Bioenergy, Green Biotech, Marine Biotechnology, Agri & Food Biotech, and Medtech & Diagnostics."
@@ -1288,23 +1135,12 @@
               "Early-stage and growth-stage biotech startups"
             ]
           },
-          "actual_output": {
-            "title": "Thermo Fisher BioVerse Challenge",
-            "sector": "Biotech",
-            "deadline": "Apr 10, 2026",
-            "location": "Nationwide",
-            "type": "accelerator",
-            "summary": "Nationwide challenge for early-stage and growth-stage biotech startups.",
-            "eligibility": [
-              "Registered with DPIIT",
-              "Early-stage and growth-stage biotech startups"
-            ]
-          },
-          "score": 9,
-          "reason": "The actual output matches all required fields with minor wording differences (title and location) that still convey the correct information."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 3,
+          "test_case": 5,
           "input": {
             "title": "R|Elan Circular Design Challenge 2026R|ElanAmountVariableDeadlineApr 14, 2026Typechallenge",
             "description": "Global competition for sustainable fashion innovations by designers and startups. Seed funding and mentorship offered."
@@ -1320,23 +1156,12 @@
               "Designers and startups"
             ]
           },
-          "actual_output": {
-            "title": "R|Elan Circular Design Challenge",
-            "sector": "Sustainable Fashion",
-            "deadline": "Apr 14, 2026",
-            "location": "Global",
-            "type": "Challenge",
-            "summary": "Global competition for sustainable fashion innovations by designers and startups. Seed funding and mentorship offered.",
-            "eligibility": [
-              "Designers and startups",
-              "Innovative sustainable fashion solutions"
-            ]
-          },
-          "score": 9,
-          "reason": "All required fields match, extra summary and eligibility details are relevant and do not detract from correctness."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 4,
+          "test_case": 6,
           "input": {
             "title": "Amazon Saheli Accelerate Season 2Amazon IndiaAmountNot specifiedDeadlineDec 20, 2025Typeaccelerator",
             "description": "Business scale-up and mentorship program designed to nurture and empower women-led businesses across India. Provides seller training, brand visibility on Amazon marketplace, and direct access to venture capitalists during Demo Day."
@@ -1352,23 +1177,12 @@
               "Women-led businesses in India"
             ]
           },
-          "actual_output": {
-            "title": "Amazon Saheli Accelerate",
-            "sector": "Any",
-            "deadline": "Dec 20, 2025",
-            "location": "India",
-            "type": "accelerator",
-            "summary": "Business scale-up and mentorship program designed to nurture and empower women-led businesses across India.",
-            "eligibility": [
-              "Women-led businesses across India",
-              "Seller training, brand visibility on Amazon marketplace, and direct access to venture capitalists during Demo Day"
-            ]
-          },
+          "actual_output": null,
           "score": 0,
-          "reason": "Judge failed to return valid JSON"
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 5,
+          "test_case": 7,
           "input": {
             "title": "Innovate for Impact Challenge - Food Security World Food PrizeAmount₹45 LakhsDeadlineApr 15, 2026Typegrant",
             "description": "A startup competition focused on food security and sustainability, with a grant of up to ₹45 Lakhs."
@@ -1384,23 +1198,12 @@
               "Startups working on food security and sustainability"
             ]
           },
-          "actual_output": {
-            "title": "Food Security Innovation Grant",
-            "sector": "Food Security",
-            "deadline": "Apr 15, 2026",
-            "location": "Global",
-            "type": "Grant",
-            "summary": "A startup competition focused on food security and sustainability, with a grant of up to ₹45 Lakhs.",
-            "eligibility": [
-              "Eligible startups can apply for the grant.",
-              "The grant amount is up to ₹45 Lakhs."
-            ]
-          },
+          "actual_output": null,
           "score": 0,
-          "reason": "Judge failed to return valid JSON"
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 6,
+          "test_case": 8,
           "input": {
             "title": "BioNEST Incubation Program at FITT IIT DelhiIIT DelhiAmountNot specifiedDeadlineApr 15, 2026Typeincubation",
             "description": "Biotech incubation at IIT Delhi for innovators at ideation to early prototype stages."
@@ -1416,22 +1219,12 @@
               "Innovators at ideation to early prototype stages"
             ]
           },
-          "actual_output": {
-            "title": "BioNEST Incubation Program",
-            "sector": "Biotech",
-            "deadline": "Apr 15, 2026",
-            "location": "IIT Delhi",
-            "type": "incubation",
-            "summary": "Biotech incubation at IIT Delhi for innovators at ideation to early prototype stages.",
-            "eligibility": [
-              "Innovators at ideation to early prototype stages"
-            ]
-          },
+          "actual_output": null,
           "score": 0,
-          "reason": "Judge failed to return valid JSON"
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 7,
+          "test_case": 9,
           "input": {
             "title": "VJTI TBI DeepTech IncubatorVJTI TBI MumbaiAmountUp to ₹1 CrDeadlineApr 17, 2026Typeincubation",
             "description": "Government-affiliated incubator focused on deep technology sectors. Provides access to laboratory and testing infrastructure, entrepreneurship training, mentorship, investor connections, and go-to-market support for startups in energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity."
@@ -1447,22 +1240,12 @@
               "DeepTech startups in energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity"
             ]
           },
-          "actual_output": {
-            "title": "VJTI TBI DeepTech Incubator",
-            "sector": "DeepTech",
-            "deadline": "Apr 17, 2026",
-            "location": "Mumbai",
-            "type": "incubation",
-            "summary": "Government-affiliated incubator focused on deep technology sectors. Provides access to laboratory and testing infrastructure, entrepreneurship training, mentorship, investor connections, and go-to-market support for startups.",
-            "eligibility": [
-              "Startups in energy, EVs, semiconductors, IoT, AI/ML, and cybersecurity"
-            ]
-          },
-          "score": 9,
-          "reason": "The output correctly captures all required fields with minor omissions (country in location and 'DeepTech' qualifier in eligibility) but otherwise matches the expected content."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 8,
+          "test_case": 10,
           "input": {
             "title": "Google for Startups Accelerator: IndiaGoogle for StartupsAmountEquity-freeDeadlineApr 19, 2026Typeaccelerator",
             "description": "Three-month, equity-free accelerator for AI-first startups at Seed to Series A. Offers mentoring from Google teams, Cloud credits, free Cloud TPU access, technical bootcamps, and strategic support on product and company strategy."
@@ -1479,23 +1262,12 @@
               "Seed to Series A stage"
             ]
           },
-          "actual_output": {
-            "title": "Google AI-First Accelerator",
-            "sector": "DeepTech",
-            "deadline": "Apr 19, 2026",
-            "location": "India",
-            "type": "accelerator",
-            "summary": "Three-month, equity-free accelerator for AI-first startups at Seed to Series A. Offers mentoring, Cloud credits, and strategic support.",
-            "eligibility": [
-              "AI-first startups at Seed to Series A",
-              "Equity-free"
-            ]
-          },
+          "actual_output": null,
           "score": 0,
-          "reason": "Judge failed to return valid JSON"
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 9,
+          "test_case": 11,
           "input": {
             "title": "Tamil Nadu Technology Hub - iAccelerate Batch 2T-Hub TN / iAccelerateAmount₹40 LakhsDeadlineApr 20, 2026Typeaccelerator",
             "description": "Deep tech accelerator for startups in Tier 2/3 cities of Tamil Nadu with TRL 3+. Provides expert-led strategy sessions, access to corporate and government partners, connections with 30+ investor partners, and seed funding up to Rs. 40 lakh for graduating startups."
@@ -1512,23 +1284,12 @@
               "TRL 3+ readiness"
             ]
           },
-          "actual_output": {
-            "title": "Tamil Nadu Tech Hub Accelerator",
-            "sector": "DeepTech",
-            "deadline": "Apr 20, 2026",
-            "location": "Tamil Nadu",
-            "type": "Accelerator",
-            "summary": "Deep tech accelerator for startups in Tier 2/3 cities of Tamil Nadu with TRL 3+. Provides expert-led strategy sessions, access to corporate and government partners, connections with 30+ investor partners, and seed funding up to Rs. 40 lakh for graduating startups.",
-            "eligibility": [
-              "TRL 3+ startups",
-              "Startups in Tier 2/3 cities of Tamil Nadu"
-            ]
-          },
+          "actual_output": null,
           "score": 0,
-          "reason": "Judge failed to return valid JSON"
+          "reason": "Error: fetch failed"
         },
         {
-          "test_case": 10,
+          "test_case": 12,
           "input": {
             "title": "BIRAC LEAP Fund at IIT DelhiBIRAC / IIT DelhiAmountUp to ₹70 LakhsDeadlineApr 20, 2026Typegrant",
             "description": "Equity-linked funding for biotech and medtech startups provided by BIRAC's LEAP Fund at IIT Delhi. Up to ₹70 Lakhs for startups in validation and scaling stages."
@@ -1544,20 +1305,9 @@
               "Biotech and medtech startups in validation and scaling stages"
             ]
           },
-          "actual_output": {
-            "title": "BIRAC LEAP Fund",
-            "sector": "Biotech and Medtech",
-            "deadline": "Apr 20, 2026",
-            "location": "IIT Delhi",
-            "type": "Grant",
-            "summary": "Equity-linked funding for biotech and medtech startups in validation and scaling stages, up to ₹70 Lakhs.",
-            "eligibility": [
-              "Startups in validation and scaling stages",
-              "Biotech and medtech startups"
-            ]
-          },
-          "score": 8,
-          "reason": "All key details match the expected output except the 'type' field, which should be 'Equity' but was given as 'Grant'."
+          "actual_output": null,
+          "score": 0,
+          "reason": "Error: fetch failed"
         }
       ]
     }

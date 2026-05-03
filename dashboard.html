@@ -441,24 +441,32 @@
                             const diffDays = Math.ceil((dDate - today) / (1000 * 60 * 60 * 24));
                             return { ...o, diffDays };
                         })
-                        .filter(o => o.diffDays >= 0 && o.diffDays <= 30) // Threshold can be adjusted
+                        .filter(o => o.diffDays >= 0)
                         .sort((a, b) => a.diffDays - b.diffDays)
                         .slice(0, 3);
 
+                    const rollingFallback = opps
+                        .filter(o => !closeOpps.some(d => d.opportunity_id === o.opportunity_id))
+                        .filter(o => !o.deadline || o.deadline.toLowerCase() === 'rolling')
+                        .slice(0, 3)
+                        .map(o => ({ ...o, diffDays: null }));
+
+                    const displayedDeadlines = closeOpps.length > 0 ? closeOpps : rollingFallback;
+
                     const deadlinesList = document.getElementById('deadlines-list');
                     if(deadlinesList) {
-                        if (closeOpps.length > 0) {
-                            deadlinesList.innerHTML = closeOpps.map(o => {
-                                const isUrgent = o.diffDays <= 14;
+                        if (displayedDeadlines.length > 0) {
+                            deadlinesList.innerHTML = displayedDeadlines.map(o => {
+                                const isUrgent = o.diffDays !== null && o.diffDays <= 14;
                                 return `
                                 <a href="opportunity.html?opportunity_id=${o.opportunity_id}" class="deadline-item ${isUrgent ? 'urgent' : ''}">
                                     <span class="deadline-date">${o.deadline}</span>
                                     <span class="deadline-name">${o.title || 'Grant'}</span>
-                                    <span class="deadline-days">${o.diffDays === 0 ? 'Due Today!' : o.diffDays + ' days left'}</span>
+                                    <span class="deadline-days">${o.diffDays === null ? 'Open now' : (o.diffDays === 0 ? 'Due Today!' : o.diffDays + ' days left')}</span>
                                 </a>
                             `}).join('');
                         } else {
-                            deadlinesList.innerHTML = '<em style="color:var(--color-text-secondary); grid-column: span 3;">No immediate upcoming deadlines tracked.</em>';
+                            deadlinesList.innerHTML = '<em style="color:var(--color-text-secondary); grid-column: span 3;">No open opportunities tracked.</em>';
                         }
                     }
 
@@ -468,7 +476,7 @@
                     const tbody = document.getElementById('matches-tbody');
                     
                     // Initial render (Scoring state)
-                    tbody.innerHTML = poolOpps.slice(0, 7).map((o, idx) => `
+                    tbody.innerHTML = poolOpps.slice(0, 5).map((o, idx) => `
                         <tr data-opp-card="${o.opportunity_id}" style="display: none;">
                             <td>
                                 <div style="font-weight: 600;">${o.title}</div>
@@ -491,7 +499,7 @@
                         const sortedScores = scores
                             .filter(s => s.score > 0)
                             .sort((a, b) => b.score - a.score)
-                            .slice(0, 7);
+                            .slice(0, 5);
 
                         if (sortedScores.length === 0) {
                             tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 2rem; color: var(--color-text-secondary);">No high-relevance matches found yet. Try updating your profile for better results!</td></tr>';
@@ -522,7 +530,7 @@
 
                     // Update metrics
                     document.querySelectorAll('.metric-value')[0].innerText = opps.length;
-                    document.querySelectorAll('.metric-value')[1].innerText = closeOpps.length;
+                    document.querySelectorAll('.metric-value')[1].innerText = displayedDeadlines.length;
                 }
 
                 // 2. Load Drafts

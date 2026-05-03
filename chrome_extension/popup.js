@@ -13,8 +13,7 @@ const el = {
     diagnoseBtn: document.getElementById('diagnoseBtn'),
     captureBtn: document.getElementById('captureBtn'),
     generateBtn: document.getElementById('generateBtn'),
-    fillBtn: document.getElementById('fillBtn'),
-    aiFillBtn: document.getElementById('aiFillBtn')
+    fillBtn: document.getElementById('fillBtn')
 };
 
 function log(message) {
@@ -75,6 +74,75 @@ async function sendContentMessage(type, payload = {}) {
             resolve(response);
         });
     }));
+}
+
+async function requestSchemaFromAllFrames() {
+    return new Promise(async (resolve, reject) => {
+        let bestSchema = null;
+        
+        const listener = (msg) => {
+            if (msg.type === 'SCHEMA_RESPONSE' && msg.schema) {
+                if (!bestSchema || msg.schema.fieldCount > bestSchema.fieldCount) {
+                    bestSchema = msg.schema;
+                }
+            }
+        };
+        chrome.runtime.onMessage.addListener(listener);
+
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (!tab?.id) {
+            chrome.runtime.onMessage.removeListener(listener);
+            return reject(new Error('No active browser tab found.'));
+        }
+        
+        chrome.scripting.executeScript({
+            target: { tabId: tab.id, allFrames: true },
+            func: () => {
+                if (typeof extractFormSchema === 'function') {
+                    const schema = extractFormSchema();
+                    if (schema && schema.fieldCount > 0) {
+                        chrome.runtime.sendMessage({ type: 'SCHEMA_RESPONSE', schema });
+                    }
+                }
+            }
+        });
+
+        setTimeout(() => {
+            chrome.runtime.onMessage.removeListener(listener);
+            if (bestSchema) {
+                resolve(bestSchema);
+            } else {
+                reject(new Error("No usable application fields were detected on this page. Check if the page is fully loaded."));
+            }
+        }, 1200);
+    });
+}
+
+async function broadcastFillCommand(type, payload) {
+    return new Promise(async (resolve) => {
+        let totalFilled = 0;
+        let allUnmatched = [];
+
+        const listener = (msg) => {
+            if (msg.type === 'FILL_RESPONSE') {
+                totalFilled += msg.result.filledCount || 0;
+                if (msg.result.unmatched) {
+                    allUnmatched.push(...msg.result.unmatched);
+                }
+            }
+        };
+        chrome.runtime.onMessage.addListener(listener);
+
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (tab?.id) {
+            chrome.tabs.sendMessage(tab.id, { type, ...payload });
+        }
+
+        setTimeout(() => {
+            chrome.runtime.onMessage.removeListener(listener);
+            resolve({ filledCount: totalFilled, unmatched: [...new Set(allUnmatched)] });
+        }, 600);
+    });
 }
 
 function setBusy(button, busyText) {
@@ -144,10 +212,17 @@ async function loadTabContext() {
         const summary = getCurrentSiteSummary(tab.url);
         el.tabMeta.textContent = `Current site: ${summary}`;
         if (isFundMeTab(tab.url)) {
-            log('Open this extension on the external portal after you log in there. It is not meant to run on FundMe itself.');
+            log('Extension detected FundMe site. Switch to the application portal tab to use Smart Fill.');
             return;
         }
         await stageLookup();
+    });
+
+    // Listen for storage changes (e.g. if a session is stashed while popup is open)
+    chrome.storage.onChanged.addListener((changes) => {
+        if (changes.fundmeUserId) el.userId.value = changes.fundmeUserId.newValue;
+        if (changes.fundmeOpportunityId) el.opportunityId.value = changes.fundmeOpportunityId.newValue;
+        if (changes.fundmeBaseUrl) el.baseUrl.value = changes.fundmeBaseUrl.newValue;
     });
 }
 
@@ -157,7 +232,7 @@ async function diagnosePage() {
         if (isFundMeTab(state.tab?.url)) {
             throw new Error('Switch to the external application portal tab first.');
         }
-        const extracted = await sendContentMessage('extractFormSchema');
+        const extracted = await requestSchemaFromAllFrames();
         const sectionCount = extracted?.schema?.sections?.length || 0;
         const titles = (extracted?.schema?.sections || []).map(section => section.title).slice(0, 4);
         log(
@@ -180,7 +255,7 @@ async function captureForm() {
             throw new Error('Open the external application portal tab first, then run capture there.');
         }
 
-        const extracted = await sendContentMessage('extractFormSchema');
+        const extracted = await requestSchemaFromAllFrames();
         if (!extracted?.schema?.sections?.length || !extracted.fieldCount) {
             throw new Error('No usable application fields were detected on this page.');
         }
@@ -283,7 +358,7 @@ async function fillPortal() {
             throw new Error('No saved draft was found. Capture and generate answers first.');
         }
 
-        const result = await sendContentMessage('fillFormFields', {
+        const result = await broadcastFillCommand('BROADCAST_FILL_FIELDS', {
             schema: state.draft.form_schema,
             values: state.draft.form_fields || {}
         });
@@ -291,8 +366,20 @@ async function fillPortal() {
         const unmatched = (result?.unmatched || []).slice(0, 6);
         log(
             `Filled ${result?.filledCount || 0} field(s) on the live portal.\n` +
-            `${unmatched.length ? `Still unmatched: ${unmatched.join(', ')}` : 'Everything matched cleanly.'}`
+            `${unmatched.length ? `Still unmatched: ${unmatched.join(', ')}` : 'Everything matched cleanly.'}\n` +
+            `Armed reactive watcher for conditional fields.`
         );
+
+        if (state.tab?.id) {
+            chrome.tabs.sendMessage(state.tab.id, {
+                type: 'BROADCAST_START_WATCHER',
+                payload: {
+                    userId,
+                    opportunityId,
+                    baseUrl: getBaseUrl()
+                }
+            });
+        }
     } catch (err) {
         log(`Fill failed: ${err.message}`);
     } finally {
@@ -316,7 +403,7 @@ async function aiFillPortal() {
         }
 
         log('Extracting portal fields for AI mapping...');
-        const extracted = await sendContentMessage('extractFormSchema');
+        const extracted = await requestSchemaFromAllFrames();
         const pageFields = (extracted?.schema?.sections || []).flatMap(s => s.fields || []);
 
         log('AI is mapping portal fields to your draft...');
@@ -341,12 +428,23 @@ async function aiFillPortal() {
         });
 
         // Use the content script to fill using the AI mapping
-        const result = await sendContentMessage('fillWithMapping', {
+        const result = await broadcastFillCommand('BROADCAST_FILL_MAPPING', {
             mapping,
             values: state.draft.form_fields
         });
 
-        log(`AI Smart Fill complete! Filled ${result.filledCount} fields.`);
+        log(`AI Smart Fill complete! Filled ${result.filledCount} fields.\nArmed reactive watcher for conditional fields.`);
+        
+        if (state.tab?.id) {
+            chrome.tabs.sendMessage(state.tab.id, {
+                type: 'BROADCAST_START_WATCHER',
+                payload: {
+                    userId,
+                    opportunityId,
+                    baseUrl: getBaseUrl()
+                }
+            });
+        }
     } catch (err) {
         log(`AI Smart Fill failed: ${err.message}`);
     } finally {
@@ -362,7 +460,6 @@ el.diagnoseBtn.addEventListener('click', diagnosePage);
 el.captureBtn.addEventListener('click', captureForm);
 el.generateBtn.addEventListener('click', generateAnswers);
 el.fillBtn.addEventListener('click', fillPortal);
-el.aiFillBtn.addEventListener('click', aiFillPortal);
 
 loadTabContext().catch(err => {
     log(`Initialization failed: ${err.message}`);

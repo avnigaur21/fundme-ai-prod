@@ -7,7 +7,13 @@ const path = require('path');
  */
 function parseKeyFile(keyName) {
   try {
-    const content = fs.readFileSync(path.join(__dirname, '..', 'key.txt'), 'utf-8');
+    const keyFilePath = ['keys.txt', 'key.txt']
+      .map(file => path.join(__dirname, '..', file))
+      .find(file => fs.existsSync(file));
+
+    if (!keyFilePath) return "";
+
+    const content = fs.readFileSync(keyFilePath, 'utf-8');
     const lines = content.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
 
     for (let i = 0; i < lines.length; i++) {

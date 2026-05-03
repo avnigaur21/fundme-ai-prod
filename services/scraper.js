@@ -483,4 +483,249 @@ async function scrapeDetails(link, retryCount = 0) {
   }
 }
 
-module.exports = { scrapeStartupGrants, scrapeDetails };
+function extractApplyLinkFromHtml(html, pageUrl) {
+  const $ = cheerio.load(html);
+  let best = '';
+  const isValidApplyUrl = (rawUrl) => {
+    try {
+      const url = new URL(rawUrl);
+      const host = url.hostname.replace(/^www\./, '');
+      if (host.includes('startupgrantsindia.com')) return false;
+      if (host.includes('googletagmanager.com') || host.includes('google-analytics.com')) return false;
+      if (host.includes('google.com') && url.pathname.includes('/ns.html')) return false;
+      if (rawUrl.includes('/cdn-cgi/')) return false;
+      return true;
+    } catch {
+      return false;
+    }
+  };
+
+  $('a[href]').each((_, el) => {
+    const $el = $(el);
+    const href = ($el.attr('href') || '').trim();
+    const label = $el.text().replace(/\s+/g, ' ').trim().toLowerCase();
+    if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+
+    const absoluteUrl = new URL(href, pageUrl).toString();
+    const hostname = new URL(absoluteUrl).hostname;
+    const isStartupGrants = hostname.includes('startupgrantsindia.com');
+    const looksLikeApply = /apply|register|submit|nominate|application/.test(label) || /apply|register|submit|nominate|application/.test(href.toLowerCase());
+
+    if (looksLikeApply && !isStartupGrants && isValidApplyUrl(absoluteUrl)) {
+      best = absoluteUrl;
+      return false;
+    }
+  });
+
+  if (!best) {
+    $('script, style, noscript, iframe').remove();
+    const text = $('body').text();
+    const matches = text.match(/https?:\/\/[^\s)"'<]+/ig) || [];
+    best = matches.find(isValidApplyUrl) || '';
+  }
+
+  return best;
+}
+
+function parseJsonLdGraph(html) {
+  const $ = cheerio.load(html);
+  const nodes = [];
+
+  $('script[type="application/ld+json"]').each((_, el) => {
+    const raw = $(el).contents().text();
+    if (!raw) return;
+
+    try {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed)) nodes.push(...parsed);
+      else if (Array.isArray(parsed['@graph'])) nodes.push(...parsed['@graph']);
+      else nodes.push(parsed);
+    } catch {
+      // Ignore malformed analytics or framework payloads.
+    }
+  });
+
+  return nodes;
+}
+
+function formatDate(value) {
+  if (!value) return '';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '';
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function extractBetween(text, start, endMarkers = []) {
+  const startIndexes = [];
+  let cursor = text.indexOf(start);
+  while (cursor !== -1) {
+    startIndexes.push(cursor);
+    cursor = text.indexOf(start, cursor + start.length);
+  }
+  if (startIndexes.length === 0) return '';
+
+  const candidates = startIndexes.map(startIndex => {
+    const contentStart = startIndex + start.length;
+    const endIndex = endMarkers
+      .map(marker => text.indexOf(marker, contentStart))
+      .filter(index => index !== -1)
+      .sort((a, b) => a - b)[0] || text.length;
+    return { startIndex, endIndex, distance: endIndex - contentStart };
+  });
+
+  const { startIndex, endIndex } = candidates.sort((a, b) => a.distance - b.distance)[0];
+  if (startIndex === -1) return '';
+  const contentStart = startIndex + start.length;
+
+  return dedupeSentences(text.slice(contentStart, endIndex)
+    .replace(/Sign in or create a free account to read everything\./gi, '')
+    .replace(/Sign up to unlock (eligibility|benefits)/gi, '')
+    .replace(/Sign up to view full details/gi, '')
+    .replace(/\s+/g, ' ')
+    .trim());
+}
+
+function dedupeSentences(text) {
+  if (!text) return '';
+  const parts = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) || [text];
+  const seen = new Set();
+  const unique = [];
+
+  for (const part of parts) {
+    const sentence = part.trim();
+    const key = sentence.toLowerCase();
+    if (!sentence || seen.has(key)) continue;
+    seen.add(key);
+    unique.push(sentence);
+  }
+
+  return unique.join(' ').trim();
+}
+
+function extractOpportunityDetailDataFromHtml(html, pageUrl) {
+  const $ = cheerio.load(html);
+  const graph = parseJsonLdGraph(html);
+  const grant = graph.find(node => {
+    const type = node['@type'];
+    return type === 'MonetaryGrant' || (Array.isArray(type) && type.includes('MonetaryGrant'));
+  }) || {};
+
+  const applyUrl = grant.potentialAction?.target || extractApplyLinkFromHtml(html, pageUrl);
+
+  $('script, style, noscript, iframe, svg').remove();
+  const text = $('body').text().replace(/\s+/g, ' ').trim();
+
+  const aboutIndex = text.indexOf('About this grant');
+  const headerText = aboutIndex === -1 ? text : text.slice(0, aboutIndex);
+  const typeIndex = headerText.lastIndexOf('Type');
+  const locationIndex = headerText.lastIndexOf('Location');
+  const applyIndex = headerText.indexOf('Apply Now', locationIndex);
+  const closingIndex = headerText.lastIndexOf('Closing date', typeIndex === -1 ? undefined : typeIndex);
+  const description = closingIndex !== -1 && typeIndex !== -1
+    ? headerText.slice(closingIndex + 'Closing date'.length, typeIndex).replace(/Stage[A-Za-z0-9, /&+-]+$/i, '').trim()
+    : '';
+  const type = typeIndex !== -1 && locationIndex !== -1
+    ? headerText.slice(typeIndex + 'Type'.length, locationIndex).trim()
+    : '';
+  const location = locationIndex !== -1
+    ? headerText.slice(locationIndex + 'Location'.length, applyIndex === -1 ? headerText.length : applyIndex).trim()
+    : '';
+
+  const about = extractBetween(text, 'About this grant', ['Provider', 'AI Overview', 'Eligibility']);
+  const eligibility = extractBetween(text, 'Eligibility', ['Benefits & Funding']);
+  const benefits = extractBetween(text, 'Benefits & Funding', ['Timelines & Process']);
+  const timeline = extractBetween(text, 'Timelines & Process', ['Apply for this program', 'Startup Deals', 'Similar Grants']);
+
+  const amountMatch = benefits.match(/Amount(.+?)Fund Type/) || benefits.match(/Offers\s+(.+?)\s+as/i);
+  const amount = amountMatch ? amountMatch[1].trim() : extractAmount(benefits || text);
+  const deadline = formatDate(grant.validThrough) || extractDeadline(timeline || text);
+
+  return {
+    title: grant.name || '',
+    provider: grant.funder?.name || '',
+    description,
+    about,
+    eligibility,
+    benefits,
+    timeline,
+    type,
+    amount,
+    deadline,
+    location,
+    external_apply_url: applyUrl || '',
+    raw_scraped_text: text.substring(0, 8000)
+  };
+}
+
+async function scrapeApplyLink(link, retryCount = 0) {
+  try {
+    const response = await axios.get(link, {
+      headers: {
+        'User-Agent': USER_AGENT,
+        Accept: 'text/html,application/xhtml+xml',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Cache-Control': 'no-cache'
+      },
+      timeout: REQUEST_TIMEOUT_MS,
+      validateStatus: (status) => status < 500,
+    });
+
+    if (response.status === 429 && retryCount < MAX_RETRIES) {
+      await new Promise(r => setTimeout(r, 5000));
+      return scrapeApplyLink(link, retryCount + 1);
+    }
+
+    if (response.status !== 200 || !response.data) return '';
+    return extractApplyLinkFromHtml(response.data, link);
+  } catch (err) {
+    if (retryCount < MAX_RETRIES) {
+      const delay = RETRY_DELAY_MS * Math.pow(2, retryCount);
+      await new Promise(r => setTimeout(r, delay));
+      return scrapeApplyLink(link, retryCount + 1);
+    }
+
+    console.warn(`Could not extract apply link for ${link}: ${err.message}`);
+    return '';
+  }
+}
+
+async function scrapeOpportunityDetailData(link, retryCount = 0) {
+  try {
+    const response = await axios.get(link, {
+      headers: {
+        'User-Agent': USER_AGENT,
+        Accept: 'text/html,application/xhtml+xml',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Cache-Control': 'no-cache'
+      },
+      timeout: REQUEST_TIMEOUT_MS,
+      validateStatus: (status) => status < 500,
+    });
+
+    if (response.status === 429 && retryCount < MAX_RETRIES) {
+      await new Promise(r => setTimeout(r, 5000));
+      return scrapeOpportunityDetailData(link, retryCount + 1);
+    }
+
+    if (response.status !== 200 || !response.data) return {};
+    return extractOpportunityDetailDataFromHtml(response.data, link);
+  } catch (err) {
+    if (retryCount < MAX_RETRIES) {
+      const delay = RETRY_DELAY_MS * Math.pow(2, retryCount);
+      await new Promise(r => setTimeout(r, delay));
+      return scrapeOpportunityDetailData(link, retryCount + 1);
+    }
+
+    console.warn(`Could not extract detail data for ${link}: ${err.message}`);
+    return {};
+  }
+}
+
+module.exports = {
+  scrapeStartupGrants,
+  scrapeDetails,
+  scrapeApplyLink,
+  scrapeOpportunityDetailData,
+  extractApplyLinkFromHtml,
+  extractOpportunityDetailDataFromHtml
+};

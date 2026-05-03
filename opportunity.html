@@ -44,6 +44,62 @@
             min-height: 400px;
             color: var(--color-text-secondary);
         }
+
+        .extension-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.48);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .extension-modal-backdrop.show {
+            display: flex;
+        }
+
+        .extension-modal {
+            width: min(560px, 100%);
+            background: var(--color-bg-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+            padding: 1.5rem;
+        }
+
+        .extension-modal h2 {
+            font-size: 1.25rem;
+            margin: 0 0 0.5rem;
+            color: var(--color-text-main);
+        }
+
+        .extension-modal p,
+        .extension-modal li {
+            color: var(--color-text-secondary);
+            line-height: 1.55;
+            font-size: 0.95rem;
+        }
+
+        .extension-modal ol {
+            margin: 1rem 0;
+            padding-left: 1.25rem;
+        }
+
+        .extension-modal-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+
+        .extension-modal-status {
+            min-height: 1.25rem;
+            margin-top: 0.75rem;
+            color: #92400e;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body>
@@ -229,9 +285,9 @@
                             <div style="margin-top: var(--spacing-lg); display: grid; gap: var(--spacing-sm);">
                                 <button class="btn btn-primary" id="btn-draft" style="width: 100%;">Draft
                                     Proposal</button>
-                                <a id="btn-external" target="_blank" class="btn btn-outline"
-                                    style="width: 100%; display: flex; justify-content: center; text-decoration: none;">Apply
-                                    Externally</a>
+                                <a id="btn-external" target="_blank" class="btn btn-primary"
+                                    style="width: 100%; display: flex; justify-content: center; text-decoration: none;">Smart Apply</a>
+
                                 <button class="btn btn-outline" id="btn-save" style="width: 100%;">Save
                                     Opportunity</button>
                             </div>
@@ -241,6 +297,31 @@
 
             </div>
     </main>
+</div>
+
+<div class="extension-modal-backdrop" id="extensionInstallModal" aria-hidden="true">
+    <div class="extension-modal" role="dialog" aria-modal="true" aria-labelledby="extensionModalTitle">
+        <h2 id="extensionModalTitle">Install FundMe Smart Apply</h2>
+        <p>Smart Apply needs the FundMe Chrome extension before it can read and fill the external application form.</p>
+        <ol>
+            <li>Open <strong>chrome://extensions</strong> in Chrome.</li>
+            <li>Turn on <strong>Developer mode</strong>.</li>
+            <li>Click <strong>Load unpacked</strong>.</li>
+            <li>Select the <strong>chrome_extension</strong> folder from this project.</li>
+            <li>Come back here and click <strong>Done</strong>. FundMe will check again before opening the portal.</li>
+        </ol>
+        <p>
+            <a href="fundme-smart-apply-extension.zip" download>Download extension files</a>
+            <span style="color: var(--color-text-secondary);"> · </span>
+            <a href="chrome_extension/README.md" target="_blank" rel="noopener">Open installation guide</a>
+        </p>
+        <div class="extension-modal-actions">
+            <button class="btn btn-primary" id="extensionDoneBtn" type="button">Done</button>
+            <button class="btn btn-outline" id="extensionIgnoreBtn" type="button">Ignore AI</button>
+            <button class="btn btn-outline" id="extensionCancelBtn" type="button">Cancel</button>
+        </div>
+        <div class="extension-modal-status" id="extensionModalStatus"></div>
+    </div>
 </div>
 
 <script src="js/api.js"></script>
@@ -257,6 +338,91 @@
             let oppId = params.get('id') || params.get('opportunity_id');
             let currentOpp = null;
             let scrapedText = '';
+            let pendingExternalApply = null;
+
+            function checkSmartApplyExtension(timeoutMs = 700) {
+                // 1. Instant check via DOM marker
+                if (document.documentElement.dataset.fundmeExtensionInstalled === 'true') {
+                    return Promise.resolve({ installed: true, version: '1.0.0' });
+                }
+
+                // 2. Fallback to handshake
+                return new Promise(resolve => {
+                    let settled = false;
+
+                    const finish = (installed, meta = {}) => {
+                        if (settled) return;
+                        settled = true;
+                        window.removeEventListener('message', onMessage);
+                        resolve({ installed, ...meta });
+                    };
+
+                    const onMessage = (event) => {
+                        if (event.source !== window) return;
+                        if (event.data?.source === 'fundme-extension' && event.data?.type === 'FUNDME_EXTENSION_PONG') {
+                            finish(true, { version: event.data.version || '' });
+                        }
+                    };
+
+                    window.addEventListener('message', onMessage);
+                    window.postMessage({ source: 'fundme-web', type: 'FUNDME_EXTENSION_PING' }, '*');
+                    setTimeout(() => finish(false), timeoutMs);
+                });
+            }
+
+            function showExtensionModal(applyUrl) {
+                pendingExternalApply = applyUrl;
+                document.getElementById('extensionModalStatus').textContent = '';
+                const modal = document.getElementById('extensionInstallModal');
+                modal.classList.add('show');
+                modal.setAttribute('aria-hidden', 'false');
+            }
+
+            function hideExtensionModal() {
+                const modal = document.getElementById('extensionInstallModal');
+                modal.classList.remove('show');
+                modal.setAttribute('aria-hidden', 'true');
+            }
+
+            async function openExternalApply(applyUrl, useSmartApply = true) {
+                if (useSmartApply) {
+                    await api.stageExtensionSession(oppId, applyUrl);
+                    // Inform the extension to stash this session context locally
+                    window.postMessage({
+                        type: 'FUNDME_STASH_SESSION',
+                        user_id: getCurrentUserId(),
+                        opportunity_id: oppId,
+                        baseUrl: window.location.origin
+                    }, '*');
+                }
+                window.open(applyUrl, '_blank');
+            }
+
+            document.getElementById('extensionDoneBtn').addEventListener('click', async () => {
+                const status = document.getElementById('extensionModalStatus');
+                status.textContent = 'Checking extension...';
+                const result = await checkSmartApplyExtension(1000);
+                if (!result.installed) {
+                    status.textContent = 'FundMe still cannot detect the extension. Reload this page after loading the unpacked extension, then click Done again.';
+                    return;
+                }
+
+                try {
+                    status.textContent = 'Extension detected. Opening portal with Smart Apply...';
+                    await openExternalApply(pendingExternalApply, true);
+                    hideExtensionModal();
+                } catch (err) {
+                    status.textContent = `Could not start Smart Apply: ${err.message}`;
+                }
+            });
+
+            document.getElementById('extensionIgnoreBtn').addEventListener('click', () => {
+                const applyUrl = pendingExternalApply;
+                hideExtensionModal();
+                if (applyUrl) window.open(applyUrl, '_blank');
+            });
+
+            document.getElementById('extensionCancelBtn').addEventListener('click', hideExtensionModal);
 
             // 1. Load Opportunity Metadata
             try {
@@ -286,15 +452,22 @@
                 // Buttons
                 document.getElementById('btn-draft').onclick = () => window.location.href = `draft-generator.html?opportunity_id=${oppId}`;
                 const extBtn = document.getElementById('btn-external');
-                if (currentOpp.link) {
+                const applyUrl = currentOpp.external_apply_url || currentOpp.apply_url || '';
+                if (applyUrl) {
+                    extBtn.href = applyUrl;
                     extBtn.onclick = async (e) => {
                         e.preventDefault();
                         try {
-                            await api.stageExtensionSession(oppId, currentOpp.link);
+                            const extension = await checkSmartApplyExtension();
+                            if (!extension.installed) {
+                                showExtensionModal(applyUrl);
+                                return;
+                            }
+                            await openExternalApply(applyUrl, true);
                         } catch (err) {
-                            console.error('Failed to stage extension session', err);
+                            console.error('Failed to start Smart Apply session', err);
+                            window.open(applyUrl, '_blank');
                         }
-                        window.open(currentOpp.link, '_blank');
                     };
                     extBtn.style.display = 'flex';
                 } else {
@@ -322,7 +495,7 @@
                 // Check if we have formatted details already
                 if (currentOpp.formatted_details && currentOpp.formatted_details.about && 
                     currentOpp.formatted_details.about !== "This is some raw text to format.") {
-                    renderStructuredDetails(currentOpp.formatted_details, "", currentOpp.link);
+                    renderStructuredDetails(currentOpp.formatted_details, "", currentOpp.external_apply_url || '');
                 } else {
                     // INSTANT DISPLAY: Use the pre-saved description and eligibility directly
                     descContent.innerHTML = `
@@ -336,7 +509,20 @@
 
                     const eligList = document.getElementById('opp-elig-list');
                     if (currentOpp.eligibility) {
-                        eligList.innerHTML = `<li>${currentOpp.eligibility}</li>`;
+                        const eList = Array.isArray(currentOpp.eligibility)
+                            ? currentOpp.eligibility
+                            : currentOpp.eligibility.split(/(?<=[.!?])\s+/).filter(Boolean);
+                        eligList.innerHTML = eList.map(e => `<li style="margin-bottom: 0.5rem;">${e}</li>`).join('');
+                    }
+                    
+                    const benefitsList = document.getElementById('opp-benefits-list');
+                    if (currentOpp.benefits) {
+                        const bList = Array.isArray(currentOpp.benefits) 
+                            ? currentOpp.benefits 
+                            : currentOpp.benefits.split(/(?<=[.!?])\s+/).filter(Boolean);
+                        benefitsList.innerHTML = bList.map(b => `<li style="margin-bottom: 0.5rem;">${b}</li>`).join('');
+                    } else {
+                        benefitsList.innerHTML = '<li>Check the official listing for specific award and benefit details.</li>';
                     }
                     
                     // No automatic AI call here! We use what we have.

@@ -209,6 +209,8 @@
             }
 
             currentOpportunity = currentDraft.opportunity || (opportunityId ? await api.getOpportunity(opportunityId) : null);
+            const applyUrl = currentOpportunity?.external_apply_url || currentOpportunity?.apply_url || currentOpportunity?.link || '';
+            currentOpportunity.applyUrl = applyUrl; // Store the correct one
             document.getElementById('page-title').textContent = currentDraft.title || currentOpportunity?.title || 'Application Draft';
             document.getElementById('page-subtitle').textContent = currentDraft.subtitle || 'Review the final answers before applying.';
 
@@ -262,8 +264,16 @@
 
                 try {
                     await api.stageExtensionSession(currentDraft.opportunity_id, currentOpportunity.link);
-                    window.open(currentOpportunity.link, '_blank', 'noopener');
-                    alert('The portal session is staged. Open the FundMe extension on that site to capture or fill the live application form.');
+                    
+                    // Inform the extension to stash this session context locally
+                    window.postMessage({
+                        type: 'FUNDME_STASH_SESSION',
+                        user_id: getCurrentUserId(),
+                        opportunity_id: currentDraft.opportunity_id,
+                        baseUrl: window.location.origin
+                    }, '*');
+
+                    window.open(currentOpportunity.applyUrl, '_blank', 'noopener');
                 } catch (err) {
                     console.error(err);
                     alert('Failed to stage the external portal session.');
