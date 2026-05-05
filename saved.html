@@ -48,8 +48,33 @@
 
         .watchlist-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 1.5rem;
+            align-items: start;
+        }
+
+        /* Lock eligibility to exactly 1 bullet line — same as explorer */
+        .watchlist-grid .opp-eligibility-list {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
+
+        /* Lock description to 2 lines — same as explorer */
+        .watchlist-grid .opp-description {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        /* Lock title to 2 lines so long titles don't break layout */
+        .watchlist-grid .opp-title {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
 
         .watchlist-card {
@@ -296,23 +321,26 @@
                     const amount = opp.amount || 'Variable';
                     const deadline = typeof formatDeadline === 'function' ? formatDeadline(opp.deadline) : opp.deadline;
                     
+                    // Prefer the summarized eligibility string for the card view — same logic as explorer
                     let elig = opp.eligibility || 'See details for eligibility criteria.';
+                    if (Array.isArray(elig) && elig.length > 0) elig = elig[0];
                     if (opp.formatted_details && opp.formatted_details.eligibility && Array.isArray(opp.formatted_details.eligibility) && opp.formatted_details.eligibility.length > 0) {
                         elig = opp.formatted_details.eligibility[0];
-                        if (elig.length > 85) elig = elig.substring(0, 82) + '...';
                     }
-                    const desc = opp.description || opp.summary || 'Click view details for more information.';
+                    if (typeof elig === 'string' && elig.length > 90) elig = elig.substring(0, 87) + '...';
+
+                    let desc = opp.description || opp.summary || 'Click view details for more information.';
+                    if (typeof desc === 'string' && desc.length > 120) desc = desc.substring(0, 117) + '...';
 
                     card.innerHTML = `
                         <div class="opp-header">
-                            <div>
+                            <div style="min-width: 0; flex: 1;">
                                 <h3 class="opp-title">${opp.title || 'Untitled'}</h3>
-                                <div style="font-size: 0.75rem; color: var(--color-text-secondary); display: flex; align-items: center; gap: 0.35rem;">
-                                    ${opp.provider || 'Provider'}
-                                    ${opp.credibility_source ? `<span style="color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 99px; font-weight: 600; font-size: 0.65rem;" title="${opp.credibility_source}">✓ Verified</span>` : ''}
+                                <div style="font-size: 0.75rem; color: var(--color-text-secondary);">
+                                    ${opp.provider || 'Provider'}${opp.credibility_source ? ` <span style="display: inline-flex; align-items: center; vertical-align: middle; color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 99px; font-weight: 600; font-size: 0.65rem;" title="${opp.credibility_source}">✓ Verified</span>` : ''}
                                 </div>
                             </div>
-                            <span class="badge badge-match" data-score-for="${opp.opportunity_id}" style="background: rgba(16, 185, 129, 0.05); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 12px; border-radius: 99px; font-weight: 700; font-size: 0.75rem;">✨ Scoring...</span>
+                            <span class="badge badge-match" data-score-for="${opp.opportunity_id}" style="background: rgba(16, 185, 129, 0.05); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 12px; border-radius: 99px; font-weight: 700; font-size: 0.75rem; flex-shrink: 0; white-space: nowrap; align-self: flex-start;">✨ Scoring...</span>
                         </div>
                         
                         <div class="opp-badges" style="margin-top: 0.25rem; margin-bottom: 0.25rem;">

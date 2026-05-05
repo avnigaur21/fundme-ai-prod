@@ -270,14 +270,13 @@
 
                         card.innerHTML = `
                             <div class="opp-header">
-                                <div>
+                                <div style="min-width: 0; flex: 1;">
                                     <h3 class="opp-title">${opp.title || 'Untitled'}</h3>
-                                    <div style="font-size: 0.75rem; color: var(--color-text-secondary); display: flex; align-items: center; gap: 0.35rem;">
-                                        ${opp.provider || 'Provider'}
-                                        ${opp.credibility_source ? `<span style="color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 99px; font-weight: 600; font-size: 0.65rem;" title="${opp.credibility_source}">✓ Verified</span>` : ''}
+                                    <div style="font-size: 0.75rem; color: var(--color-text-secondary);">
+                                        ${opp.provider || 'Provider'}${opp.credibility_source ? ` <span style="display: inline-flex; align-items: center; vertical-align: middle; color: #047857; background: #ecfdf5; padding: 2px 6px; border-radius: 99px; font-weight: 600; font-size: 0.65rem;" title="${opp.credibility_source}">✓ Verified</span>` : ''}
                                     </div>
                                 </div>
-                                <span class="badge badge-match" data-score-for="${opp.opportunity_id}">✨ Scoring...</span>
+                                <span class="badge badge-match" data-score-for="${opp.opportunity_id}" style="flex-shrink: 0; white-space: nowrap; align-self: flex-start;">✨ Scoring...</span>
                             </div>
                             
                             <div class="opp-badges" style="margin-top: 0.25rem; margin-bottom: 0.25rem;">
