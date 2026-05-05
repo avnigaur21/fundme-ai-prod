@@ -3762,7 +3762,7 @@
         "checkbox4_scaling": false,
         "checkbox5_pre_seed": false,
         "checkbox5_seed": false,
-        "checkbox5_early": false,
+        "checkbox5_early": true,
         "checkbox5_growth": false,
         "multiline3_which_sectors_i": "Fintech",
         "allow_others_text_what_kind_of_an": "",
@@ -3819,16 +3819,26 @@
       "schema_source": "extension_capture",
       "source_url": "https://impunjab.org/register-now/",
       "capture_meta": {
-        "captured_at": "2026-05-05T07:22:24.480Z",
+        "captured_at": "2026-05-05T07:49:00.478Z",
         "field_count": 52,
         "page_title": "Join the IMPunjab Community",
         "selected_root_tag": "body",
         "selected_root_score": 87
       },
-      "last_saved": "2026-05-05T07:25:44.279Z"
+      "last_saved": "2026-05-05T07:51:09.553Z"
     }
   ],
   "extension_sessions": [
+    {
+      "session_id": "x4ebec7",
+      "user_id": "u1",
+      "opportunity_id": "opp_1866e6",
+      "external_url": "https://www.startupgrantsindia.com/impunjab-accelerator-cohort-3-innovation-mission-punjab-381",
+      "hostname": "www.startupgrantsindia.com",
+      "root_domain": "startupgrantsindia.com",
+      "created_at": "2026-05-05T07:48:42.247Z",
+      "updated_at": "2026-05-05T07:48:42.247Z"
+    },
     {
       "session_id": "x5933da",
       "user_id": "u1",
@@ -3848,16 +3858,6 @@
       "root_domain": "hello-tomorrow.org",
       "created_at": "2026-05-04T11:43:06.167Z",
       "updated_at": "2026-05-04T11:43:06.167Z"
-    },
-    {
-      "session_id": "xe3d433",
-      "user_id": "u1",
-      "opportunity_id": "opp_1866e6",
-      "external_url": "https://www.startupgrantsindia.com/impunjab-accelerator-cohort-3-innovation-mission-punjab-381",
-      "hostname": "www.startupgrantsindia.com",
-      "root_domain": "startupgrantsindia.com",
-      "created_at": "2026-05-04T11:42:58.581Z",
-      "updated_at": "2026-05-04T11:42:58.581Z"
     },
     {
       "session_id": "x046dd0",

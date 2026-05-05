@@ -79,7 +79,7 @@ async function sendContentMessage(type, payload = {}) {
 async function requestSchemaFromAllFrames() {
     return new Promise(async (resolve, reject) => {
         let bestSchema = null;
-        
+
         const listener = (msg) => {
             if (msg.type === 'SCHEMA_RESPONSE' && msg.schema) {
                 if (!bestSchema || msg.schema.fieldCount > bestSchema.fieldCount) {
@@ -94,18 +94,24 @@ async function requestSchemaFromAllFrames() {
             chrome.runtime.onMessage.removeListener(listener);
             return reject(new Error('No active browser tab found.'));
         }
-        
-        chrome.scripting.executeScript({
-            target: { tabId: tab.id, allFrames: true },
-            func: () => {
-                if (typeof extractFormSchema === 'function') {
-                    const schema = extractFormSchema();
-                    if (schema && schema.fieldCount > 0) {
-                        chrome.runtime.sendMessage({ type: 'SCHEMA_RESPONSE', schema });
-                    }
-                }
-            }
-        });
+
+        // Guard: Diagnose only works on external grant application pages, not on FundMe itself
+        if (/^https?:\/\/(localhost|127\.0\.0\.1):3000/i.test(tab.url || '')) {
+            chrome.runtime.onMessage.removeListener(listener);
+            return reject(new Error(
+                '⚠️ You are on the FundMe app page.\n\nTo use Diagnose, navigate to the external grant application form (the "Apply" link) first, then click Diagnose.'
+            ));
+        }
+
+        // Send via chrome.tabs.sendMessage so content.js's BROADCAST_EXTRACT_SCHEMA
+        // handler is triggered correctly (executeScript runs in a separate isolated
+        // context where content.js globals like extractFormSchema are not accessible).
+        try {
+            await chrome.tabs.sendMessage(tab.id, { type: 'BROADCAST_EXTRACT_SCHEMA' });
+        } catch (e) {
+            // Content script may not be injected yet — ignore and let timeout handle it
+            console.warn('FundMe Popup: sendMessage failed:', e.message);
+        }
 
         setTimeout(() => {
             chrome.runtime.onMessage.removeListener(listener);
@@ -114,7 +120,7 @@ async function requestSchemaFromAllFrames() {
             } else {
                 reject(new Error("No usable application fields were detected on this page. Check if the page is fully loaded."));
             }
-        }, 1200);
+        }, 2500); // Increased timeout to 2.5s to handle dynamic/slow-loading pages
     });
 }
 

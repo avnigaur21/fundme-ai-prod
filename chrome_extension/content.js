@@ -17,9 +17,7 @@ if (_isFundMeAppPage) {
             });
         }
     });
-
-    // Stop here — do not run any logic on the FundMe app itself
-    throw new Error('FundMe: skipping own app page.');
+    // Silent early exit — do NOT throw (throws show as "Uncaught Error" in extension panel)
 }
 
 function cssPathFor(element) {
@@ -839,9 +837,9 @@ function fillWithMapping(mapping, values) {
 document.documentElement.dataset.fundmeExtensionInstalled = 'true';
 
 
-// ─── MESSAGE LISTENERS ────────────────────────────────────────────────────────
+// ─── MESSAGE LISTENERS (only registered on external pages, not on FundMe itself) ─
 
-chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+if (!_isFundMeAppPage) chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
     try {
         if (message.type === 'BROADCAST_EXTRACT_SCHEMA') {
             console.log('📬 FundMe: Received BROADCAST_EXTRACT_SCHEMA');
