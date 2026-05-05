@@ -1,3 +1,27 @@
+// ─── GUARD: Skip all logic on FundMe's own app pages ────────────────────────
+const _isFundMeAppPage = /^https?:\/\/(localhost|127\.0\.0\.1):3000/i.test(window.location.href);
+if (_isFundMeAppPage) {
+    document.documentElement.dataset.fundmeExtensionInstalled = 'true';
+
+    window.addEventListener('message', (event) => {
+        if (event.source !== window) return;
+        if (event.data?.source === 'fundme-web' && event.data?.type === 'FUNDME_EXTENSION_PING') {
+            window.postMessage({ source: 'fundme-extension', type: 'FUNDME_EXTENSION_PONG', version: '1.0.0' }, '*');
+        }
+        if (event.data?.type === 'FUNDME_STASH_SESSION') {
+            const { user_id, opportunity_id, baseUrl } = event.data;
+            chrome.storage.local.set({
+                fundmeUserId: user_id,
+                fundmeOpportunityId: opportunity_id,
+                fundmeBaseUrl: baseUrl || 'http://localhost:3000'
+            });
+        }
+    });
+
+    // Stop here — do not run any logic on the FundMe app itself
+    throw new Error('FundMe: skipping own app page.');
+}
+
 function cssPathFor(element) {
     if (!(element instanceof Element)) return '';
     const parts = [];
@@ -614,55 +638,63 @@ const SUCCESS_PATTERNS = [
 ];
 
 async function checkStagedSession() {
+    // Only activate if the server explicitly confirms this URL has a staged session.
+    // On all other pages, this function does nothing — no toasts, no UI, no side effects.
     try {
         const url = window.location.href;
         const settings = await chrome.storage.local.get(['fundmeBaseUrl']);
         const baseUrl = (settings.fundmeBaseUrl || 'http://localhost:3000').replace(/\/$/, '');
         const API_BASE = `${baseUrl}/api`;
 
+        // Ask the server: "is this URL a known apply link for an active session?"
         const res = await fetch(`${API_BASE}/extension/session?external_url=${encodeURIComponent(url)}`);
-        if (res.ok) {
-            stagedSession = await res.json();
-            console.log('🎯 FundMe: Staged session found!', stagedSession);
 
-            // Check for fields
-            const fields = getVisibleFields();
-            if (fields.length === 0) {
-                // No fields? Look for navigation hints
-                const applyBtn = Array.from(document.querySelectorAll('a, button')).find(el =>
-                    /apply|register|start application|fill form/i.test(el.innerText || el.textContent || '')
-                );
-                if (applyBtn) {
-                    applyBtn.style.outline = '4px solid #0ea5e9';
-                    applyBtn.style.outlineOffset = '4px';
-                    showCaptureToast('Form not found here. Try clicking the highlighted "Apply" button to reach the portal.', 'info');
-                } else {
-                    showCaptureToast(`Tracking session active for ${stagedSession.opportunity_id}. Head to the application portal to fill fields.`);
-                }
-                return;
+        // If server returns 404 / non-ok → this page is NOT a tracked apply link → stay silent
+        if (!res.ok) return;
+
+        stagedSession = await res.json();
+        // Extra safety: server must return a valid opportunity_id
+        if (!stagedSession?.opportunity_id) return;
+
+        console.log('🎯 FundMe: Staged session confirmed for this apply page.', stagedSession);
+
+        // From here on we know this IS an apply page — show UI and try to fill
+        const fields = getVisibleFields();
+        if (fields.length === 0) {
+            // No form fields visible yet — look for a navigation hint
+            const applyBtn = Array.from(document.querySelectorAll('a, button')).find(el =>
+                /apply|register|start application|fill form/i.test(el.innerText || el.textContent || '')
+            );
+            if (applyBtn) {
+                applyBtn.style.outline = '4px solid #0ea5e9';
+                applyBtn.style.outlineOffset = '4px';
+                showCaptureToast('Form not found here. Try clicking the highlighted "Apply" button to reach the portal.', 'info');
+            } else {
+                showCaptureToast(`FundMe session active for ${stagedSession.opportunity_id}. Navigate to the application form to fill it.`);
             }
+            return;
+        }
 
-            // AUTOMATION: Try to fetch draft and auto-fill
-            try {
-                const draftRes = await fetch(`${API_BASE}/drafts/by-opportunity?user_id=${encodeURIComponent(stagedSession.user_id)}&opportunity_id=${encodeURIComponent(stagedSession.opportunity_id)}`);
-                if (draftRes.ok) {
-                    const draft = await draftRes.json();
-                    if (draft && draft.form_fields && Object.keys(draft.form_fields).length > 0) {
-                        console.log('🪄 FundMe: Auto-filling fields from draft...');
-                        const result = fillFormFields(draft.form_schema, draft.form_fields);
-                        if (result.filledCount > 0) {
-                            showCaptureToast(`Auto-filled ${result.filledCount} fields for ${stagedSession.opportunity_id}`, 'success');
-                        } else {
-                            showCaptureToast(`Found the form! Use the FundMe popup to "Fill Portal" if auto-fill didn't catch everything.`);
-                        }
+        // Form fields found — try to auto-fill from saved draft
+        try {
+            const draftRes = await fetch(`${API_BASE}/drafts/by-opportunity?user_id=${encodeURIComponent(stagedSession.user_id)}&opportunity_id=${encodeURIComponent(stagedSession.opportunity_id)}`);
+            if (draftRes.ok) {
+                const draft = await draftRes.json();
+                if (draft && draft.form_fields && Object.keys(draft.form_fields).length > 0) {
+                    console.log('🪄 FundMe: Auto-filling fields from draft...');
+                    const result = fillFormFields(draft.form_schema, draft.form_fields);
+                    if (result.filledCount > 0) {
+                        showCaptureToast(`Auto-filled ${result.filledCount} fields for ${stagedSession.opportunity_id}`, 'success');
+                    } else {
+                        showCaptureToast(`Form found! Use the FundMe popup to "Fill Portal" if auto-fill didn't catch everything.`);
                     }
                 }
-            } catch (draftErr) {
-                showCaptureToast(`Ready to fill application for ${stagedSession.opportunity_id}`);
             }
+        } catch (draftErr) {
+            showCaptureToast(`Ready to fill application for ${stagedSession.opportunity_id}`);
         }
     } catch (err) {
-        // Silent fail if no session or server down
+        // Silent fail — server may be down or this page is simply not a tracked apply link
     }
 }
 
@@ -790,34 +822,22 @@ function fillWithMapping(mapping, values) {
     return { filledCount };
 }
 
-// ─── INITIALIZATION ───────────────────────────────────────────────────────────
+// ─── INITIALIZATION ────────────────────────────────────────────────────
+//
+// content.js is intentionally PASSIVE. It defines helper functions and message
+// listeners, but does NOTHING automatically on page load.
+//
+// All actions are triggered explicitly by the user via the popup buttons:
+//   • Diagnose Page  → sends BROADCAST_EXTRACT_SCHEMA
+//   • Capture Form   → sends BROADCAST_EXTRACT_SCHEMA then bootstraps a draft
+//   • Fill Portal    → sends BROADCAST_FILL_FIELDS
+//
+// The extension will never read a page, show a toast, or contact the server
+// unless the user explicitly initiates it from the popup.
 
-checkStagedSession();
-detectSubmission();
-
-// ─── WEB APP HANDSHAKE ───────────────────────────────────────────────────────
+// Handshake dataset so FundMe web app can detect the extension is installed
 document.documentElement.dataset.fundmeExtensionInstalled = 'true';
 
-window.addEventListener('message', (event) => {
-    if (event.source !== window) return;
-    if (event.data?.source === 'fundme-web' && event.data?.type === 'FUNDME_EXTENSION_PING') {
-        window.postMessage({
-            source: 'fundme-extension',
-            type: 'FUNDME_EXTENSION_PONG',
-            version: '1.0.0'
-        }, '*');
-    }
-
-    if (event.data.type === 'FUNDME_STASH_SESSION') {
-        const { user_id, opportunity_id, baseUrl } = event.data;
-        chrome.storage.local.set({
-            fundmeUserId: user_id,
-            fundmeOpportunityId: opportunity_id,
-            fundmeBaseUrl: baseUrl || 'http://localhost:3000'
-        });
-        console.log('✅ FundMe: Session context stashed in local storage');
-    }
-});
 
 // ─── MESSAGE LISTENERS ────────────────────────────────────────────────────────
 
