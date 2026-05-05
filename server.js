@@ -10,7 +10,7 @@ const cron = require('node-cron');
 const logger = require('./utils/logger');
 const { scrapeStartupGrants, scrapeDetails, scrapeApplyLink, scrapeOpportunityDetailData } = require('./services/scraper');
 const { cleanWithAI, formatDetailedContent } = require('./services/aiCleaner');
-const { callOpenRouter, callLLM } = require('./utils/ai');
+const { callOpenRouter, callLLM, callLLMForDraft } = require('./utils/ai');
 const { extractTextFromPDF } = require('./utils/pdf');
 const { extractJSON } = require('./utils/jsonSanitizer');
 const {
@@ -1942,31 +1942,49 @@ STATUS: [ELIGIBLE or INELIGIBLE or POTENTIALLY ELIGIBLE]
 });
 
 // POST /api/ai/generate-draft
-// Enhanced auto-fill application based on profile with improved accuracy
+// Smart draft generation: only generates answers for MISSING fields.
+// If a field already has a non-empty answer, it is skipped to save tokens.
 app.post('/api/ai/generate-draft', async (req, res) => {
     console.log('[AI] Generate Draft Request Received');
     try {
-        const { profile, form_fields, form_schema, opportunity } = req.body;
+        const { profile, form_fields: existingFields = {}, form_schema, opportunity } = req.body;
         console.log('[AI] Opportunity:', opportunity?.title || opportunity?.opportunity_id);
-    const normalizedSchema = form_schema ? normalizeSchema(form_schema, opportunity?.title || 'Application Draft') : null;
 
+        const normalizedSchema = form_schema ? normalizeSchema(form_schema, opportunity?.title || 'Application Draft') : null;
 
-    const fieldContext = normalizedSchema
-      ? flattenSchema(normalizedSchema).map(field => ({
-          id: field.id,
-          label: field.label,
-          type: field.type,
-          required: field.required,
-          placeholder: field.placeholder || '',
-          name: field.name || '',
-          options: field.options,
-          help_text: field.help_text,
-          max_words: field.max_words
-        }))
-      : [];
+        const allFieldContext = normalizedSchema
+            ? flattenSchema(normalizedSchema).map(field => ({
+                id: field.id,
+                label: field.label,
+                type: field.type,
+                required: field.required,
+                placeholder: field.placeholder || '',
+                name: field.name || '',
+                options: field.options,
+                help_text: field.help_text,
+                max_words: field.max_words
+            }))
+            : [];
 
-    // Enhanced prompt with better context and validation
-    const prompt = `
+        // ── TOKEN SAVER: Only generate for fields that are missing or empty ──
+        const missingFieldContext = allFieldContext.filter(field => {
+            const existing = existingFields[field.id];
+            // Skip if already has a non-empty, non-whitespace answer
+            return !existing || String(existing).trim() === '';
+        });
+
+        const alreadyAnsweredCount = allFieldContext.length - missingFieldContext.length;
+        if (alreadyAnsweredCount > 0) {
+            console.log(`[AI] Skipping ${alreadyAnsweredCount} already-answered field(s). Only generating for ${missingFieldContext.length} missing field(s).`);
+        }
+
+        // If nothing is missing, return existing fields as-is — zero AI calls
+        if (missingFieldContext.length === 0) {
+            console.log('[AI] All fields already answered. Returning existing draft without calling AI.');
+            return res.json({ result: existingFields, skipped: allFieldContext.length, generated: 0 });
+        }
+
+        const prompt = `
       You are an expert grant application assistant. Fill this application form using the founder's profile and opportunity details.
       
       CRITICAL RULES:
@@ -1979,8 +1997,8 @@ app.post('/api/ai/generate-draft', async (req, res) => {
          - NEVER repeat the full name in both. If you only have one name field, use the full name.
       5. EMAIL RULE: ALWAYS use the "application_email" from the profile for any email fields.
       6. Keep responses concise and professional
-      6. For unknown/missing information, use empty string ""
-      7. Match the exact field requirements (word limits, format)
+      7. For unknown/missing information, use empty string ""
+      8. Match the exact field requirements (word limits, format)
       
       Profile Analysis:
       - Founder Full Name: ${profile.founder_name || 'Not specified'}
@@ -2007,8 +2025,8 @@ app.post('/api/ai/generate-draft', async (req, res) => {
       - Sector Focus: ${opportunity?.sector || 'Not specified'}
       - Stage Focus: ${opportunity?.stage || 'Not specified'}
       
-      Form Fields to Complete:
-      ${JSON.stringify(fieldContext, null, 2)}
+      Form Fields to Complete (MISSING fields only — do NOT regenerate already answered ones):
+      ${JSON.stringify(missingFieldContext, null, 2)}
       
       Return ONLY a valid JSON object with field IDs as keys. No markdown, no explanations. 
       IMPORTANT: If you cannot find information for a field, use an empty string "". 
@@ -2021,57 +2039,101 @@ app.post('/api/ai/generate-draft', async (req, res) => {
         "field_id_3": ""
       }
     `;
-    
-    console.log(`🤖 Generating AI draft for ${opportunity?.title || 'unknown opportunity'}...`);
-    const aiResponse = await callLLM(prompt);
-    console.log('[AI] Raw Response Received (first 100 chars):', aiResponse?.substring(0, 100));
-    
-    const parsed = extractJSON(aiResponse);
-    console.log('[AI] Extracted JSON keys:', parsed ? Object.keys(parsed) : 'FAILED');
-    
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
-      throw new Error('AI failed to return a valid draft object');
-    }
 
-    // Validate and clean the AI response
-    const cleanedDraft = {};
-    Object.keys(parsed).forEach(fieldId => {
-      const field = fieldContext.find(f => f.id === fieldId);
-      if (!field) return; // Skip unknown fields
-      
-      let value = parsed[fieldId];
-      
-      // Type-specific validation
-      if (field.type === 'checkbox') {
-        cleanedDraft[fieldId] = Boolean(value);
-      } else if (field.type === 'select') {
-        cleanedDraft[fieldId] = field.options && field.options.includes(value) ? value : '';
-      } else if (typeof value === 'string') {
-        // Apply word limits if specified
-        if (field.max_words && value.split(' ').length > field.max_words) {
-          const words = value.split(' ').slice(0, field.max_words);
-          cleanedDraft[fieldId] = words.join(' ');
-        } else {
-          cleanedDraft[fieldId] = value.trim();
+        // ── CHUNKED AI CALLS: max 20 fields per batch to avoid 413 context overflow ──
+        const BATCH_SIZE = 20;
+        const chunks = [];
+        for (let i = 0; i < missingFieldContext.length; i += BATCH_SIZE) {
+            chunks.push(missingFieldContext.slice(i, i + BATCH_SIZE));
         }
-      } else {
-        cleanedDraft[fieldId] = String(value).trim();
-      }
-    });
 
-    // Fill required fields with empty strings if missing
-    fieldContext.forEach(field => {
-      if (field.required && !(field.id in cleanedDraft)) {
-        cleanedDraft[field.id] = '';
-      }
-    });
+        const totalMissing = missingFieldContext.length;
+        console.log(`🤖 Generating AI draft for "${opportunity?.title || 'unknown'}" — ${totalMissing} missing field(s) in ${chunks.length} batch(es)...`);
 
-    console.log(`✅ AI draft generated with ${Object.keys(cleanedDraft).length} fields completed`);
-    res.json({ result: cleanedDraft });
-  } catch (err) {
-    console.error('❌ AI draft generation failed:', err.message);
-    res.status(500).json({ error: err.message });
-  }
+        // Helper: build the profile+opportunity header (shared across all batches)
+        const profileHeader = prompt.substring(0, prompt.indexOf('Form Fields to Complete'));
+
+        function buildBatchPrompt(fields) {
+            return `${profileHeader}
+      Form Fields to Complete (MISSING fields only — do NOT regenerate already answered ones):
+      ${JSON.stringify(fields, null, 2)}
+      
+      Return ONLY a valid JSON object with field IDs as keys. No markdown, no explanations.
+      IMPORTANT: If you cannot find information for a field, use an empty string "".
+      DO NOT include any text before or after the JSON.
+      
+      Example format:
+      {
+        "field_id_1": "answer based on profile",
+        "field_id_2": "another answer",
+        "field_id_3": ""
+      }
+    `;
+        }
+
+        // Process all batches sequentially and merge results
+        const newAnswers = {};
+        for (let batchIdx = 0; batchIdx < chunks.length; batchIdx++) {
+            const batch = chunks[batchIdx];
+            const batchPrompt = chunks.length === 1 ? prompt : buildBatchPrompt(batch);
+
+            console.log(`[AI] Batch ${batchIdx + 1}/${chunks.length}: ${batch.length} field(s)...`);
+            const aiResponse = await callLLMForDraft(batchPrompt);
+
+            const parsed = extractJSON(aiResponse);
+            if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+                console.warn(`[AI] Batch ${batchIdx + 1} returned invalid JSON — skipping batch.`);
+                continue;
+            }
+
+            // Validate and clean batch answers
+            Object.keys(parsed).forEach(fieldId => {
+                const field = batch.find(f => f.id === fieldId);
+                if (!field) return;
+
+                let value = parsed[fieldId];
+                if (field.type === 'checkbox') {
+                    newAnswers[fieldId] = Boolean(value);
+                } else if (field.type === 'select') {
+                    newAnswers[fieldId] = field.options && field.options.includes(value) ? value : '';
+                } else if (typeof value === 'string') {
+                    if (field.max_words && value.split(' ').length > field.max_words) {
+                        newAnswers[fieldId] = value.split(' ').slice(0, field.max_words).join(' ');
+                    } else {
+                        newAnswers[fieldId] = value.trim();
+                    }
+                } else {
+                    newAnswers[fieldId] = String(value).trim();
+                }
+            });
+        }
+
+        // Ensure required missing fields have at least an empty string
+        missingFieldContext.forEach(field => {
+            if (field.required && !(field.id in newAnswers)) {
+                newAnswers[field.id] = '';
+            }
+        });
+
+        // Merge: existing answers take priority, new AI answers fill the gaps
+        const mergedResult = { ...newAnswers, ...existingFields };
+        // Re-apply new answers for fields that were empty in existingFields
+        Object.keys(newAnswers).forEach(id => {
+            if (!existingFields[id] || String(existingFields[id]).trim() === '') {
+                mergedResult[id] = newAnswers[id];
+            }
+        });
+
+        console.log(`✅ AI draft complete: ${Object.keys(newAnswers).length} new answers generated, ${alreadyAnsweredCount} fields reused from existing draft.`);
+        res.json({
+            result: mergedResult,
+            generated: Object.keys(newAnswers).length,
+            skipped: alreadyAnsweredCount
+        });
+    } catch (err) {
+        console.error('❌ AI draft generation failed:', err.message);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 // POST /api/ai/map-fields

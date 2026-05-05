@@ -316,6 +316,7 @@ async function generateAnswers() {
             body: {
                 profile,
                 form_schema: state.draft.form_schema,
+                form_fields: state.draft.form_fields || {}, // Pass existing answers so server skips them
                 opportunity
             }
         });
@@ -330,7 +331,11 @@ async function generateAnswers() {
             }
         });
 
-        log(`Generated answers for ${Object.keys(generated.result || {}).length} field(s).\nThe draft is now ready to fill into the portal.`);
+        const genCount = generated.generated ?? Object.keys(generated.result || {}).length;
+        const skipCount = generated.skipped ?? 0;
+        const skipNote = skipCount > 0 ? `\n${skipCount} field(s) reused from existing draft (tokens saved).` : '';
+        log(`Generated ${genCount} new answer(s).${skipNote}\nDraft is ready to fill into the portal.`);
+
     } catch (err) {
         const message = String(err.message || '');
         if (message.includes('All AI providers')) {
